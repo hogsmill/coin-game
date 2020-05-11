@@ -1,5 +1,10 @@
 # team-depedndency-simulation
 
+heroku push
+```
+git subtree push --prefix coin-game heroku master
+```
+
 ## Project setup
 ```
 npm install
