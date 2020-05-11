@@ -67,11 +67,11 @@
         <h2>Control</h2>
         <div>Run Type:</div>
         <div>
-          <input type="radio" id="fullRun" name="fullRun" value="Full Run" v-model="state['runType']">
+          <input type="radio" id="fullRun" name="fullRun" v-model="state['runType']">
           <label for="fullRun">Full Run</label>
         </div>
         <div>
-          <input type="radio" id="fullRound" name="fullRound" value="Round AT A Time" v-model="state['runType']">
+          <input type="radio" id="fullRound" name="fullRound" v-model="state['runType']">
           <label for="fullRound">Round By Round</label>
         </div>
         <button @click="go" :disabled="state['running']">Go</button>
@@ -105,17 +105,21 @@ export default {
         1: 18
       },
       roles: [
-        { name: 'Product Owner', include: true },
-        { name: 'Developer', include: true },
-        { name: 'Tester',  include: true },
-        { name: 'Integrator', include: true },
-        { name: 'Customer', include: true }
+        { name: 'Product Owner', include: true, coins: [] },
+        { name: 'Developer', include: true, coins: [] },
+        { name: 'Tester',  include: true, coins: [] },
+        { name: 'Integrator', include: true, coins: [] },
+        { name: 'Customer', include: true, coins: [] }
+      ],
+      rounds: [
+        'Batch',
+        'Kanban',
+        'Value First'
       ],
       state: {
         runType: 'Full Run',
         sprint: 0,
-        coins: [],
-        roles: []
+        rounds: []
       }
     }
   },
@@ -147,20 +151,56 @@ export default {
       }
       this.roles = roles
     },
-    go() {
-      this.state['coins'] = []
-      for (var denomination in this.denominations) {
-        for (var i = 0; i < this.denominations[denomination]; i++) {
-          this.state['coins'].push(denomination)
+    allPlayed(coins) {
+      for (var i = 0; i < coins.length; i++) {
+        if (!coins[i]['played']) {
+          return false
         }
       }
-      this.state['roles'] = []
-      for (i = 0; i < this.roles.length; i++) {
-        if (this.roles[i]['include']) {
-          this.state['roles'].push(this.roles[i]['name'])
+      return true
+    },
+    batch() {
+      var round = this.state['rounds'][0]
+      console.log(round['name'])
+      for (var i = 0; i < round['roles'].length; i++) {
+        var role = round['roles'][i]
+        console.log('  ' + role['name'])
+        for (var j = 0; j < role['coins'].length; j++) {
+          if (!role['coins'][j]['played']) {
+            console.log('    Playing ' + role['coins'][j]['value'])
+            role['coins'][j]['played'] = true
+            setTimeout(this.batch, 200)
+            return
+          }
         }
+      }
+    },
+    getCoins() {
+      var coins = []
+      for (var denomination in this.denominations) {
+        for (var k = 0; k < this.denominations[denomination]; k++) {
+          coins.push({value: denomination, played: false})
+        }
+      }
+      return coins
+    },
+    go() {
+      this.state['rounds'] = []
+      for (var i = 0; i < this.rounds.length; i++) {
+        var roles = []
+        for (var j = 0; j < this.roles.length; j++) {
+          if (this.roles[j]['include']) {
+            var role = this.roles[j]
+            if (j == 0) {
+              role['coins'] = this.getCoins()
+            }
+            roles.push(role)
+          }
+        }
+        this.state['rounds'].push({'round': this.rounds[i], 'roles': roles})
       }
       console.log(this.state)
+      this.batch()
     }
   }
 }

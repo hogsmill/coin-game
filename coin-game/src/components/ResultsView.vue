@@ -7,13 +7,15 @@
       <table>
         <thead>
           <td :style="{ width: setWidth() }">Round</td>
-          <td v-for="role in state.roles" :key="role" :style="{ width: setWidth() }">{{role}}</td>
+          <td v-for="role in state.rounds[0]['roles']" :key="role['name']" :style="{ width: setWidth() }">{{role['name']}}</td>
           <td :style="{ width: setWidth() }">Delivered</td>
         </thead>
         <tbody>
-          <tr v-for="round in rounds" :key="round['name']">
-            <td>{{round['name']}}</td>
-            <td v-for="role in state.roles" :key="role"></td>
+          <tr v-for="(round, index) in state.rounds" :key="index">
+            <td>{{round['round']}}</td>
+            <td v-for="(role, roleindex) in state.rounds[index]['roles']" :key="roleindex">
+              <CoinsView v-bind:coins="role['coins']" />
+            </td>
             <td v-bind:id="round['delivered']">£0</td>
           </tr>
         </tbody>
@@ -23,8 +25,13 @@
 </template>
 
 <script>
+import CoinsView from './CoinsView.vue'
+
 export default {
   name: 'Results',
+  components: {
+    CoinsView
+  },
   props: ['state'],
   data() {
     return {
@@ -37,10 +44,10 @@ export default {
   },
   methods: {
     setWidth() {
-      return 100 / (this.state.roles.length + 1) + '%'
+      return 100 / (this.state.rounds[0]['roles'].length + 1) + '%'
     },
     stateSet() {
-      return this.state['coins'].length && this.state['roles'].length
+      return this.state['rounds'].length
     }
   }
 }
