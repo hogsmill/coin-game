@@ -9,7 +9,7 @@
     </div>
     <div v-if="!showAbout">
       <h1>The Coin Game</h1>
-      <div class="denominations">
+      <div class="denominations" v-if="!stateSet">
         <h2>Denominations</h2>
         <div>
           <label for="twoPound">£2</label>
@@ -51,11 +51,12 @@
           <input type="input" id="one" name="one" v-model="denominations['1']">
           <div class="distribution" :style="{ width: getWidth(denominations['1']) }"></div>
         </div>
+          Total: £{{total()}}
       </div>
-      <div class="roles">
+      <div class="roles"  v-if="!stateSet">
         <h2>Roles</h2>
         <div>
-          <div v-for="role in roles" :key="role['name'].replace(' ', '')" class="role">
+          <div v-for="role in state.roles" :key="role['name'].replace(' ', '')" class="role">
             <input type='checkbox' checked="role['include']" v-model="role['include']">
             <button @click="addBefore(role)">+ Before</button>
             <button v-if="role['name'] != 'Customer'" @click="addAfter(role)">+ After</button>
@@ -63,18 +64,13 @@
           </div>
         </div>
       </div>
-      <div class="run">
+      <div class="run" :class="{ 'running': stateSet }">
         <h2>Control</h2>
-        <div>Run Type:</div>
-        <div>
-          <input type="radio" id="fullRun" name="fullRun" v-model="state['runType']">
-          <label for="fullRun">Full Run</label>
-        </div>
-        <div>
-          <input type="radio" id="fullRound" name="fullRound" v-model="state['runType']">
-          <label for="fullRound">Round By Round</label>
-        </div>
-        <button @click="go" :disabled="state['running']">Go</button>
+        <button @click="go(0)" :disabled="state['running']">Run Batch</button>
+        <button @click="go(1)" :disabled="state['running']">Run Kanban</button>
+        <button @click="go(2)" :disabled="state['running']">Run Value Delivery</button>
+        <button @click="stop()" v-if="stateSet && !stopped" :disabled="state['running']">Stop</button>
+        <button @click="start()" v-if="stopped" :disabled="state['running']">Start</button>
         </div>
       <ResultsView v-bind:state="state" />
     </div>
@@ -94,36 +90,59 @@ export default {
   data() {
     return {
       showAbout: false,
+      stateSet: false,
+      stopped: false,
       denominations: {
         200: 1,
         100: 7,
         50: 11,
         20: 21,
         10: 6,
-        5: 4,
-        2: 5,
-        1: 18
+        5: 6,
+        2: 10,
+        1: 20
       },
-      roles: [
-        { name: 'Product Owner', include: true, coins: [] },
-        { name: 'Developer', include: true, coins: [] },
-        { name: 'Tester',  include: true, coins: [] },
-        { name: 'Integrator', include: true, coins: [] },
-        { name: 'Customer', include: true, coins: [] }
-      ],
-      rounds: [
-        'Batch',
-        'Kanban',
-        'Value First'
-      ],
+      interval: 250,
       state: {
-        runType: 'Full Run',
-        sprint: 0,
-        rounds: []
+        timeLimit: 60000,
+        valueTimeLimit: 10000,
+        round: 0,
+        total: 0,
+        roles: [
+          { name: 'Product Owner', include: true },
+          { name: 'Developer', include: true },
+          { name: 'Tester',  include: true },
+          { name: 'Integrator', include: true },
+          { name: 'Customer', include: true }
+        ],
+        rounds:  [
+          {name: 'Batch', roles: [
+            { name: 'Product Owner', include: true },
+            { name: 'Developer', include: true },
+            { name: 'Tester',  include: true },
+            { name: 'Integrator', include: true },
+            { name: 'Customer', include: true }
+          ], current: false, delivered: 0, time: 0 },
+          {name: 'Kanban', roles: [], current: false, delivered: 0, time: 0 },
+          {name: 'Value First', roles: [], current: false, delivered: 0, time: 0 }
+        ]
       }
     }
   },
   methods: {
+    total() {
+      var total = 0
+      for (var denomination in this.denominations) {
+        total += this.denominations[denomination] * denomination
+      }
+      this.state['total'] = total
+      var pounds = Math.floor(total / 100)
+      var pence = total - pounds * 100
+      if (pence < 10) {
+        pence = '0' + pence
+      }
+      return pounds + ':' + pence
+    },
     getWidth(n) {
       var sum = 0
       for (var denomination in this.denominations) {
@@ -133,74 +152,165 @@ export default {
     },
     addBefore(role) {
       var roles = []
-      for (var i = 0; i < this.roles.length; i++) {
-        if (role['name'] == this.roles[i]['name']) {
+      for (var i = 0; i < this.state['roles'].length; i++) {
+        if (role['name'] == this.state['roles'][i]['name']) {
           roles.push({name: 'New Role', include: true})
         }
-        roles.push(this.roles[i])
+        roles.push(this.state['roles'][i])
       }
-      this.roles = roles
+      this.state['roles'] = roles
     },
     addAfter(role) {
       var roles = []
-      for (var i = 0; i < this.roles.length; i++) {
-        roles.push(this.roles[i])
-        if (role['name'] == this.roles[i]['name']) {
+      for (var i = 0; i < this.state['roles'].length; i++) {
+        roles.push(this.state['roles'][i])
+        if (role['name'] == this.state['roles'][i]['name']) {
           roles.push({name: 'New Role', include: true})
         }
       }
-      this.roles = roles
+      this.state['roles'] = roles
     },
     allPlayed(coins) {
+      var played = true
       for (var i = 0; i < coins.length; i++) {
         if (!coins[i]['played']) {
-          return false
+          played = false
         }
       }
-      return true
+      return played
     },
-    batch() {
-      var round = this.state['rounds'][0]
-      console.log(round['name'])
-      for (var i = 0; i < round['roles'].length; i++) {
-        var role = round['roles'][i]
-        console.log('  ' + role['name'])
+    setCoin(coin, i, roles) {
+      if (i < roles.length - 2) {
+        coin['played'] = false
+      }
+      return coin
+    },
+    deliverCoin(coin, role, round) {
+      var l = round['roles'].length
+      if (role.name == round['roles'][l - 1]['name']) {
+        round['delivered'] = round['delivered'] + parseInt(coin['value'])
+      }
+    },
+    moveCoins(roundNum) {
+      var i, j, coin
+      var round = this.state['rounds'][roundNum]
+      for (i = 0; i < round['roles'].length - 1; i++) {
+        if (round['roles'][i]['coins'].length && this.allPlayed(round['roles'][i]['coins'])) {
+          for (j = 0; j < round['roles'][i]['coins'].length; j++) {
+            coin = round['roles'][i]['coins'][j]
+            coin.played = false
+            round['roles'][i + 1]['coins'].push(coin)
+            this.deliverCoin(coin, round['roles'][i + 1], round)
+          }
+          round['roles'][i]['coins'] = []
+        }
+      }
+    },
+    moveCoin(round) {
+      for (var i = 0; i < this.state['rounds'][round]['roles'].length - 1; i++) {
+        var roles = this.state['rounds'][round]['roles']
+        var role = roles[i]
+        console.log('role', role['name'])
         for (var j = 0; j < role['coins'].length; j++) {
-          if (!role['coins'][j]['played']) {
-            console.log('    Playing ' + role['coins'][j]['value'])
-            role['coins'][j]['played'] = true
-            setTimeout(this.batch, 200)
-            return
+          var coin = role['coins'][j]
+          if (coin['played']) {
+            coin['played'] = false
+            roles[i + 1]['coins'].push(coin)
+            role['coins'].splice(j, 1)
+            this.deliverCoin(coin, roles[i + 1], this.state['rounds'][round])
           }
         }
       }
     },
-    getCoins() {
+    playCoin(coins) {
+      var i = 0
+      var played = false
+      while (i < coins.length && !played) {
+        if (!coins[i]['played']) {
+          coins[i]['played'] = true
+          played = true
+        }
+        i++
+      }
+    },
+    playRoleCoins(round) {
+      var roles = this.state['rounds'][round]['roles']
+      var played
+      for (var i = 0; i < roles.length; i++) {
+        if (!played) {
+          this.playCoin(roles[i]['coins'])
+        }
+      }
+    },
+    incrementTime(round) {
+      this.state['rounds'][round]['time'] = this.state['rounds'][round]['time'] + this.interval
+      return this.state['rounds'][round]['time']
+    },
+    complete(round) {
+      var limit = this.state['rounds'][round]['name'] == 'Value First'
+        ? this.state['valueTimeLimit'] : this.state['timeLimit']
+       return this.state['rounds'][round]['time'] >= limit ||
+        this.state['rounds'][round]['delivered'] == this.state['total']
+    },
+    run() {
+      var round = this.state['round']
+      this.playRoleCoins(round)
+      console.log('round', this.state['rounds'][round])
+      if (this.state['rounds'][round]['name'] == "Batch") {
+        this.moveCoins(round)
+      } else {
+        this.moveCoin(round)
+      }
+      this.incrementTime(this.state['round'])
+      if (!this.complete(this.state['round']) && !this.stopped) {
+        setTimeout(this.run, this.interval)
+      }
+    },
+    shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array
+    },
+    getCoins(round) {
       var coins = []
       for (var denomination in this.denominations) {
-        for (var k = 0; k < this.denominations[denomination]; k++) {
+        for (var i = 0; i < this.denominations[denomination]; i++) {
           coins.push({value: denomination, played: false})
         }
       }
+      if (round == 'Value First') {
+        coins = coins.sort(function(a, b) {return parseInt(b['value']) - parseInt(a['value'])})
+      } else {
+        coins = this.shuffleArray(coins)
+      }
       return coins
     },
-    go() {
-      this.state['rounds'] = []
-      for (var i = 0; i < this.rounds.length; i++) {
-        var roles = []
-        for (var j = 0; j < this.roles.length; j++) {
-          if (this.roles[j]['include']) {
-            var role = this.roles[j]
-            if (j == 0) {
-              role['coins'] = this.getCoins()
-            }
-            roles.push(role)
+    start () {
+      this.stopped = false
+    },
+    stop() {
+      this.stopped = true
+    },
+    go(round) {
+      this.stateSet = true
+      this.state['round'] = round
+      var roles = []
+      for (var i = 0; i < this.state['roles'].length; i++) {
+        if (this.state['roles'][i]['include']) {
+          var role = JSON.parse(JSON.stringify(this.state['roles'][i]))
+          if (i == 0) {
+            role['coins'] = this.getCoins(this.state['rounds'][round]['name'])
+          } else {
+            role['coins'] = []
           }
+          roles.push(role)
         }
-        this.state['rounds'].push({'round': this.rounds[i], 'roles': roles})
       }
+      this.state['rounds'][round]['roles'] = roles
       console.log(this.state)
-      this.batch()
+      this.run()
     }
   }
 }
@@ -226,5 +336,7 @@ export default {
   .run div { text-align: left; }
   .run input { width: 5%; }
   .run label { width: 80%; text-align: left; }
-  .run button { margin-top: 18px; }
+  .run button { margin: 0 auto 6px auto; display: block; width: 130px; }
+  .running { width: 100%; }
+  .running button { display: inline-block; margin: 6px; }
 </style>
