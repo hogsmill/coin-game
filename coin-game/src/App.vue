@@ -53,7 +53,7 @@
         </div>
           Total: £{{total()}}
       </div>
-      <div class="roles"  v-if="!stateSet">
+      <div class="roles" v-if="!stateSet">
         <h2>Roles</h2>
         <div>
           <div v-for="role in state.roles" :key="role['name'].replace(' ', '')" class="role">
@@ -66,6 +66,14 @@
       </div>
       <div class="run" :class="{ 'running': stateSet }">
         <h2>Control</h2>
+        <div v-if="!stateSet">
+          <label for="interval">Interval Between Coin Plays (ms)</label>
+          <input type="input" id="interval" name="interval" v-model="interval">
+          <label for="timeLimit">Time Limit Per Round (ms)</label>
+          <input type="input" id="timeLimit" name="timeLimit" v-model="state['timeLimit']">
+          <label for="valueTimeLimit">Value First Round Time Limit (ms)</label>
+          <input type="input" id="valueTimeLimit" name="valueTimeLimit" v-model="state['valueTimeLimit']">
+        </div>
         <button @click="go(0)" :disabled="state['running']">Run Batch</button>
         <button @click="go(1)" :disabled="state['running']">Run Kanban</button>
         <button @click="go(2)" :disabled="state['running']">Run Value Delivery</button>
@@ -243,13 +251,13 @@ export default {
       }
     },
     incrementTime(round) {
-      this.state['rounds'][round]['time'] = this.state['rounds'][round]['time'] + this.interval
+      this.state['rounds'][round]['time'] = this.state['rounds'][round]['time'] + parseInt(this.interval)
       return this.state['rounds'][round]['time']
     },
     complete(round) {
       var limit = this.state['rounds'][round]['name'] == 'Value First'
         ? this.state['valueTimeLimit'] : this.state['timeLimit']
-       return this.state['rounds'][round]['time'] >= limit ||
+       return this.state['rounds'][round]['time'] >= parseInt(limit) ||
         this.state['rounds'][round]['delivered'] == this.state['total']
     },
     run() {
@@ -334,7 +342,6 @@ export default {
 
   .run { width: 20%; display: inline-block; padding-left: 40px; }
   .run div { text-align: left; }
-  .run input { width: 5%; }
   .run label { width: 80%; text-align: left; }
   .run button { margin: 0 auto 6px auto; display: block; width: 130px; }
   .running { width: 100%; }
