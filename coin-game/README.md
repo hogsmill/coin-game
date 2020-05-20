@@ -1,9 +1,4 @@
-# team-depedndency-simulation
-
-heroku push
-```
-git subtree push --prefix coin-game heroku master
-```
+# Coin Game
 
 ## Project setup
 ```
