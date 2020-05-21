@@ -7,7 +7,7 @@
         <thead>
           <td :style="{ width: setWidth() }">Round</td>
           <td
-            v-for="role in state.rounds[0]['roles']"
+            v-for="role in gameState.rounds[0]['roles']"
             :key="role['name']"
             :style="{ width: setWidth() }"
           >
@@ -16,19 +16,19 @@
           <td :style="{ width: setWidth() }">Delivered</td>
         </thead>
         <tbody>
-          <tr v-for="(round, index) in state.rounds" :key="index">
+          <tr v-for="(round, index) in gameState.rounds" :key="index">
             <td>{{ round["name"] }}</td>
             <td
-              v-for="(role, roleIndex) in state.rounds[0]['roles']"
+              v-for="(role, roleIndex) in gameState.rounds[0]['roles']"
               v-bind:role="role"
               v-bind:roleIndex="roleIndex"
               :key="roleIndex"
             >
-              <div v-if="state.rounds[index]['roles'][roleIndex]">
+              <div v-if="gameState.rounds[index]['roles'][roleIndex]">
                 <div
-                  v-for="(coin, coinIndex) in state['rounds'][index]['roles'][
-                    roleIndex
-                  ]['coins']"
+                  v-for="(coin, coinIndex) in gameState['rounds'][index][
+                    'roles'
+                  ][roleIndex]['coins']"
                   :v-bind:coin="coin"
                   :key="coinIndex"
                   class="coin-parent"
@@ -56,7 +56,6 @@
 <script>
 export default {
   name: "Results",
-  props: ["state"],
   data() {
     return {
       coinClasses: {
@@ -71,9 +70,14 @@ export default {
       },
     };
   },
+  computed: {
+    gameState() {
+      return this.$store.getters.getGameState;
+    },
+  },
   methods: {
     setWidth() {
-      return 100 / (this.state["roles"].length + 1) + "%";
+      return 100 / (this.gameState["roles"].length + 1) + "%";
     },
     getClassName(role) {
       return role["name"].replace(" ", "-").toLowerCase();
@@ -103,7 +107,7 @@ export default {
       return pounds + ":" + pence;
     },
     outOfTime(round) {
-      return round["time"] >= this.state["timeLimit"];
+      return round["time"] >= this.gameState["timeLimit"];
     },
   },
 };

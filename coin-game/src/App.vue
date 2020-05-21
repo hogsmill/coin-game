@@ -6,141 +6,8 @@
     </div>
     <div v-else>
       <h1>The Coin Game</h1>
-      <div class="denominations" v-if="!stateSet">
-        <h2>Denominations</h2>
-        <div>
-          <label for="twoPound">£2</label>
-          <input
-            type="input"
-            id="twoPound"
-            name="twoPound"
-            v-model="denominations['200']"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['200']) }"
-          ></div>
-        </div>
-        <div>
-          <label for="onePound">£1</label>
-          <input
-            type="input"
-            id="onePound"
-            name="onePound"
-            v-model="denominations['100']"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['100']) }"
-          ></div>
-        </div>
-        <div>
-          <label for="fifty">50p</label>
-          <input
-            type="input"
-            id="fifty"
-            name="fifty"
-            v-model="denominations['50']"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['50']) }"
-          ></div>
-        </div>
-        <div>
-          <label for="twenty">20p</label>
-          <input
-            type="input"
-            id="twenty"
-            name="twenty"
-            v-model="denominations['20']"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['20']) }"
-          ></div>
-        </div>
-        <div>
-          <label for="twenty">10p</label>
-          <input
-            type="input"
-            id="ten"
-            name="ten"
-            v-model="denominations['10']"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['10']) }"
-          ></div>
-        </div>
-        <div>
-          <label for="five">5p</label>
-          <input
-            type="input"
-            id="five"
-            name="five"
-            v-model="denominations['5']"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['5']) }"
-          ></div>
-        </div>
-        <div>
-          <label for="two">2p</label>
-          <input
-            type="input"
-            id="two"
-            name="two"
-            v-model="denominations['2']"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['2']) }"
-          ></div>
-        </div>
-        <div>
-          <label for="one">1p</label>
-          <input
-            type="input"
-            id="one"
-            name="one"
-            v-model="denominations['1']"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['1']) }"
-          ></div>
-        </div>
-        Total: £{{ total() }}
-      </div>
-      <div class="roles" v-if="!stateSet">
-        <h2>Roles</h2>
-        <div>
-          <div
-            v-for="role in state.roles"
-            :key="role['name'].replace(' ', '')"
-            class="role"
-          >
-            <input
-              type="checkbox"
-              checked="role['include']"
-              v-model="role['include']"
-            />
-            <button @click="addBefore(role)">+ Before</button>
-            <button v-if="role['name'] != 'Customer'" @click="addAfter(role)">
-              + After
-            </button>
-            <input
-              type="input"
-              class="rolename"
-              v-bind:id="role['name'].replace(' ', '')"
-              name="ten"
-              v-model="role['name']"
-            />
-          </div>
-        </div>
-      </div>
+      <app-denominations></app-denominations>
+      <app-roles></app-roles>
       <div class="run" :class="{ running: stateSet }">
         <h2>Control</h2>
         <div v-if="!stateSet">
@@ -156,39 +23,49 @@
             type="input"
             id="timeLimit"
             name="timeLimit"
-            v-model="state['timeLimit']"
+            v-model="gameState['timeLimit']"
           />
           <label for="valueTimeLimit">Value First Round Time Limit (ms)</label>
           <input
             type="input"
             id="valueTimeLimit"
             name="valueTimeLimit"
-            v-model="state['valueTimeLimit']"
+            v-model="gameState['valueTimeLimit']"
           />
         </div>
-        <button @click="go(0)" :disabled="state['running']">Run Batch</button>
-        <button @click="go(1)" :disabled="state['running']">Run Kanban</button>
-        <button @click="go(2)" :disabled="state['running']">
+        <button @click="go(0)" :disabled="gameState['running']">
+          Run Batch
+        </button>
+        <button @click="go(1)" :disabled="gameState['running']">
+          Run Kanban
+        </button>
+        <button @click="go(2)" :disabled="gameState['running']">
           Run Value Delivery
         </button>
         <button
           @click="stop()"
           v-if="stateSet && !stopped"
-          :disabled="state['running']"
+          :disabled="gameState['running']"
         >
           Stop
         </button>
-        <button @click="start()" v-if="stopped" :disabled="state['running']">
+        <button
+          @click="start()"
+          v-if="stopped"
+          :disabled="gameState['running']"
+        >
           Start
         </button>
       </div>
-      <ResultsView v-bind:state="state" />
+      <ResultsView v-bind:gameState="gameState" />
     </div>
   </div>
 </template>
 
 <script>
 import Header from "./components/Header.vue";
+import Denominations from "./components/game-config/Denominations.vue";
+import Roles from "./components/game-config/Roles.vue";
 import AboutView from "./components/about/AboutView.vue";
 import ResultsView from "./components/results/ResultsView.vue";
 
@@ -196,108 +73,29 @@ export default {
   name: "App",
   components: {
     appHeader: Header,
+    appDenominations: Denominations,
+    appRoles: Roles,
     AboutView,
     ResultsView,
   },
   data() {
     return {
-      stateSet: false,
       stopped: false,
-      denominations: {
-        200: 1,
-        100: 7,
-        50: 11,
-        20: 21,
-        10: 6,
-        5: 6,
-        2: 10,
-        1: 20,
-      },
       interval: 250,
-      state: {
-        timeLimit: 60000,
-        valueTimeLimit: 10000,
-        round: 0,
-        total: 0,
-        roles: [
-          { name: "Product Owner", include: true },
-          { name: "Developer", include: true },
-          { name: "Tester", include: true },
-          { name: "Integrator", include: true },
-          { name: "Customer", include: true },
-        ],
-        rounds: [
-          {
-            name: "Batch",
-            roles: [
-              { name: "Product Owner", include: true },
-              { name: "Developer", include: true },
-              { name: "Tester", include: true },
-              { name: "Integrator", include: true },
-              { name: "Customer", include: true },
-            ],
-            current: false,
-            delivered: 0,
-            time: 0,
-          },
-          { name: "Kanban", roles: [], current: false, delivered: 0, time: 0 },
-          {
-            name: "Value First",
-            roles: [],
-            current: false,
-            delivered: 0,
-            time: 0,
-          },
-        ],
-      },
     };
   },
   computed: {
     showAbout() {
       return this.$store.getters.getShowAbout;
     },
+    stateSet() {
+      return this.$store.getters.getStateSet;
+    },
+    gameState() {
+      return this.$store.getters.getGameState;
+    },
   },
   methods: {
-    total() {
-      var total = 0;
-      for (var denomination in this.denominations) {
-        total += this.denominations[denomination] * denomination;
-      }
-      this.state["total"] = total;
-      var pounds = Math.floor(total / 100);
-      var pence = total - pounds * 100;
-      if (pence < 10) {
-        pence = "0" + pence;
-      }
-      return pounds + ":" + pence;
-    },
-    getWidth(n) {
-      var sum = 0;
-      for (var denomination in this.denominations) {
-        sum = sum + parseInt(this.denominations[denomination]);
-      }
-      return (n / sum) * 100 + "%";
-    },
-    addBefore(role) {
-      var roles = [];
-      for (var i = 0; i < this.state["roles"].length; i++) {
-        if (role["name"] == this.state["roles"][i]["name"]) {
-          roles.push({ name: "New Role", include: true });
-        }
-        roles.push(this.state["roles"][i]);
-      }
-      this.state["roles"] = roles;
-    },
-    addAfter(role) {
-      var roles = [];
-      for (var i = 0; i < this.state["roles"].length; i++) {
-        roles.push(this.state["roles"][i]);
-        if (role["name"] == this.state["roles"][i]["name"]) {
-          roles.push({ name: "New Role", include: true });
-        }
-      }
-      this.state["roles"] = roles;
-    },
     allPlayed(coins) {
       var played = true;
       for (var i = 0; i < coins.length; i++) {
