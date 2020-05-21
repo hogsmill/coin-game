@@ -21,7 +21,7 @@
           class="rolename"
           v-bind:id="role['name'].replace(' ', '')"
           name="ten"
-          v-model="role['name']"
+          v-model.lazy="role['name']"
         />
       </div>
     </div>
