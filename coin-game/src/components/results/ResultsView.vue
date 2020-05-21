@@ -114,8 +114,6 @@ export default {
 </script>
 
 <style>
-.strategies {
-}
 table {
   border-collapse: collapse;
   margin: 0 auto;

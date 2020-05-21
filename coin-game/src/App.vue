@@ -8,55 +8,7 @@
       <h1>The Coin Game</h1>
       <app-denominations></app-denominations>
       <app-roles></app-roles>
-      <div class="run" :class="{ running: stateSet }">
-        <h2>Control</h2>
-        <div v-if="!stateSet">
-          <label for="interval">Interval Between Coin Plays (ms)</label>
-          <input
-            type="input"
-            id="interval"
-            name="interval"
-            v-model="interval"
-          />
-          <label for="timeLimit">Time Limit Per Round (ms)</label>
-          <input
-            type="input"
-            id="timeLimit"
-            name="timeLimit"
-            v-model="gameState['timeLimit']"
-          />
-          <label for="valueTimeLimit">Value First Round Time Limit (ms)</label>
-          <input
-            type="input"
-            id="valueTimeLimit"
-            name="valueTimeLimit"
-            v-model="gameState['valueTimeLimit']"
-          />
-        </div>
-        <button @click="go(0)" :disabled="gameState['running']">
-          Run Batch
-        </button>
-        <button @click="go(1)" :disabled="gameState['running']">
-          Run Kanban
-        </button>
-        <button @click="go(2)" :disabled="gameState['running']">
-          Run Value Delivery
-        </button>
-        <button
-          @click="stop()"
-          v-if="stateSet && !stopped"
-          :disabled="gameState['running']"
-        >
-          Stop
-        </button>
-        <button
-          @click="start()"
-          v-if="stopped"
-          :disabled="gameState['running']"
-        >
-          Start
-        </button>
-      </div>
+      <app-control></app-control>
       <ResultsView v-bind:gameState="gameState" />
     </div>
   </div>
@@ -66,6 +18,7 @@
 import Header from "./components/Header.vue";
 import Denominations from "./components/game-config/Denominations.vue";
 import Roles from "./components/game-config/Roles.vue";
+import Control from "./components/game-config/Control.vue";
 import AboutView from "./components/about/AboutView.vue";
 import ResultsView from "./components/results/ResultsView.vue";
 
@@ -75,14 +28,9 @@ export default {
     appHeader: Header,
     appDenominations: Denominations,
     appRoles: Roles,
+    appControl: Control,
     AboutView,
     ResultsView,
-  },
-  data() {
-    return {
-      stopped: false,
-      interval: 250,
-    };
   },
   computed: {
     showAbout() {

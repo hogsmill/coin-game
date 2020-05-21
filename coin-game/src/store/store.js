@@ -7,6 +7,8 @@ export const store = new Vuex.Store({
   state: {
     showAbout: false,
     stateSet: false,
+    interval: 250,
+    stopped: false,
     gameState: {
       timeLimit: 60000,
       valueTimeLimit: 10000,
@@ -57,6 +59,12 @@ export const store = new Vuex.Store({
     getStateSet: (state) => {
       return state.stateSet;
     },
+    getInterval: (state) => {
+      return state.interval;
+    },
+    getStopped: (state) => {
+      return state.stopped;
+    },
     getGameState: (state) => {
       return state.gameState;
     },
@@ -67,6 +75,12 @@ export const store = new Vuex.Store({
     },
     updateStateSet: (state, payload) => {
       state.stateSet = payload;
+    },
+    updateInterval: (state, payload) => {
+      state.interval = payload;
+    },
+    updateStopped: (state, payload) => {
+      state.stopped = payload;
     },
     updateGameState: (state, payload) => {
       state.gameState = payload;
@@ -81,6 +95,12 @@ export const store = new Vuex.Store({
     },
     updateStateSet: ({ commit }, payload) => {
       commit("updateStateSet", payload);
+    },
+    updateInterval: ({ commit }, payload) => {
+      commit("updateInterval", payload);
+    },
+    updateStopped: ({ commit }, payload) => {
+      commit("updateStopped", payload);
     },
     updateGameState: ({ commit }, payload) => {
       commit("updateGameState", payload);
