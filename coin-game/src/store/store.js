@@ -88,6 +88,9 @@ export const store = new Vuex.Store({
     updateGameStateRoles: (state, payload) => {
       state.gameState["roles"] = payload;
     },
+    updateGameStateRound: (state, payload) => {
+      state.gameState["round"] = payload;
+    },
   },
   actions: {
     updateShowAbout: ({ commit }, payload) => {
@@ -107,6 +110,9 @@ export const store = new Vuex.Store({
     },
     updateGameStateRoles: ({ commit }, payload) => {
       commit("updateGameStateRoles", payload);
+    },
+    updateGameStateRound: ({ commit }, payload) => {
+      commit("updateGameStateRound", payload);
     },
   },
 });
