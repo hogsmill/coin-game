@@ -7,7 +7,7 @@
         type="input"
         id="twoPound"
         name="twoPound"
-        v-model="denominations['200']"
+        v-model.lazy="denominations['200']"
       />
       <div
         class="distribution"
@@ -20,7 +20,7 @@
         type="input"
         id="onePound"
         name="onePound"
-        v-model="denominations['100']"
+        v-model.lazy="denominations['100']"
       />
       <div
         class="distribution"
@@ -33,7 +33,7 @@
         type="input"
         id="fifty"
         name="fifty"
-        v-model="denominations['50']"
+        v-model.lazy="denominations['50']"
       />
       <div
         class="distribution"
@@ -46,7 +46,7 @@
         type="input"
         id="twenty"
         name="twenty"
-        v-model="denominations['20']"
+        v-model.lazy="denominations['20']"
       />
       <div
         class="distribution"
@@ -55,7 +55,12 @@
     </div>
     <div>
       <label for="twenty">10p</label>
-      <input type="input" id="ten" name="ten" v-model="denominations['10']" />
+      <input
+        type="input"
+        id="ten"
+        name="ten"
+        v-model.lazy="denominations['10']"
+      />
       <div
         class="distribution"
         :style="{ width: getWidth(denominations['10']) }"
@@ -63,7 +68,12 @@
     </div>
     <div>
       <label for="five">5p</label>
-      <input type="input" id="five" name="five" v-model="denominations['5']" />
+      <input
+        type="input"
+        id="five"
+        name="five"
+        v-model.lazy="denominations['5']"
+      />
       <div
         class="distribution"
         :style="{ width: getWidth(denominations['5']) }"
@@ -71,7 +81,12 @@
     </div>
     <div>
       <label for="two">2p</label>
-      <input type="input" id="two" name="two" v-model="denominations['2']" />
+      <input
+        type="input"
+        id="two"
+        name="two"
+        v-model.lazy="denominations['2']"
+      />
       <div
         class="distribution"
         :style="{ width: getWidth(denominations['2']) }"
@@ -79,7 +94,12 @@
     </div>
     <div>
       <label for="one">1p</label>
-      <input type="input" id="one" name="one" v-model="denominations['1']" />
+      <input
+        type="input"
+        id="one"
+        name="one"
+        v-model.lazy="denominations['1']"
+      />
       <div
         class="distribution"
         :style="{ width: getWidth(denominations['1']) }"
@@ -91,23 +111,12 @@
 
 <script>
 export default {
-  data() {
-    return {
-      denominations: {
-        200: 1,
-        100: 7,
-        50: 11,
-        20: 21,
-        10: 6,
-        5: 6,
-        2: 10,
-        1: 20,
-      },
-    };
-  },
   computed: {
     stateSet() {
       return this.$store.getters.getStateSet;
+    },
+    denominations() {
+      return this.$store.getters.getDenominations;
     },
     gameState() {
       return this.$store.getters.getGameState;

@@ -9,6 +9,16 @@ export const store = new Vuex.Store({
     stateSet: false,
     interval: 250,
     stopped: false,
+    denominations: {
+      200: 1,
+      100: 7,
+      50: 11,
+      20: 21,
+      10: 6,
+      5: 6,
+      2: 10,
+      1: 20,
+    },
     gameState: {
       timeLimit: 60000,
       valueTimeLimit: 10000,
@@ -65,6 +75,9 @@ export const store = new Vuex.Store({
     getStopped: (state) => {
       return state.stopped;
     },
+    getDenominations: (state) => {
+      return state.denominations;
+    },
     getGameState: (state) => {
       return state.gameState;
     },
@@ -82,6 +95,9 @@ export const store = new Vuex.Store({
     updateStopped: (state, payload) => {
       state.stopped = payload;
     },
+    updateDenominations: (state, payload) => {
+      state.denominations = payload;
+    },
     updateGameState: (state, payload) => {
       state.gameState = payload;
     },
@@ -90,6 +106,9 @@ export const store = new Vuex.Store({
     },
     updateGameStateRound: (state, payload) => {
       state.gameState["round"] = payload;
+    },
+    updateGameStateRoundsRoles: (state, payload) => {
+      state.gameState["rounds"][payload.round]["roles"] = payload.roles;
     },
   },
   actions: {
@@ -105,6 +124,9 @@ export const store = new Vuex.Store({
     updateStopped: ({ commit }, payload) => {
       commit("updateStopped", payload);
     },
+    updateDenominations: ({ commit }, payload) => {
+      commit("updateDenominations", payload);
+    },
     updateGameState: ({ commit }, payload) => {
       commit("updateGameState", payload);
     },
@@ -113,6 +135,9 @@ export const store = new Vuex.Store({
     },
     updateGameStateRound: ({ commit }, payload) => {
       commit("updateGameStateRound", payload);
+    },
+    updateGameStateRoundsRoles: ({ commit }, payload) => {
+      commit("updateGameStateRoundsRoles", payload);
     },
   },
 });

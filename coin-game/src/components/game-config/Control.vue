@@ -58,6 +58,9 @@ export default {
     stopped() {
       return this.$store.getters.getStopped;
     },
+    denominations() {
+      return this.$store.getters.getDenominations;
+    },
     gameState() {
       return this.$store.getters.getGameState;
     },
@@ -86,7 +89,7 @@ export default {
     },
     moveCoins(roundNum) {
       var i, j, coin;
-      var round = this.state["rounds"][roundNum];
+      var round = this.gameState["rounds"][roundNum];
       for (i = 0; i < round["roles"].length - 1; i++) {
         if (
           round["roles"][i]["coins"].length &&
@@ -158,7 +161,7 @@ export default {
           : this.gameState["timeLimit"];
       return (
         this.gameState["rounds"][round]["time"] >= parseInt(limit) ||
-        this.gameState["rounds"][round]["delivered"] == this.state["total"]
+        this.gameState["rounds"][round]["delivered"] == this.gameState["total"]
       );
     },
     run() {
@@ -208,7 +211,7 @@ export default {
       this.$store.dispatch("updateStateSet", true);
       this.$store.dispatch("updateGameStateRound", round);
       var roles = [];
-      for (var i = 0; i < this.state["roles"].length; i++) {
+      for (var i = 0; i < this.gameState["roles"].length; i++) {
         if (this.gameState["roles"][i]["include"]) {
           var role = JSON.parse(JSON.stringify(this.gameState["roles"][i]));
           if (i == 0) {
@@ -221,8 +224,10 @@ export default {
           roles.push(role);
         }
       }
-      // TODO: Add Update rounds[round][roles] to store and then add dispatch below
-      this.state["rounds"][round]["roles"] = roles;
+      this.$store.dispatch("updateGameStateRoundsRoles", {
+        round: round,
+        roles: roles,
+      });
       console.log(this.gameState);
       this.run();
     },
