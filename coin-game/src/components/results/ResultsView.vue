@@ -1,9 +1,9 @@
 <template>
-  <div class="results">
+  <div class="results mb-5">
     <h2>Results</h2>
     <div class="narration"></div>
-    <div class="strategies">
-      <table class="table table-bordered">
+    <div class="container">
+      <table class="table table-striped">
         <thead>
           <td :style="{ width: setWidth() }">Round</td>
           <td
@@ -104,7 +104,7 @@ export default {
       if (pence < 10) {
         pence = "0" + pence;
       }
-      return pounds + ":" + pence;
+      return pounds + "." + pence;
     },
     outOfTime(round) {
       return round["time"] >= this.gameState["timeLimit"];
@@ -114,7 +114,7 @@ export default {
 </script>
 
 <style>
-table {
+/* table {
   border-collapse: collapse;
   margin: 0 auto;
   max-width: 80%;
@@ -125,7 +125,7 @@ thead td {
 td {
   border: 1px solid;
   vertical-align: top;
-}
+} */
 .missed {
   margin-top: 12px;
   color: red;
