@@ -1,14 +1,18 @@
 <template>
-  <div id="app">
+  <div id="app" class="mb-4">
     <appHeader></appHeader>
     <div v-if="showAbout">
       <AboutView />
     </div>
     <div v-else>
       <h1>The Coin Game</h1>
-      <app-denominations></app-denominations>
-      <app-roles></app-roles>
-      <app-control></app-control>
+      <div class="container">
+        <div class="card-deck">
+          <app-denominations></app-denominations>
+          <app-roles></app-roles>
+          <app-control></app-control>
+        </div>
+      </div>
       <ResultsView v-bind:gameState="gameState" />
     </div>
   </div>

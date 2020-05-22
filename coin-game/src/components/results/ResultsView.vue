@@ -3,7 +3,7 @@
     <h2>Results</h2>
     <div class="narration"></div>
     <div class="strategies">
-      <table>
+      <table class="table table-bordered">
         <thead>
           <td :style="{ width: setWidth() }">Round</td>
           <td

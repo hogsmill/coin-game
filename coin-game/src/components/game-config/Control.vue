@@ -1,46 +1,81 @@
 <template>
-  <div class="run" :class="{ running: stateSet }">
-    <h2>Control</h2>
-    <div v-if="!stateSet">
-      <label for="interval">Interval Between Coin Plays (ms)</label>
-      <input
-        type="input"
-        id="interval"
-        name="interval"
-        v-model.lazy="interval"
-      />
-      <label for="timeLimit">Time Limit Per Round (ms)</label>
-      <input
-        type="input"
-        id="timeLimit"
-        name="timeLimit"
-        v-model.lazy="gameState['timeLimit']"
-      />
-      <label for="valueTimeLimit">Value First Round Time Limit (ms)</label>
-      <input
-        type="input"
-        id="valueTimeLimit"
-        name="valueTimeLimit"
-        v-model.lazy="gameState['valueTimeLimit']"
-      />
+  <div class="col-md-3 mb-3 no-padding-r-l" :class="{ running: stateSet }">
+    <div class="card bg-light mb-3" v-if="!stateSet">
+      <div class="card-body">
+        <h5 class="card-title">Control</h5>
+        <form>
+          <div class="form-group">
+            <label for="interval">Interval Between Coin Plays (ms)</label>
+            <input
+              type="text"
+              class="form-control"
+              id="interval"
+              name="interval"
+              v-model.lazy="interval"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="timeLimit">Time Limit Per Round (ms)</label>
+            <input
+              type="text"
+              class="form-control"
+              id="timeLimit"
+              name="timeLimit"
+              v-model.lazy="gameState['timeLimit']"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="valueTimeLimit"
+              >Value First Round Time Limit (ms)</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="valueTimeLimit"
+              name="valueTimeLimit"
+              v-model.lazy="gameState['valueTimeLimit']"
+            />
+          </div>
+        </form>
+      </div>
     </div>
-    <button @click="go(0)" :disabled="gameState['running']">
+    <button
+      class="btn btn-info mb-2"
+      @click="go(0)"
+      :disabled="gameState['running']"
+    >
       Run Batch
     </button>
-    <button @click="go(1)" :disabled="gameState['running']">
+    <button
+      class="btn btn-info mb-2"
+      @click="go(1)"
+      :disabled="gameState['running']"
+    >
       Run Kanban
     </button>
-    <button @click="go(2)" :disabled="gameState['running']">
+    <button
+      class="btn btn-info mb-2"
+      @click="go(2)"
+      :disabled="gameState['running']"
+    >
       Run Value Delivery
     </button>
     <button
+      class="btn btn-info mb-2"
       @click="stop()"
       v-if="stateSet && !stopped"
       :disabled="gameState['running']"
     >
       Stop
     </button>
-    <button @click="start()" v-if="stopped" :disabled="gameState['running']">
+    <button
+      class="btn btn-info mb-2"
+      @click="start()"
+      v-if="stopped"
+      :disabled="gameState['running']"
+    >
       Start
     </button>
   </div>

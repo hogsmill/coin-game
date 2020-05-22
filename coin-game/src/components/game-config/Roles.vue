@@ -1,29 +1,37 @@
 <template>
-  <div class="roles" v-if="!stateSet">
-    <h2>Roles</h2>
-    <div>
-      <div
+  <div class="card bg-light mb-3 no-padding-r-l" v-if="!stateSet">
+    <div class="card-body">
+      <h5 class="card-title">Roles</h5>
+      <form
+        class="form-inline"
         v-for="role in gameState.roles"
         :key="role['name'].replace(' ', '')"
-        class="role"
       >
-        <input
-          type="checkbox"
-          checked="role['include']"
-          v-model="role['include']"
-        />
-        <button @click="addBefore(role)">+ Before</button>
-        <button v-if="role['name'] != 'Customer'" @click="addAfter(role)">
+        <div class="form-check mb-2 mr-sm-2">
+          <input
+            class="form-check-input mr-neg-10"
+            type="checkbox"
+            checked="role['include']"
+            v-model="role['include']"
+          />
+        </div>
+        <button @click="addBefore(role)" class="btn btn-info mb-2">
+          + Before
+        </button>
+        <button
+          v-if="role['name'] != 'Customer'"
+          @click="addAfter(role)"
+          class="btn btn-info mb-2"
+        >
           + After
         </button>
         <input
-          type="input"
-          class="rolename"
+          type="text"
+          class="form-control mb-2 ml-1 col-md-6"
           v-bind:id="role['name'].replace(' ', '')"
-          name="ten"
           v-model.lazy="role['name']"
         />
-      </div>
+      </form>
     </div>
   </div>
 </template>
