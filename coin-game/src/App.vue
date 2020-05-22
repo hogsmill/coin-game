@@ -11,6 +11,7 @@
           <app-denominations></app-denominations>
           <app-roles></app-roles>
           <app-control></app-control>
+          <app-game-buttons></app-game-buttons>
         </div>
       </div>
       <ResultsView v-bind:gameState="gameState" />
@@ -23,6 +24,7 @@ import Header from "./components/Header.vue";
 import Denominations from "./components/game-config/Denominations.vue";
 import Roles from "./components/game-config/Roles.vue";
 import Control from "./components/game-config/Control.vue";
+import GameButtons from "./components/game-config/GameButtons.vue";
 import AboutView from "./components/about/AboutView.vue";
 import ResultsView from "./components/results/ResultsView.vue";
 
@@ -33,6 +35,7 @@ export default {
     appDenominations: Denominations,
     appRoles: Roles,
     appControl: Control,
+    appGameButtons: GameButtons,
     AboutView,
     ResultsView,
   },

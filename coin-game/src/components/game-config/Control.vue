@@ -1,83 +1,42 @@
 <template>
-  <div class="col-md-3 mb-3 no-padding-r-l" :class="{ running: stateSet }">
-    <div class="card bg-light mb-3" v-if="!stateSet">
-      <div class="card-body">
-        <h5 class="card-title">Control</h5>
-        <form>
-          <div class="form-group">
-            <label for="interval">Interval Between Coin Plays (ms)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="interval"
-              name="interval"
-              v-model.lazy="interval"
-            />
-          </div>
+  <div class="card bg-light mb-3 col-md-3 no-padding-r-l" v-if="!stateSet">
+    <div class="card-body">
+      <h5 class="card-title">Control</h5>
+      <form>
+        <div class="form-group">
+          <label for="interval">Interval Between Coin Plays (ms)</label>
+          <input
+            type="text"
+            class="form-control"
+            id="interval"
+            name="interval"
+            v-model.lazy="interval"
+          />
+        </div>
 
-          <div class="form-group">
-            <label for="timeLimit">Time Limit Per Round (ms)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="timeLimit"
-              name="timeLimit"
-              v-model.lazy="gameState['timeLimit']"
-            />
-          </div>
+        <div class="form-group">
+          <label for="timeLimit">Time Limit Per Round (ms)</label>
+          <input
+            type="text"
+            class="form-control"
+            id="timeLimit"
+            name="timeLimit"
+            v-model.lazy="gameState['timeLimit']"
+          />
+        </div>
 
-          <div class="form-group">
-            <label for="valueTimeLimit"
-              >Value First Round Time Limit (ms)</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="valueTimeLimit"
-              name="valueTimeLimit"
-              v-model.lazy="gameState['valueTimeLimit']"
-            />
-          </div>
-        </form>
-      </div>
+        <div class="form-group">
+          <label for="valueTimeLimit">Value First Round Time Limit (ms)</label>
+          <input
+            type="text"
+            class="form-control"
+            id="valueTimeLimit"
+            name="valueTimeLimit"
+            v-model.lazy="gameState['valueTimeLimit']"
+          />
+        </div>
+      </form>
     </div>
-    <button
-      class="btn btn-info mb-2"
-      @click="go(0)"
-      :disabled="gameState['running']"
-    >
-      Run Batch
-    </button>
-    <button
-      class="btn btn-info mb-2"
-      @click="go(1)"
-      :disabled="gameState['running']"
-    >
-      Run Kanban
-    </button>
-    <button
-      class="btn btn-info mb-2"
-      @click="go(2)"
-      :disabled="gameState['running']"
-    >
-      Run Value Delivery
-    </button>
-    <button
-      class="btn btn-info mb-2"
-      @click="stop()"
-      v-if="stateSet && !stopped"
-      :disabled="gameState['running']"
-    >
-      Stop
-    </button>
-    <button
-      class="btn btn-info mb-2"
-      @click="start()"
-      v-if="stopped"
-      :disabled="gameState['running']"
-    >
-      Start
-    </button>
   </div>
 </template>
 
@@ -90,181 +49,8 @@ export default {
     interval() {
       return this.$store.getters.getInterval;
     },
-    stopped() {
-      return this.$store.getters.getStopped;
-    },
-    denominations() {
-      return this.$store.getters.getDenominations;
-    },
     gameState() {
       return this.$store.getters.getGameState;
-    },
-  },
-  methods: {
-    allPlayed(coins) {
-      var played = true;
-      for (var i = 0; i < coins.length; i++) {
-        if (!coins[i]["played"]) {
-          played = false;
-        }
-      }
-      return played;
-    },
-    setCoin(coin, i, roles) {
-      if (i < roles.length - 2) {
-        coin["played"] = false;
-      }
-      return coin;
-    },
-    deliverCoin(coin, role, round) {
-      var l = round["roles"].length;
-      if (role.name == round["roles"][l - 1]["name"]) {
-        round["delivered"] = round["delivered"] + parseInt(coin["value"]);
-      }
-    },
-    moveCoins(roundNum) {
-      var i, j, coin;
-      var round = this.gameState["rounds"][roundNum];
-      for (i = 0; i < round["roles"].length - 1; i++) {
-        if (
-          round["roles"][i]["coins"].length &&
-          this.allPlayed(round["roles"][i]["coins"])
-        ) {
-          for (j = 0; j < round["roles"][i]["coins"].length; j++) {
-            coin = round["roles"][i]["coins"][j];
-            coin.played = false;
-            round["roles"][i + 1]["coins"].push(coin);
-            this.deliverCoin(coin, round["roles"][i + 1], round);
-          }
-          round["roles"][i]["coins"] = [];
-        }
-      }
-    },
-    moveCoin(round) {
-      for (
-        var i = 0;
-        i < this.gameState["rounds"][round]["roles"].length - 1;
-        i++
-      ) {
-        var roles = this.gameState["rounds"][round]["roles"];
-        var role = roles[i];
-        console.log("role", role["name"]);
-        for (var j = 0; j < role["coins"].length; j++) {
-          var coin = role["coins"][j];
-          if (coin["played"]) {
-            coin["played"] = false;
-            roles[i + 1]["coins"].push(coin);
-            role["coins"].splice(j, 1);
-            this.deliverCoin(
-              coin,
-              roles[i + 1],
-              this.gameState["rounds"][round]
-            );
-          }
-        }
-      }
-    },
-    playCoin(coins) {
-      var i = 0;
-      var played = false;
-      while (i < coins.length && !played) {
-        if (!coins[i]["played"]) {
-          coins[i]["played"] = true;
-          played = true;
-        }
-        i++;
-      }
-    },
-    playRoleCoins(round) {
-      var roles = this.gameState["rounds"][round]["roles"];
-      var played;
-      for (var i = 0; i < roles.length; i++) {
-        if (!played) {
-          this.playCoin(roles[i]["coins"]);
-        }
-      }
-    },
-    incrementTime(round) {
-      this.gameState["rounds"][round]["time"] =
-        this.gameState["rounds"][round]["time"] + parseInt(this.interval);
-      return this.gameState["rounds"][round]["time"];
-    },
-    complete(round) {
-      var limit =
-        this.gameState["rounds"][round]["name"] == "Value First"
-          ? this.gameState["valueTimeLimit"]
-          : this.gameState["timeLimit"];
-      return (
-        this.gameState["rounds"][round]["time"] >= parseInt(limit) ||
-        this.gameState["rounds"][round]["delivered"] == this.gameState["total"]
-      );
-    },
-    run() {
-      var round = this.gameState["round"];
-      this.playRoleCoins(round);
-      console.log("round", this.gameState["rounds"][round]);
-      if (this.gameState["rounds"][round]["name"] == "Batch") {
-        this.moveCoins(round);
-      } else {
-        this.moveCoin(round);
-      }
-      this.incrementTime(this.gameState["round"]);
-      if (!this.complete(this.gameState["round"]) && !this.stopped) {
-        setTimeout(this.run, this.interval);
-      }
-    },
-    shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    },
-    getCoins(round) {
-      var coins = [];
-      for (var denomination in this.denominations) {
-        for (var i = 0; i < this.denominations[denomination]; i++) {
-          coins.push({ value: denomination, played: false });
-        }
-      }
-      if (round == "Value First") {
-        coins = coins.sort(function(a, b) {
-          return parseInt(b["value"]) - parseInt(a["value"]);
-        });
-      } else {
-        coins = this.shuffleArray(coins);
-      }
-      return coins;
-    },
-    start() {
-      this.$store.dispatch("updateStopped", false);
-    },
-    stop() {
-      this.$store.dispatch("updateStopped", true);
-    },
-    go(round) {
-      this.$store.dispatch("updateStateSet", true);
-      this.$store.dispatch("updateGameStateRound", round);
-      var roles = [];
-      for (var i = 0; i < this.gameState["roles"].length; i++) {
-        if (this.gameState["roles"][i]["include"]) {
-          var role = JSON.parse(JSON.stringify(this.gameState["roles"][i]));
-          if (i == 0) {
-            role["coins"] = this.getCoins(
-              this.gameState["rounds"][round]["name"]
-            );
-          } else {
-            role["coins"] = [];
-          }
-          roles.push(role);
-        }
-      }
-      this.$store.dispatch("updateGameStateRoundsRoles", {
-        round: round,
-        roles: roles,
-      });
-      console.log(this.gameState);
-      this.run();
     },
   },
 };

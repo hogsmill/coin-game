@@ -114,18 +114,6 @@ export default {
 </script>
 
 <style>
-/* table {
-  border-collapse: collapse;
-  margin: 0 auto;
-  max-width: 80%;
-}
-thead td {
-  font-weight: bold;
-}
-td {
-  border: 1px solid;
-  vertical-align: top;
-} */
 .missed {
   margin-top: 12px;
   color: red;
