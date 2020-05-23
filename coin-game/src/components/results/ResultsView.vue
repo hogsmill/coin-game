@@ -1,5 +1,5 @@
 <template>
-  <div class="results mb-5">
+  <div class="results mb-5" v-if="stateSet">
     <h2>Results</h2>
     <div class="narration"></div>
     <div class="container">
@@ -71,6 +71,9 @@ export default {
     };
   },
   computed: {
+    stateSet() {
+      return this.$store.getters.getStateSet;
+    },
     gameState() {
       return this.$store.getters.getGameState;
     },
