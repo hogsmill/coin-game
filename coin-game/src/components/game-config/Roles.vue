@@ -15,12 +15,12 @@
             v-model="role['include']"
           />
         </div>
-        <button @click="addBefore(role)" class="btn btn-info mb-2">
+        <button @click.prevent="addBefore(role)" class="btn btn-info mb-2">
           + Before
         </button>
         <button
           v-if="role['name'] != 'Customer'"
-          @click="addAfter(role)"
+          @click.prevent="addAfter(role)"
           class="btn btn-info mb-2"
         >
           + After
@@ -54,6 +54,7 @@ export default {
           roles.push({ name: "New Role", include: true });
         }
         roles.push(this.gameState["roles"][i]);
+        console.log("roles = ", roles);
       }
       this.$store.dispatch("updateGameStateRoles", roles);
     },
