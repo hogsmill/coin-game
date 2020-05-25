@@ -46,8 +46,13 @@ export default {
     stateSet() {
       return this.$store.getters.getStateSet;
     },
-    interval() {
-      return this.$store.getters.getInterval;
+    interval: {
+      get() {
+        return this.$store.getters.getInterval;
+      },
+      set(value) {
+        this.$store.dispatch("updateInterval", value);
+      },
     },
     gameState() {
       return this.$store.getters.getGameState;
