@@ -1,11 +1,13 @@
+import Vue from "vue";
+import App from "./App.vue";
+import { store } from "./store/store";
 
-import Vue from 'vue'
-import App from './App.vue'
+require("./assets/site.css");
 
-require('./assets/site.css')
-
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+  el: "#app",
+  store,
+  render: (h) => h(App),
+});
