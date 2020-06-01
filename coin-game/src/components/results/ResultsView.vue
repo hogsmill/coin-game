@@ -117,6 +117,9 @@ export default {
 </script>
 
 <style>
+thead {
+  font-weight: bold;
+}
 .missed {
   margin-top: 12px;
   color: red;
