@@ -20,8 +20,8 @@
             <td>{{ round["name"] }}</td>
             <td
               v-for="(role, roleIndex) in gameState.rounds[0]['roles']"
-              v-bind:role="role"
-              v-bind:roleIndex="roleIndex"
+              :role="role"
+              :roleIndex="roleIndex"
               :key="roleIndex"
             >
               <div v-if="gameState.rounds[index]['roles'][roleIndex]">
@@ -29,13 +29,14 @@
                   v-for="(coin, coinIndex) in gameState['rounds'][index][
                     'roles'
                   ][roleIndex]['coins']"
-                  :v-bind:coin="coin"
+                  :coin="coin"
+                  :coinIndex="coinIndex"
                   :key="coinIndex"
                   class="coin-parent"
                 >
                   <div
                     class="coin"
-                    v-bind:class="[getClassName(role), getValueName(coin)]"
+                    :class="[getClassName(role), getValueName(coin)]"
                   ></div>
                 </div>
               </div>
