@@ -16,11 +16,6 @@ io.on("connection", (socket) => {
     console.log("clickGo emit triggered!");
     io.emit("goClicked", data);
   });
-
-  socket.on("test", (data) => {
-    console.log("test socket.on triggered!");
-    io.emit("updateHeader", data);
-  });
 });
 
 http.listen(3000, () => {

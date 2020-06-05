@@ -5,10 +5,7 @@
       <AboutView />
     </div>
     <div v-else>
-      <h1>{{ h1 }}</h1>
-      <button @click="updateH1('New h1 message')" class="btn btn-primary mb-4">
-        Update H1 text
-      </button>
+      <h1>The Coin Game</h1>
       <div class="container">
         <div class="card-deck">
           <app-denominations></app-denominations>
@@ -34,11 +31,6 @@ import io from "socket.io-client";
 
 export default {
   name: "App",
-  data() {
-    return {
-      h1: "The Coin Game",
-    };
-  },
   components: {
     appHeader: Header,
     appDenominations: Denominations,
@@ -63,14 +55,6 @@ export default {
     updateH1(data) {
       this.socket.emit("test", data);
     },
-  },
-  created() {
-    this.socket = io("http://localhost:3000");
-  },
-  mounted() {
-    this.socket.on("updateHeader", (data) => {
-      this.h1 = data;
-    });
   },
 };
 </script>
