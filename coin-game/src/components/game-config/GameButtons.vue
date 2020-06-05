@@ -202,6 +202,11 @@ export default {
       this.$store.dispatch("updateStopped", true);
     },
     go(round) {
+      this.$socket.emit("click-go", {
+        round: round,
+        updateStateSet: true,
+        updateGameStateRound: round,
+      });
       this.$store.dispatch("updateStateSet", true);
       this.$store.dispatch("updateGameStateRound", round);
       var roles = [];
@@ -225,6 +230,14 @@ export default {
       console.log(this.gameState);
       this.run();
     },
+  },
+  mounted() {
+    console.log("inside mounted life cycle");
+    this.$socket.on("click-go", (data) => {
+      console.log("inside click-go emit");
+      this.$store.dispatch("updateStateSet", data.updateStateSet);
+      this.$store.dispatch("updateGameStateRound", data.updateGameStateRound);
+    });
   },
 };
 </script>

@@ -12,9 +12,10 @@ io.on("connection", (socket) => {
     console.log(`User with socket id ${socket.id} has disconnected.`);
   });
 
-  // socket.on("nudge-client", (data) => {
-  //   socket.broadcast.to(data.to).emit("client-nudged", data);
-  // });
+  socket.on("click-go", (data) => {
+    console.log("click-go emit triggered!");
+    socket.broadcast.emit("click-go", data);
+  });
 });
 
 http.listen(3000, () => {
