@@ -12,9 +12,14 @@ io.on("connection", (socket) => {
     console.log(`User with socket id ${socket.id} has disconnected.`);
   });
 
-  socket.on("click-go", (data) => {
-    console.log("click-go emit triggered!");
-    socket.broadcast.emit("click-go", data);
+  socket.on("clickGo", (data) => {
+    console.log("clickGo emit triggered!");
+    io.emit("goClicked", data);
+  });
+
+  socket.on("test", (data) => {
+    console.log("test socket.on triggered!");
+    io.emit("updateHeader", data);
   });
 });
 

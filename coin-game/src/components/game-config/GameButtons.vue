@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import io from "socket.io-client";
+
 export default {
   computed: {
     stateSet() {
@@ -107,7 +109,7 @@ export default {
       ) {
         var roles = this.gameState["rounds"][round]["roles"];
         var role = roles[i];
-        console.log("role", role["name"]);
+        // console.log("role", role["name"]);
         for (var j = 0; j < role["coins"].length; j++) {
           var coin = role["coins"][j];
           if (coin["played"]) {
@@ -161,7 +163,7 @@ export default {
     run() {
       var round = this.gameState["round"];
       this.playRoleCoins(round);
-      console.log("round", this.gameState["rounds"][round]);
+      // console.log("round", this.gameState["rounds"][round]);
       if (this.gameState["rounds"][round]["name"] == "Batch") {
         this.moveCoins(round);
       } else {
@@ -202,7 +204,7 @@ export default {
       this.$store.dispatch("updateStopped", true);
     },
     go(round) {
-      this.$socket.emit("click-go", {
+      this.$socket.emit("clickGo", {
         round: round,
         updateStateSet: true,
         updateGameStateRound: round,
@@ -227,14 +229,16 @@ export default {
         round: round,
         roles: roles,
       });
-      console.log(this.gameState);
+      // console.log(this.gameState);
       this.run();
     },
   },
+  created() {
+    this.socket = io("http://localhost:3000");
+  },
   mounted() {
-    console.log("inside mounted life cycle");
-    this.$socket.on("click-go", (data) => {
-      console.log("inside click-go emit");
+    this.socket.on("goClicked", (data) => {
+      console.log("inside goClicked emit");
       this.$store.dispatch("updateStateSet", data.updateStateSet);
       this.$store.dispatch("updateGameStateRound", data.updateGameStateRound);
     });
