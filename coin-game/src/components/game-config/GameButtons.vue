@@ -209,28 +209,28 @@ export default {
         updateStateSet: true,
         updateGameStateRound: round,
       });
-      this.$store.dispatch("updateStateSet", true);
-      this.$store.dispatch("updateGameStateRound", round);
-      var roles = [];
-      for (var i = 0; i < this.gameState["roles"].length; i++) {
-        if (this.gameState["roles"][i]["include"]) {
-          var role = JSON.parse(JSON.stringify(this.gameState["roles"][i]));
-          if (i == 0) {
-            role["coins"] = this.getCoins(
-              this.gameState["rounds"][round]["name"]
-            );
-          } else {
-            role["coins"] = [];
-          }
-          roles.push(role);
-        }
-      }
-      this.$store.dispatch("updateGameStateRoundsRoles", {
-        round: round,
-        roles: roles,
-      });
-      // console.log(this.gameState);
-      this.run();
+      // this.$store.dispatch("updateStateSet", true);
+      // this.$store.dispatch("updateGameStateRound", round);
+      // var roles = [];
+      // for (var i = 0; i < this.gameState["roles"].length; i++) {
+      //   if (this.gameState["roles"][i]["include"]) {
+      //     var role = JSON.parse(JSON.stringify(this.gameState["roles"][i]));
+      //     if (i == 0) {
+      //       role["coins"] = this.getCoins(
+      //         this.gameState["rounds"][round]["name"]
+      //       );
+      //     } else {
+      //       role["coins"] = [];
+      //     }
+      //     roles.push(role);
+      //   }
+      // }
+      // this.$store.dispatch("updateGameStateRoundsRoles", {
+      //   round: round,
+      //   roles: roles,
+      // });
+      // // console.log(this.gameState);
+      // this.run();
     },
   },
   created() {
@@ -241,6 +241,26 @@ export default {
       console.log("inside goClicked emit");
       this.$store.dispatch("updateStateSet", data.updateStateSet);
       this.$store.dispatch("updateGameStateRound", data.updateGameStateRound);
+      var roles = [];
+      for (var i = 0; i < this.gameState["roles"].length; i++) {
+        if (this.gameState["roles"][i]["include"]) {
+          var role = JSON.parse(JSON.stringify(this.gameState["roles"][i]));
+          if (i == 0) {
+            role["coins"] = this.getCoins(
+              this.gameState["rounds"][data.round]["name"]
+            );
+          } else {
+            role["coins"] = [];
+          }
+          roles.push(role);
+        }
+      }
+      this.$store.dispatch("updateGameStateRoundsRoles", {
+        round: data.round,
+        roles: roles,
+      });
+      // console.log(this.gameState);
+      this.run();
     });
   },
 };
