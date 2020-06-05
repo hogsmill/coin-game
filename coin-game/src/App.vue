@@ -27,7 +27,6 @@ import Control from "./components/game-config/Control.vue";
 import GameButtons from "./components/game-config/GameButtons.vue";
 import AboutView from "./components/about/AboutView.vue";
 import ResultsView from "./components/results/ResultsView.vue";
-import io from "socket.io-client";
 
 export default {
   name: "App",
