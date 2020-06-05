@@ -204,7 +204,7 @@ export default {
       this.$store.dispatch("updateStopped", true);
     },
     go(round) {
-      this.$socket.emit("clickGo", {
+      this.socket.emit("clickGo", {
         round: round,
         updateStateSet: true,
         updateGameStateRound: round,
