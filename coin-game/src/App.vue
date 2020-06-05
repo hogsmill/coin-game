@@ -50,10 +50,5 @@ export default {
       return this.$store.getters.getGameState;
     },
   },
-  methods: {
-    updateH1(data) {
-      this.socket.emit("test", data);
-    },
-  },
 };
 </script>
