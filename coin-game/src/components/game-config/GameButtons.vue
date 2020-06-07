@@ -1,28 +1,28 @@
 <template>
   <div class="col-md-12 mb-3" :class="{ running: stateSet }">
     <button
-      class="btn btn-info mb-2"
+      class="btn btn-site-primary mb-2"
       @click="go(0)"
       :disabled="gameState['running']"
     >
       Run Batch
     </button>
     <button
-      class="btn btn-info mb-2"
+      class="btn btn-site-primary mb-2"
       @click="go(1)"
       :disabled="gameState['running']"
     >
       Run Kanban
     </button>
     <button
-      class="btn btn-info mb-2"
+      class="btn btn-site-primary mb-2"
       @click="go(2)"
       :disabled="gameState['running']"
     >
       Run Value Delivery
     </button>
     <button
-      class="btn btn-info mb-2"
+      class="btn btn-site-primary mb-2"
       @click="stop()"
       v-if="stateSet && !stopped"
       :disabled="gameState['running']"
@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import io from "socket.io-client";
+
 export default {
   computed: {
     stateSet() {
@@ -107,7 +109,7 @@ export default {
       ) {
         var roles = this.gameState["rounds"][round]["roles"];
         var role = roles[i];
-        console.log("role", role["name"]);
+        // console.log("role", role["name"]);
         for (var j = 0; j < role["coins"].length; j++) {
           var coin = role["coins"][j];
           if (coin["played"]) {
@@ -161,7 +163,7 @@ export default {
     run() {
       var round = this.gameState["round"];
       this.playRoleCoins(round);
-      console.log("round", this.gameState["rounds"][round]);
+      // console.log("round", this.gameState["rounds"][round]);
       if (this.gameState["rounds"][round]["name"] == "Batch") {
         this.moveCoins(round);
       } else {
@@ -202,15 +204,28 @@ export default {
       this.$store.dispatch("updateStopped", true);
     },
     go(round) {
-      this.$store.dispatch("updateStateSet", true);
-      this.$store.dispatch("updateGameStateRound", round);
+      this.socket.emit("clickGo", {
+        round: round,
+        updateStateSet: true,
+        updateGameStateRound: round,
+      });
+    },
+  },
+  created() {
+    this.socket = io("http://localhost:3000");
+  },
+  mounted() {
+    this.socket.on("goClicked", (data) => {
+      console.log("inside goClicked emit");
+      this.$store.dispatch("updateStateSet", data.updateStateSet);
+      this.$store.dispatch("updateGameStateRound", data.updateGameStateRound);
       var roles = [];
       for (var i = 0; i < this.gameState["roles"].length; i++) {
         if (this.gameState["roles"][i]["include"]) {
           var role = JSON.parse(JSON.stringify(this.gameState["roles"][i]));
           if (i == 0) {
             role["coins"] = this.getCoins(
-              this.gameState["rounds"][round]["name"]
+              this.gameState["rounds"][data.round]["name"]
             );
           } else {
             role["coins"] = [];
@@ -219,12 +234,12 @@ export default {
         }
       }
       this.$store.dispatch("updateGameStateRoundsRoles", {
-        round: round,
+        round: data.round,
         roles: roles,
       });
-      console.log(this.gameState);
+      // console.log(this.gameState);
       this.run();
-    },
+    });
   },
 };
 </script>
