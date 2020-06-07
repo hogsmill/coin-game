@@ -1,28 +1,28 @@
 <template>
   <div class="col-md-12 mb-3" :class="{ running: stateSet }">
     <button
-      class="btn btn-info mb-2"
+      class="btn btn-site-primary mb-2"
       @click="go(0)"
       :disabled="gameState['running']"
     >
       Run Batch
     </button>
     <button
-      class="btn btn-info mb-2"
+      class="btn btn-site-primary mb-2"
       @click="go(1)"
       :disabled="gameState['running']"
     >
       Run Kanban
     </button>
     <button
-      class="btn btn-info mb-2"
+      class="btn btn-site-primary mb-2"
       @click="go(2)"
       :disabled="gameState['running']"
     >
       Run Value Delivery
     </button>
     <button
-      class="btn btn-info mb-2"
+      class="btn btn-site-primary mb-2"
       @click="stop()"
       v-if="stateSet && !stopped"
       :disabled="gameState['running']"

@@ -15,13 +15,16 @@
             v-model="role['include']"
           />
         </div>
-        <button @click.prevent="addBefore(role)" class="btn btn-info mb-2">
+        <button
+          @click.prevent="addBefore(role)"
+          class="btn btn-site-primary mb-2"
+        >
           + Before
         </button>
         <button
           v-if="role['name'] != 'Customer'"
           @click.prevent="addAfter(role)"
-          class="btn btn-info mb-2"
+          class="btn btn-site-primary mb-2"
         >
           + After
         </button>
