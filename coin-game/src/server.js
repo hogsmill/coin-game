@@ -2,6 +2,14 @@ const app = require("express")();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
+var debugOn = true
+function emit(event, data) {
+  if (debugOn) {
+    console.log(event, data);
+  }
+  io.emit(event, data);
+}
+
 io.on("connection", (socket) => {
   console.log(`A user connected with socket id ${socket.id}.`);
 
@@ -9,12 +17,11 @@ io.on("connection", (socket) => {
     console.log(`User with socket id ${socket.id} has disconnected.`);
   });
 
-  socket.on("clickGo", (data) => {
-    console.log("clickGo emit triggered!");
-    io.emit("goClicked", data);
-  });
+  socket.on("clickGo", (data) => { emit("goClicked", data) });
 });
 
-http.listen(3000, () => {
-  console.log("Listening on *:3000");
+var port = process.argv[2] || 3000
+
+http.listen(port, () => {
+  console.log("Listening on *:" + port);
 });
