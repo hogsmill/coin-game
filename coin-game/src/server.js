@@ -20,12 +20,13 @@ function emit(event, data) {
 
 io.on("connection", (socket) => {
   connections = connections + 1
-    if (connections > maxConnections) {
-      console.log(`Too many connections. Socket ${socket.id} closed`)
-      socket.disconnect(0)
-    } else {
-      connectDebugOff || console.log(`A user connected with socket id ${socket.id}. (${connections} connections)`)
-    }
+  if (connections > maxConnections) {
+    console.log(`Too many connections. Socket ${socket.id} closed`)
+    socket.disconnect(0)
+  } else {
+    connectDebugOff || console.log(`A user connected with socket id ${socket.id}. (${connections} connections)`)
+  }
+
   socket.on("disconnect", () => {
     connections = connections - 1
     connectDebugOff || console.log(`User with socket id ${socket.id} has disconnected.`)
