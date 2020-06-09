@@ -11,6 +11,7 @@
             id="twoPound"
             name="twoPound"
             v-model.lazy="denominations['200']"
+            v-on:change="updateDenominations()"
           />
           <div
             class="distribution"
@@ -122,6 +123,8 @@
 </template>
 
 <script>
+import io from "socket.io-client";
+
 export default {
   computed: {
     stateSet() {
@@ -155,6 +158,24 @@ export default {
       }
       return (n / sum) * 100 + "%";
     },
+    updateDenominations() {
+      this.socket.emit("updateDenominations", this.denominations)
+    }
   },
+  created() {
+    var host = "77.68.122.69"
+    if (location.hostname == 'localhost') {
+      host = 'localhost'
+    }
+    var connStr = "http://" + host + ":3000"
+    console.log("Connecting to: " + connStr)
+    this.socket = io(connStr)
+  },
+  mounted() {
+    this.socket.on("updateDenominations", (data) => {
+      console.log(data)
+      // update state here
+    })
+  }
 };
 </script>

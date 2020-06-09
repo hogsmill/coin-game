@@ -212,13 +212,13 @@ export default {
     },
   },
   created() {
-  var host = "77.68.122.69"
+    var host = "77.68.122.69"
     if (location.hostname == 'localhost') {
       host = 'localhost'
     }
     var connStr = "http://" + host + ":3000"
     console.log("Connecting to: " + connStr)
-    this.socket = io(connStr)  
+    this.socket = io(connStr)
   },
   mounted() {
     this.socket.on("goClicked", (data) => {
