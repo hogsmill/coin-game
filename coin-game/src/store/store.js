@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
+    host: false,
     showAbout: false,
     stateSet: false,
     interval: 250,
@@ -63,6 +64,9 @@ export const store = new Vuex.Store({
     },
   },
   getters: {
+    getHost: (state) => {
+      return state.host;
+    },
     getShowAbout: (state) => {
       return state.showAbout;
     },
@@ -83,6 +87,9 @@ export const store = new Vuex.Store({
     },
   },
   mutations: {
+    updateHost: (state, payload) => {
+      state.host = payload;
+    },
     updateShowAbout: (state, payload) => {
       state.showAbout = payload;
     },
@@ -112,6 +119,9 @@ export const store = new Vuex.Store({
     },
   },
   actions: {
+    updateHost: ({ commit }, payload) => {
+      commit("updateHost", payload);
+    },
     updateShowAbout: ({ commit }, payload) => {
       commit("updateShowAbout", payload);
     },

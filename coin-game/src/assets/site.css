@@ -76,3 +76,7 @@ input {
   background-color: #ffffff;
   border-color: #f4511e;
 }
+
+.hidden {
+  visibility: hidden;
+}

@@ -7,7 +7,7 @@
     <div v-else>
       <h1>The Coin Game</h1>
       <div class="container">
-        <div class="card-deck">
+        <div :class="{hidden : !isHost}" class="card-deck">
           <app-denominations></app-denominations>
           <app-roles></app-roles>
           <app-control></app-control>
@@ -40,6 +40,9 @@ export default {
     ResultsView,
   },
   computed: {
+    isHost() {
+      return this.$store.getters.getHost;
+    },
     showAbout() {
       return this.$store.getters.getShowAbout;
     },

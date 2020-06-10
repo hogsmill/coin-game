@@ -32,6 +32,11 @@
 
 <script>
 export default {
+  created() {
+    if (location.search == "?host") {
+      this.$store.dispatch("updateHost", true);
+    }
+  },
   computed: {
     showAbout() {
       return this.$store.getters.getShowAbout;
