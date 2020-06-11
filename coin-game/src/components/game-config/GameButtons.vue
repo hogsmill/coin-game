@@ -163,7 +163,6 @@ export default {
     run() {
       var round = this.gameState["round"];
       this.playRoleCoins(round);
-      // console.log("round", this.gameState["rounds"][round]);
       if (this.gameState["rounds"][round]["name"] == "Batch") {
         this.moveCoins(round);
       } else {
@@ -204,6 +203,7 @@ export default {
       this.$store.dispatch("updateStopped", true);
     },
     go(round) {
+      console.log(this.$store.getters.getGameState)
       this.socket.emit("clickGo", {
         round: round,
         updateStateSet: true,

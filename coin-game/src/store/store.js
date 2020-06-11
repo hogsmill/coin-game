@@ -23,6 +23,7 @@ export const store = new Vuex.Store({
     gameState: {
       timeLimit: 60000,
       valueTimeLimit: 10000,
+      clickOnCoins: true,
       round: 0,
       total: 0,
       roles: [
@@ -114,6 +115,9 @@ export const store = new Vuex.Store({
     updateGameStateRound: (state, payload) => {
       state.gameState["round"] = payload;
     },
+    updateGameStateClickCoins: (state, payload) => {
+      state.gameState["clickCoins"] = payload;
+    },
     updateGameStateRoundsRoles: (state, payload) => {
       state.gameState["rounds"][payload.round]["roles"] = payload.roles;
     },
@@ -142,6 +146,9 @@ export const store = new Vuex.Store({
     },
     updateGameStateRoles: ({ commit }, payload) => {
       commit("updateGameStateRoles", payload);
+    },
+    updateGameStateClickCoins: ({ commit }, payload) => {
+      commit("updateGameStateClickCoins", payload);
     },
     updateGameStateRound: ({ commit }, payload) => {
       commit("updateGameStateRound", payload);

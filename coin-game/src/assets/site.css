@@ -78,8 +78,13 @@ input {
 }
 
 .update-role {
-  margin-left: 6px; 
+  margin-left: 6px;
 }
+
+.control input[type=checkbox] {
+  margin-left: -2rem
+}
+
 .hidden {
   visibility: hidden;
 }

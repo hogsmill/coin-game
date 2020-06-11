@@ -2,7 +2,7 @@
   <div class="card bg-light mb-3 col-md-3 no-padding-r-l" v-if="!stateSet">
     <div class="card-body">
       <h5 class="card-title">Control</h5>
-      <form>
+      <form class="control">
         <div class="form-group">
           <label for="interval">Interval Between Coin Plays (ms)</label>
           <input
@@ -37,6 +37,15 @@
             v-on:change="updateGameState()"
           />
         </div>
+        <div class="form-check">
+          <input
+            class="form-check-input mr-neg-10"
+            id="clickCoins"
+            type="checkbox"
+            v-model.lazy="gameState['clickOnCoins']"
+          />
+          <label for="clickCoins">Click on Coins</label>
+        </div>
       </form>
     </div>
   </div>
@@ -61,7 +70,6 @@ export default {
       },
       set(value) {
         this.socket.emit("updateInterval", value)
-        //this.$store.dispatch("updateInterval", value);
       },
     },
     gameState() {
