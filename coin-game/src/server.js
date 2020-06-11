@@ -43,6 +43,8 @@ io.on("connection", (socket) => {
   socket.on("updateInterval", (data) => { emit("updateInterval", data) })
 
   socket.on("updateGameState", (data) => { emit("updateGameState", data) })
+
+  socket.on("playCoin", (data) => { emit("playCoin", data) })
 });
 
 var port = process.argv[2] || 3000

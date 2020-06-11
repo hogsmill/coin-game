@@ -109,7 +109,6 @@ export default {
       ) {
         var roles = this.gameState["rounds"][round]["roles"];
         var role = roles[i];
-        // console.log("role", role["name"]);
         for (var j = 0; j < role["coins"].length; j++) {
           var coin = role["coins"][j];
           if (coin["played"]) {
@@ -161,6 +160,9 @@ export default {
       );
     },
     run() {
+      if (this.gameState["clickOnCoins"]) {
+        return
+      }
       var round = this.gameState["round"];
       this.playRoleCoins(round);
       if (this.gameState["rounds"][round]["name"] == "Batch") {
@@ -243,9 +245,11 @@ export default {
         round: data.round,
         roles: roles,
       });
-      // console.log(this.gameState);
       this.run();
     });
+    this.socket.on("playCoin", (data) => {
+      console.log("clicked Coin", data)
+    })
   },
 };
 </script>

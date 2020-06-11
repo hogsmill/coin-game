@@ -33,6 +33,7 @@
                   :coinIndex="coinIndex"
                   :key="coinIndex"
                   class="coin-parent"
+                  @click="playCoin(coinIndex, gameState.rounds[index]['roles'][roleIndex], gameState.rounds[index])"
                 >
                   <div
                     class="coin"
@@ -55,6 +56,8 @@
 </template>
 
 <script>
+import io from "socket.io-client";
+
 export default {
   name: "Results",
   data() {
@@ -113,6 +116,19 @@ export default {
     outOfTime(round) {
       return round["time"] >= this.gameState["timeLimit"];
     },
+    playCoin(coin, role, round) {
+      console.log(coin, role, round)
+      this.socket.emit("playCoin", {coin: coin, role: role, round: round})
+    }
+  },
+  created() {
+    var host = "77.68.122.69"
+    if (location.hostname == 'localhost') {
+      host = 'localhost'
+    }
+    var connStr = "http://" + host + ":3000"
+    console.log("Connecting to: " + connStr)
+    this.socket = io(connStr)
   },
 };
 </script>
