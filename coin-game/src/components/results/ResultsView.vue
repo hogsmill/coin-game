@@ -37,6 +37,7 @@
                 >
                   <div
                     class="coin"
+                    data-toggle="tooltip" data-placement="top" :title="coinNames[coin['value']]"
                     :class="[getClassName(role), getValueName(coin)]"
                   ></div>
                 </div>
@@ -70,8 +71,18 @@ export default {
         20: "twenty-p",
         50: "fifty-p",
         100: "one-pound",
-        200: "two-pound",
+        200: "two-pound"
       },
+      coinNames: {
+        1: "1p",
+        2: "2p",
+        5: "5p",
+        10: "10p",
+        20: "20p",
+        50: "50p",
+        100: "£1",
+        200: "£2"
+      }
     };
   },
   computed: {
@@ -117,7 +128,6 @@ export default {
       return round["time"] >= this.gameState["timeLimit"];
     },
     playCoin(coin, role, round) {
-      console.log(coin, role, round)
       this.socket.emit("playCoin", {coin: coin, role: role, round: round})
     }
   },
@@ -129,7 +139,7 @@ export default {
     var connStr = "http://" + host + ":3000"
     console.log("Connecting to: " + connStr)
     this.socket = io(connStr)
-  },
+  }
 };
 </script>
 

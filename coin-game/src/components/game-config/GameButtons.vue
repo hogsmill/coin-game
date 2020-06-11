@@ -171,7 +171,7 @@ export default {
         this.moveCoin(round);
       }
       this.incrementTime(this.gameState["round"]);
-      if (!this.complete(this.gameState["round"]) && !this.stopped) {
+      if (!this.complete(this.gameState["round"])) {
         setTimeout(this.run, this.interval);
       }
     },
@@ -205,12 +205,15 @@ export default {
       this.$store.dispatch("updateStopped", true);
     },
     go(round) {
-      console.log(this.$store.getters.getGameState)
-      this.socket.emit("clickGo", {
-        round: round,
-        updateStateSet: true,
-        updateGameStateRound: round,
-      });
+      var coins = this.getCoins(this.gameState["rounds"][round]["name"])
+      var gameState = this.$store.getters.getGameState
+      gameState.stateSet = true
+      gameState.round = round
+      gameState.roles[0].coins = coins
+      for (var i = 1; i < gameState.roles.length; i++) {
+        gameState.roles[i].coins = []
+      }
+      this.socket.emit("go", { gameState: gameState });
     },
   },
   created() {
@@ -223,33 +226,24 @@ export default {
     this.socket = io(connStr)
   },
   mounted() {
-    this.socket.on("goClicked", (data) => {
-      console.log("inside goClicked emit");
-      this.$store.dispatch("updateStateSet", data.updateStateSet);
-      this.$store.dispatch("updateGameStateRound", data.updateGameStateRound);
-      var roles = [];
-      for (var i = 0; i < this.gameState["roles"].length; i++) {
-        if (this.gameState["roles"][i]["include"]) {
-          var role = JSON.parse(JSON.stringify(this.gameState["roles"][i]));
-          if (i == 0) {
-            role["coins"] = this.getCoins(
-              this.gameState["rounds"][data.round]["name"]
-            );
-          } else {
-            role["coins"] = [];
-          }
-          roles.push(role);
-        }
-      }
+    this.socket.on("go", (data) => {
+      console.log('Game state received in go: ', data.gameState)
+
+      this.$store.dispatch("updateGameState", data.gameState);
+
+      // Not sure why these are needed if gameState is set above?
+      //
+      this.$store.dispatch("updateStateSet", data.gameState.stateSet);
       this.$store.dispatch("updateGameStateRoundsRoles", {
-        round: data.round,
-        roles: roles,
+        round: data.gameState.round,
+        roles: data.gameState.roles
       });
-      this.run();
-    });
+
+      this.run()
+    }),
     this.socket.on("playCoin", (data) => {
       console.log("clicked Coin", data)
     })
-  },
+  }
 };
 </script>

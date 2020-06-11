@@ -34,7 +34,7 @@ io.on("connection", (socket) => {
     connectDebugOff || console.log(`User with socket id ${socket.id} has disconnected.`)
   })
 
-  socket.on("clickGo", (data) => { emit("goClicked", data) })
+  socket.on("go", (data) => { emit("go", data) })
 
   socket.on("updateDenominations", (data) => { emit("updateDenominations", data) })
 
