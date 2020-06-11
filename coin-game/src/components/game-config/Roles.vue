@@ -4,8 +4,8 @@
       <h5 class="card-title">Roles</h5>
       <form
         class="form-inline"
-        v-for="role in gameState.roles"
-        :key="role['name'].replace(' ', '')"
+        v-for="(role, roleIndex) in gameState.roles"
+        :key="roleIndex"
       >
         <div class="form-check mb-2 mr-sm-2">
           <input
@@ -18,15 +18,17 @@
         <button
           @click.prevent="addBefore(role)"
           class="btn btn-site-primary mb-2"
+           data-toggle="tooltip" data-placement="top" title="Add role before"
         >
-          + Before
+          + &xutri;
         </button>
         <button
           v-if="role['name'] != 'Customer'"
           @click.prevent="addAfter(role)"
           class="btn btn-site-primary mb-2"
+          data-toggle="tooltip" data-placement="top" title="Add role after"
         >
-          + After
+          + &xdtri;
         </button>
         <input
           type="text"
@@ -34,12 +36,22 @@
           v-bind:id="role['name'].replace(' ', '')"
           v-model.lazy="role['name']"
         />
+        <button
+          class="btn btn-site-primary mb-2 update-role"
+          @click.prevent="updateRoles()"
+          @click="updateRoles()"
+          data-toggle="tooltip" data-placement="top" title="Update role name"
+        >
+        &crarr;
+        </button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import io from "socket.io-client";
+
 export default {
   computed: {
     stateSet() {
@@ -57,9 +69,8 @@ export default {
           roles.push({ name: "New Role", include: true });
         }
         roles.push(this.gameState["roles"][i]);
-        console.log("roles = ", roles);
       }
-      this.$store.dispatch("updateGameStateRoles", roles);
+      this.socket.emit("updateRoles", roles)
     },
     addAfter(role) {
       var roles = [];
@@ -69,8 +80,25 @@ export default {
           roles.push({ name: "New Role", include: true });
         }
       }
-      this.$store.dispatch("updateGameStateRoles", roles);
+      this.socket.emit("updateRoles", roles)
     },
+    updateRoles() {
+      this.socket.emit("updateRoles", this.gameState["roles"])
+    }
   },
+  created() {
+    var host = "77.68.122.69"
+    if (location.hostname == 'localhost') {
+      host = 'localhost'
+    }
+    var connStr = "http://" + host + ":3000"
+    console.log("Connecting to: " + connStr)
+    this.socket = io(connStr)
+  },
+  mounted() {
+    this.socket.on("updateRoles", (data) => {
+      this.$store.dispatch("updateGameStateRoles", data);
+    })
+  }
 };
 </script>

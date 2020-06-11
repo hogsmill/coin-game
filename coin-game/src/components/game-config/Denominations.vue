@@ -26,6 +26,7 @@
             id="onePound"
             name="onePound"
             v-model.lazy="denominations['100']"
+            v-on:change="updateDenominations()"
           />
           <div
             class="distribution"
@@ -40,6 +41,7 @@
             id="fifty"
             name="fifty"
             v-model.lazy="denominations['50']"
+            v-on:change="updateDenominations()"
           />
           <div
             class="distribution"
@@ -54,6 +56,7 @@
             id="twenty"
             name="twenty"
             v-model.lazy="denominations['20']"
+            v-on:change="updateDenominations()"
           />
           <div
             class="distribution"
@@ -68,6 +71,7 @@
             id="ten"
             name="ten"
             v-model.lazy="denominations['10']"
+            v-on:change="updateDenominations()"
           />
           <div
             class="distribution"
@@ -82,6 +86,7 @@
             id="five"
             name="five"
             v-model.lazy="denominations['5']"
+            v-on:change="updateDenominations()"
           />
           <div
             class="distribution"
@@ -96,6 +101,7 @@
             id="two"
             name="two"
             v-model.lazy="denominations['2']"
+            v-on:change="updateDenominations()"
           />
           <div
             class="distribution"
@@ -110,6 +116,7 @@
             id="one"
             name="one"
             v-model.lazy="denominations['1']"
+            v-on:change="updateDenominations()"
           />
           <div
             class="distribution"
@@ -173,8 +180,7 @@ export default {
   },
   mounted() {
     this.socket.on("updateDenominations", (data) => {
-      console.log(data)
-      // update state here
+      this.$store.dispatch("updateDenominations", data);
     })
   }
 };

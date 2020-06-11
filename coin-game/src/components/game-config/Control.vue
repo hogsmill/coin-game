@@ -22,6 +22,7 @@
             id="timeLimit"
             name="timeLimit"
             v-model.lazy="gameState['timeLimit']"
+            v-on:change="updateGameState()"
           />
         </div>
 
@@ -33,6 +34,7 @@
             id="valueTimeLimit"
             name="valueTimeLimit"
             v-model.lazy="gameState['valueTimeLimit']"
+            v-on:change="updateGameState()"
           />
         </div>
       </form>
@@ -41,7 +43,14 @@
 </template>
 
 <script>
+import io from "socket.io-client";
+
 export default {
+  methods: {
+    updateGameState() {
+      this.socket.emit("updateGameState", this.$store.getters.getGameState)
+    }
+  },
   computed: {
     stateSet() {
       return this.$store.getters.getStateSet;
@@ -51,12 +60,30 @@ export default {
         return this.$store.getters.getInterval;
       },
       set(value) {
-        this.$store.dispatch("updateInterval", value);
+        this.socket.emit("updateInterval", value)
+        //this.$store.dispatch("updateInterval", value);
       },
     },
     gameState() {
       return this.$store.getters.getGameState;
-    },
+    }
   },
+  created() {
+    var host = "77.68.122.69"
+    if (location.hostname == 'localhost') {
+      host = 'localhost'
+    }
+    var connStr = "http://" + host + ":3000"
+    console.log("Connecting to: " + connStr)
+    this.socket = io(connStr)
+  },
+  mounted() {
+    this.socket.on("updateInterval", (data) => {
+      this.$store.dispatch("updateInterval", data);
+    }),
+    this.socket.on("updateGameState", (data) => {
+      this.$store.dispatch("updateGameState", data);
+    })
+  }
 };
 </script>
