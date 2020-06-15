@@ -124,6 +124,30 @@ export default {
         }
       }
     },
+    playACoin(coin, role, round) {
+      var i, roundN, roleN
+      for (i = 0; i < this.gameState.rounds.length; i++) {
+        if (this.gameState.rounds[i].name == round.name) {
+          roundN = i
+        }
+      }
+      if (this.complete(roundN)) {
+        alert("Times Up!")
+      } else {
+        for (i = 0; i < this.gameState.rounds[roundN].roles.length; i++) {
+          if (this.gameState.rounds[roundN].roles[i].name == role.name) {
+            roleN = i
+          }
+        }
+        this.gameState.rounds[roundN].roles[roleN].coins[coin]['played'] = true
+        this.$store.dispatch("updateGameState", this.gameState);
+        if (round.name == "Batch") {
+          this.moveCoins(roundN);
+        } else {
+          this.moveCoin(roundN);
+        }
+      }
+    },
     playCoin(coins) {
       var i = 0;
       var played = false;
@@ -160,15 +184,14 @@ export default {
       );
     },
     run() {
-      if (this.gameState["clickOnCoins"]) {
-        return
-      }
       var round = this.gameState["round"];
-      this.playRoleCoins(round);
-      if (this.gameState["rounds"][round]["name"] == "Batch") {
-        this.moveCoins(round);
-      } else {
-        this.moveCoin(round);
+      if (!this.gameState["clickOnCoins"]) {
+        this.playRoleCoins(round)
+        if (this.gameState["rounds"][round]["name"] == "Batch") {
+          this.moveCoins(round);
+        } else {
+          this.moveCoin(round);
+        }
       }
       this.incrementTime(this.gameState["round"]);
       if (!this.complete(this.gameState["round"])) {
@@ -242,7 +265,7 @@ export default {
       this.run()
     }),
     this.socket.on("playCoin", (data) => {
-      console.log("clicked Coin", data)
+      this.playACoin(data.coin, data.role, data.round)
     })
   }
 };
