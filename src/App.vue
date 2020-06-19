@@ -7,12 +7,12 @@
     <div v-else>
       <h1>The Coin Game</h1>
       <div class="container">
-        <div :class="{hidden : !isHost}" class="card-deck">
+        <div :class="{'not-host' : !isHost}" class="card-deck">
           <app-denominations></app-denominations>
           <app-roles></app-roles>
           <app-control></app-control>
-          <app-game-buttons></app-game-buttons>
         </div>
+        <app-game-buttons></app-game-buttons>
       </div>
       <ResultsView v-bind:gameState="gameState" />
     </div>
@@ -55,3 +55,7 @@ export default {
   },
 };
 </script>
+
+<style>
+  .not-host { height: 0px; visibility: hidden; }
+</style>
