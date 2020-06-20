@@ -37,7 +37,7 @@
             v-on:change="updateGameState()"
           />
         </div>
-        <div class="form-check">
+        <div class="form-check always-visible">
           <input
             class="form-check-input mr-neg-10"
             id="clickCoins"

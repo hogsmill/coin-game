@@ -12,6 +12,15 @@
           <app-roles></app-roles>
           <app-control></app-control>
         </div>
+        <div v-if="!isHost && !stateSet" class="form-check">
+          <input
+            class="form-check-input mr-neg-10"
+            id="clickCoins"
+            type="checkbox"
+            v-model.lazy="gameState['clickOnCoins']"
+          />
+          <label for="clickCoins">Click on Coins</label>
+        </div>
         <app-game-buttons></app-game-buttons>
       </div>
       <ResultsView v-bind:gameState="gameState" />
