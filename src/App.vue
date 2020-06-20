@@ -14,7 +14,7 @@
         </div>
         <div v-if="!isHost && !stateSet" class="form-check">
           <input
-            class="form-check-input mr-neg-10"
+            class="form-check-input"
             id="clickCoins"
             type="checkbox"
             v-model.lazy="gameState['clickOnCoins']"
@@ -67,4 +67,5 @@ export default {
 
 <style>
   .not-host { height: 0px; visibility: hidden; }
+  #clickCoins { margin-left: -2rem; }
 </style>
