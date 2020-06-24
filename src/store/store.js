@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
+    walkThrough: false,
     host: false,
     showAbout: false,
     stateSet: false,
@@ -65,6 +66,9 @@ export const store = new Vuex.Store({
     },
   },
   getters: {
+    getWalkThrough: (state) => {
+      return state.walkThrough;
+    },
     getHost: (state) => {
       return state.host;
     },
@@ -88,6 +92,9 @@ export const store = new Vuex.Store({
     },
   },
   mutations: {
+    updateWalkThrough: (state, payload) => {
+      state.walkThrough = payload;
+    },
     updateHost: (state, payload) => {
       state.host = payload;
     },
@@ -123,6 +130,9 @@ export const store = new Vuex.Store({
     },
   },
   actions: {
+    updateWalkThrough: ({ commit }, payload) => {
+      commit("updateWalkThrough", payload);
+    },
     updateHost: ({ commit }, payload) => {
       commit("updateHost", payload);
     },

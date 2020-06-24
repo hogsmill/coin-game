@@ -33,8 +33,14 @@
 <script>
 export default {
   created() {
-    if (location.search == "?host") {
-      this.$store.dispatch("updateHost", true);
+    var search = location.search.replace('?', '').split('&')
+    for (var i = 0; i < search.length; i++) {
+      if (search[i] == "host") {
+        this.$store.dispatch("updateHost", true)
+      }
+      if (search[i] == "walkThrough") {
+        this.$store.dispatch("updateWalkThrough", true)
+      }
     }
   },
   computed: {
