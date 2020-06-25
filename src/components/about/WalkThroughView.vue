@@ -1,6 +1,6 @@
 <template>
 <div>
-  <button class="btn btn-sm btn-info" @click="help">Explain this for me...</button>
+  <button v-if="walkThrough && !showAbout" class="btn btn-sm btn-info" @click="help">Explain this for me...</button>
   <modal name="walk-through" id="walk-through" :classes="['rounded']">
     <div class="float-right mr-2 mt-1">
       <button type="button" class="close" @click="hide" aria-label="Close">
@@ -198,6 +198,9 @@ export default {
     walkThrough() {
       return this.$store.getters.getWalkThrough;
     },
+    showAbout() {
+      return this.$store.getters.getShowAbout;
+    }
   },
   created() {
     if (location.search.match("walkThrough")) {
