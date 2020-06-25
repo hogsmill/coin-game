@@ -32,17 +32,6 @@
 
 <script>
 export default {
-  created() {
-    var search = location.search.replace('?', '').split('&')
-    for (var i = 0; i < search.length; i++) {
-      if (search[i] == "host") {
-        this.$store.dispatch("updateHost", true)
-      }
-      if (search[i] == "walkThrough") {
-        this.$store.dispatch("updateWalkThrough", true)
-      }
-    }
-  },
   computed: {
     showAbout() {
       return this.$store.getters.getShowAbout;

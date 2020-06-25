@@ -1,20 +1,20 @@
 <template>
   <div class="col-md-12 mb-3" :class="{ running: stateSet }">
-    <button
+    <button id="batch-button"
       class="btn btn-site-primary mb-2"
       @click="go(0)"
       :disabled="gameState['running']"
     >
       Run Batch
     </button>
-    <button
+    <button id="kanban-button"
       class="btn btn-site-primary mb-2"
       @click="go(1)"
       :disabled="gameState['running']"
     >
       Run Kanban
     </button>
-    <button
+    <button id="value-delivery-button"
       class="btn btn-site-primary mb-2"
       @click="go(2)"
       :disabled="gameState['running']"

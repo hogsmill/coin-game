@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="mb-4">
     <appHeader></appHeader>
+    <WalkThroughView />
     <div v-if="showAbout">
       <AboutView />
     </div>
@@ -19,7 +20,7 @@
             type="checkbox"
             v-model.lazy="gameState['clickOnCoins']"
           />
-          <label for="clickCoins">Click on Coins</label>
+          <label for="clickCoins" id="click-coins">Click on Coins</label>
         </div>
         <app-game-buttons></app-game-buttons>
       </div>
@@ -35,6 +36,7 @@ import Roles from "./components/game-config/Roles.vue";
 import Control from "./components/game-config/Control.vue";
 import GameButtons from "./components/game-config/GameButtons.vue";
 import AboutView from "./components/about/AboutView.vue";
+import WalkThroughView from "./components/about/WalkThroughView.vue";
 import ResultsView from "./components/results/ResultsView.vue";
 
 export default {
@@ -46,11 +48,15 @@ export default {
     appControl: Control,
     appGameButtons: GameButtons,
     AboutView,
+    WalkThroughView,
     ResultsView,
   },
   computed: {
     isHost() {
       return this.$store.getters.getHost;
+    },
+    walkThrough() {
+      return this.$store.getters.getWalkThrough;
     },
     showAbout() {
       return this.$store.getters.getShowAbout;
@@ -60,8 +66,20 @@ export default {
     },
     gameState() {
       return this.$store.getters.getGameState;
-    },
+    }
   },
+  created() {
+    var search = location.search.replace('?', '').split('&')
+    for (var i = 0; i < search.length; i++) {
+      if (search[i] == "host") {
+        this.$store.dispatch("updateHost", true)
+      }
+      if (search[i] == "walkThrough") {
+        this.$store.dispatch("updateWalkThrough", true)
+        this.$modal.show("walk-through")
+      }
+    }
+  }
 };
 </script>
 
