@@ -1,6 +1,6 @@
 <template>
 <div>
-  <button class="btn btn-sm btn-info" @click="help">Help</button>
+  <button class="btn btn-sm btn-info" @click="help">Explain this for me...</button>
   <modal name="walk-through" id="walk-through" :classes="['rounded']">
     <div class="float-right mr-2 mt-1">
       <button type="button" class="close" @click="hide" aria-label="Close">
@@ -44,7 +44,7 @@
         all the cons to the customer</p>
     </div>
     <div class="mt-4" v-if="step == 5">
-      <h4>Round 1: Value Delivery</h4>
+      <h4>Round 3: Value Delivery</h4>
       <p>This round is also kanban (coins passed on immediately),  but the timer stops
        <em>after 10 seconds!</em>. Coins are click highest-value first, however, and
        the amount of value delivered is recorded.
