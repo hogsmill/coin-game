@@ -187,10 +187,11 @@ export default {
     incrementStep() {
       this.step = this.step + 1;
       var elem = document.getElementsByClassName("vm--modal")[0];
+      elem.style.top = "40px";
       elem.style.minWidth = "320px";
       elem.style.maxWidth = "740px";
       elem.style.width = "50%";
-      elem.style.height = "420px";
+      elem.style.height = "430px";
     },
   },
   computed: {
