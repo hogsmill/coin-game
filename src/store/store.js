@@ -8,6 +8,7 @@ export const store = new Vuex.Store({
     walkThrough: false,
     host: false,
     showAbout: false,
+    gameName: '',
     stateSet: false,
     interval: 250,
     stopped: false,
@@ -69,6 +70,9 @@ export const store = new Vuex.Store({
     getShowAbout: (state) => {
       return state.showAbout;
     },
+    getGameName: (state) => {
+      return state.gameName;
+    },
     getStateSet: (state) => {
       return state.stateSet;
     },
@@ -94,6 +98,9 @@ export const store = new Vuex.Store({
     },
     updateShowAbout: (state, payload) => {
       state.showAbout = payload;
+    },
+    updateGameName: (state, payload) => {
+      state.gameName = payload;
     },
     updateStateSet: (state, payload) => {
       state.stateSet = payload;
@@ -138,6 +145,9 @@ export const store = new Vuex.Store({
     },
     updateShowAbout: ({ commit }, payload) => {
       commit("updateShowAbout", payload);
+    },
+    updateGameName: ({ commit }, payload) => {
+      commit("updateGameName", payload);
     },
     updateStateSet: ({ commit }, payload) => {
       commit("updateStateSet", payload);

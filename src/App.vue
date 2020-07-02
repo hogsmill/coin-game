@@ -7,6 +7,7 @@
     </div>
     <div v-else>
       <h1>The Coin Game</h1>
+      <GameName />
       <div class="container">
         <div :class="{'not-host' : !isHost}" class="card-deck">
           <app-denominations></app-denominations>
@@ -31,6 +32,7 @@
 
 <script>
 import Header from "./components/Header.vue";
+import GameName from "./components/GameName.vue";
 import Denominations from "./components/game-config/Denominations.vue";
 import Roles from "./components/game-config/Roles.vue";
 import Control from "./components/game-config/Control.vue";
@@ -49,6 +51,7 @@ export default {
     appGameButtons: GameButtons,
     AboutView,
     WalkThroughView,
+    GameName,
     ResultsView,
   },
   computed: {
