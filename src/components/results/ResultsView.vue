@@ -11,7 +11,12 @@
             :key="role.role"
             :style="{ width: setWidth() }"
           >
-            {{ role.role }}
+            <span @click="showNameEdit(role.role)"> {{ role.role }} </span>
+            <div v-if="roleEditing == role.role" >
+              <input class="role-name-edit" type="text" v-model="role.name" />
+              <button class="btn btn-site-primary mb-2" @click="updateRole(role)">&crarr;</button>
+            </div>
+            <span v-if="roleEditing != role.role && role.name"><br /> ({{role.name}}) </span>
           </td>
           <td :style="{ width: setWidth() }">Delivered</td>
         </thead>
@@ -57,10 +62,12 @@
 <script>
 import io from "socket.io-client";
 
+
 export default {
   name: "Results",
   data() {
     return {
+      roleEditing: '',
       coinClasses: {
         1: "one-p",
         2: "two-p",
@@ -90,8 +97,26 @@ export default {
     gameState() {
       return this.$store.getters.getGameState;
     },
+    gameName() {
+      return this.$store.getters.getGameName;
+    }
   },
   methods: {
+    showNameEdit(role) {
+      this.roleEditing = role
+    },
+    updateRole(role) {
+      this.roleEditing = ''
+      var roles = []
+      for (var i = 0; i < this.gameState.roles.length; i++) {
+        if (this.gameState.roles[i].role == role.role) {
+          roles.push(role)
+        } else {
+          roles.push(this.gameState.roles[i])
+        }
+      }
+      this.socket.emit("updateRoles", { gameName: this.gameName, roles: roles })
+    },
     setWidth() {
       return 100 / (this.gameState.roles.length + 1) + "%";
     },
@@ -137,6 +162,13 @@ export default {
     var connStr = "http://" + host + ":3000"
     console.log("Connecting to: " + connStr)
     this.socket = io(connStr)
+  },
+  mounted() {
+    this.socket.on("updateRoles", (data) => {
+      if (this.gameState.gameName == data.gameName) {
+        this.$store.dispatch("updateGameStateRoles", data.roles)
+      }
+    })
   }
 };
 </script>
@@ -164,32 +196,16 @@ thead {
   background-repeat: no-repeat;
   background-position: center center;
 }
-.played,
-.customer {
-  opacity: 1;
-}
-.one-p {
-  background-image: url("../../assets/img/1p.png");
-}
-.two-p {
-  background-image: url("../../assets/img/2p.png");
-}
-.five-p {
-  background-image: url("../../assets/img/5p.png");
-}
-.ten-p {
-  background-image: url("../../assets/img/10p.png");
-}
-.twenty-p {
-  background-image: url("../../assets/img/20p.png");
-}
-.fifty-p {
-  background-image: url("../../assets/img/50p.png");
-}
-.one-pound {
-  background-image: url("../../assets/img/1pound.png");
-}
-.two-pound {
-  background-image: url("../../assets/img/2pound.png");
-}
+  .played, .customer { opacity: 1; }
+
+  .one-p { background-image: url("../../assets/img/1p.png"); }
+  .two-p { background-image: url("../../assets/img/2p.png"); }
+  .five-p { background-image: url("../../assets/img/5p.png"); }
+  .ten-p { background-image: url("../../assets/img/10p.png"); }
+  .twenty-p { background-image: url("../../assets/img/20p.png"); }
+  .fifty-p { background-image: url("../../assets/img/50p.png"); }
+  .one-pound { background-image: url("../../assets/img/1pound.png"); }
+  .two-pound { background-image: url("../../assets/img/2pound.png"); }
+
+  .role-name-edit { width: 60px; margin-right: 2px; border: 1px solid #ced4da; }
 </style>

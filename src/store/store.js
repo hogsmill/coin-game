@@ -8,6 +8,7 @@ export const store = new Vuex.Store({
     walkThrough: false,
     host: false,
     showAbout: false,
+    clickedRole: {},
     gameState: {
       gameName: '',
       stateSet: false,
@@ -29,7 +30,7 @@ export const store = new Vuex.Store({
       round: 0,
       total: 0,
       roles: [
-        { role: "Product Owner", include: true, name: "" },
+        { role: "Product Owner", include: true, name: "Steve" },
         { role: "Developer", include: true, name: "" },
         { role: "Tester", include: true, name: "" },
         { role: "Integrator", include: true, name: "" },
