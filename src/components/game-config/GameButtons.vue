@@ -210,7 +210,7 @@ export default {
       }
       if (round == "Value First") {
         coins = coins.sort(function(a, b) {
-          return parseInt(b["value"]) - parseInt(a["value"]);
+          return parseInt(b.value) - parseInt(a.value);
         });
       } else {
         coins = this.shuffleArray(coins);
@@ -248,15 +248,7 @@ export default {
     this.socket.on("go", (data) => {
       console.log('Game state received in go: ', data.gameState)
 
-      this.$store.dispatch("updateGameState", data.gameState);
-
-      // Not sure why these are needed if gameState is set above?
-      //
-      this.$store.dispatch("updateStateSet", data.gameState.stateSet);
-      this.$store.dispatch("updateGameStateRoundsRoles", {
-        round: data.gameState.round,
-        roles: data.gameState.roles
-      });
+      this.$store.dispatch("updateGameState", data.gameState)
 
       this.run()
     }),

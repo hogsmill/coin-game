@@ -1,5 +1,5 @@
 <template>
-  <div class="results mb-5" v-if="stateSet">
+  <div class="results mb-5">
     <h2>Results</h2>
     <div class="narration"></div>
     <div class="container">
@@ -100,7 +100,7 @@ export default {
     },
     getValueName(coin) {
       var classStr = this.coinClasses[coin.value];
-      if (coin["played"]) {
+      if (coin.played) {
         classStr = classStr + " played";
       }
       return classStr;

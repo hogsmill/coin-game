@@ -12,7 +12,8 @@
             class="form-check-input mr-neg-10"
             type="checkbox"
             checked="role.include"
-            v-model="role.include"
+            v-model.lazy="role.include"
+            @change="updateRole(role)"
           />
         </div>
         <button
@@ -62,11 +63,14 @@ export default {
     },
   },
   methods: {
+    newRole() {
+      return { role: "New Role", include: true, name: "" }
+    },
     addBefore(role) {
       var roles = [];
       for (var i = 0; i < this.gameState.roles.length; i++) {
         if (role.role == this.gameState.roles[i].role) {
-          roles.push({ name: "New Role", include: true });
+          roles.push(this.newRole());
         }
         roles.push(this.gameState.roles[i]);
       }
@@ -77,7 +81,18 @@ export default {
       for (var i = 0; i < this.gameState.roles.length; i++) {
         roles.push(this.gameState.roles[i]);
         if (role.role == this.gameState.roles[i].role) {
-          roles.push({ name: "New Role", include: true });
+          roles.push(this.newRole());
+        }
+      }
+      this.socket.emit("updateRoles", roles)
+    },
+    updateRole(role) {
+      var roles = [];
+      for (var i = 0; i < this.gameState.roles.length; i++) {
+        if (role.role == this.gameState.roles[i].role) {
+          roles.push(role);
+        } else {
+          roles.push(this.gameState.roles[i]);
         }
       }
       this.socket.emit("updateRoles", roles)
@@ -94,9 +109,12 @@ export default {
     var connStr = "http://" + host + ":3000"
     console.log("Connecting to: " + connStr)
     this.socket = io(connStr)
+
+    this.$store.dispatch("updateGameStateRoles", this.gameState.roles);
   },
   mounted() {
     this.socket.on("updateRoles", (data) => {
+      console.log('After', data)
       this.$store.dispatch("updateGameStateRoles", data);
     })
   }

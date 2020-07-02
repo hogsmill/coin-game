@@ -37,13 +37,7 @@ export const store = new Vuex.Store({
       rounds: [
         {
           name: "Batch",
-          roles: [
-            { role: "Product Owner", include: true, name: "" },
-            { role: "Developer", include: true, name: "" },
-            { role: "Tester", include: true, name: "" },
-            { role: "Integrator", include: true, name: "" },
-            { role: "Customer", include: true, name: "" },
-          ],
+          roles: [],
           current: false,
           delivered: 0,
           time: 0,
@@ -117,17 +111,23 @@ export const store = new Vuex.Store({
       state.gameState = payload;
     },
     updateGameStateRoles: (state, payload) => {
-      state.gameState["roles"] = payload;
+      state.gameState.roles = payload;
+      var i, roles = []
+      for (i = 0; i < payload.length; i++) {
+        if (payload[i].include) {
+          roles.push(payload[i])
+        }
+      }
+      for (i = 0; i < state.gameState.rounds.length; i++) {
+        state.gameState.rounds[i].roles = roles
+      }
     },
     updateGameStateRound: (state, payload) => {
-      state.gameState["round"] = payload;
+      state.gameState.round = payload;
     },
     updateGameStateClickCoins: (state, payload) => {
-      state.gameState["clickCoins"] = payload;
-    },
-    updateGameStateRoundsRoles: (state, payload) => {
-      state.gameState["rounds"][payload.round]["roles"] = payload.roles;
-    },
+      state.gameState.clickCoins = payload;
+    }
   },
   actions: {
     updateWalkThrough: ({ commit }, payload) => {
@@ -162,9 +162,6 @@ export const store = new Vuex.Store({
     },
     updateGameStateRound: ({ commit }, payload) => {
       commit("updateGameStateRound", payload);
-    },
-    updateGameStateRoundsRoles: ({ commit }, payload) => {
-      commit("updateGameStateRoundsRoles", payload);
-    },
+    }
   },
 });
