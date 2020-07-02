@@ -20,7 +20,7 @@
           </td>
           <td :style="{ width: setWidth() }">Delivered</td>
         </thead>
-        <tbody>
+        <tbody id="results-table-body">
           <tr v-for="(round, index) in gameState.rounds" :key="index">
             <td>{{ round.name }}</td>
             <td

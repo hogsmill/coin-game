@@ -91,7 +91,15 @@
           management or C-Suite, or doing an online presentation
         </p>
       </div>
-      <div class="mt-4 conclusions" v-if="step == 7">
+      <div class="mt-4" v-if="step == 7">
+        <h4>Game Play</h4>
+        <p>
+          Click on the role in the header of this table to add the real names of
+          people playing the game, so you can see who's moving coins, and chivvy
+          them along accordingly...
+        </p>
+      </div>
+      <div class="mt-4 conclusions" v-if="step == 8">
         <h4>Conclusions (1)</h4>
         <div class="row">
           <div class="col">
@@ -113,7 +121,7 @@
           </div>
         </div>
       </div>
-      <div class="mt-4 conclusions" v-if="step == 8">
+      <div class="mt-4 conclusions" v-if="step == 9">
         <h4>Conclusions (2)</h4>
         <div class="row">
           <div class="col">
@@ -133,7 +141,7 @@
           </div>
         </div>
       </div>
-      <div class="mt-4 v conclusions" v-if="step == 9">
+      <div class="mt-4 v conclusions" v-if="step == 10">
         <h4>Conclusions (2)</h4>
         <div class="row">
           <div class="col">
@@ -155,11 +163,11 @@
           </div>
         </div>
       </div>
-      <div class="buttons" v-if="step < 9">
+      <div class="buttons" v-if="step < 10">
         <button class="btn btn-info" @click="incrementStep">Next</button>
         <button class="btn btn-info" @click="hide()">Skip</button>
       </div>
-      <div class="buttons" v-if="step == 9">
+      <div class="buttons" v-if="step == 10">
         <button class="btn btn-info" @click="hide()">Play Game</button>
       </div>
     </modal>
@@ -171,9 +179,30 @@ export default {
   data() {
     return {
       step: 1,
+      default: { width: 600, height: 260 },
+      positions: {
+        2: { height: 290 },
+        3: { target: "batch-button", width: 400, height: 240 },
+        4: { target: "kanban-button", width: 400, height: 255 },
+        5: { target: "value-delivery-button", width: 400, height: 380 },
+        6: { target: "click-coins", width: 400, height: 300 },
+        7: { target: "results-table-body", width: 600, height: 180 },
+        8: { width: 600, height: 460 },
+        9: { width: 800, height: 400 },
+        10: { width: 800, height: 400 }
+      }
     };
   },
   methods: {
+    setDefault() {
+      var elem = document.getElementsByClassName("vm--modal")[0].getBoundingClientRect()
+      this.default = {
+        top: elem.top,
+        left: elem.left,
+        width: elem.width,
+        height: elem.height
+      }
+    },
     show() {
       this.$modal.show("walk-through");
     },
@@ -185,14 +214,31 @@ export default {
       this.show();
     },
     incrementStep() {
-      this.step = this.step + 1;
-      var elem = document.getElementsByClassName("vm--modal")[0];
-      elem.style.top = "40px";
-      elem.style.minWidth = "320px";
-      elem.style.maxWidth = "740px";
-      elem.style.width = "50%";
-      elem.style.height = "430px";
-    },
+      if (this.step == 1) {
+        this.setDefault()
+      }
+      this.step = this.step + 1
+      var elem = document.getElementsByClassName("vm--modal")[0]
+      var target, positions = {}
+      if (this.positions[this.step].target) {
+        target = document.getElementById(this.positions[this.step].target)
+        target = target.getBoundingClientRect()
+        positions.left = target.left + 30
+        positions.top = target.top + 30
+      } else {
+        positions = this.default
+      }
+      if (this.positions[this.step].width) {
+        positions.width = this.positions[this.step].width
+      }
+      if (this.positions[this.step].height) {
+        positions.height = this.positions[this.step].height
+      }
+      elem.style.left = positions.left + 'px'
+      elem.style.top = positions.top + 'px'
+      elem.style.width = positions.width + 'px'
+      elem.style.height = positions.height +'px'
+    }
   },
   computed: {
     walkThrough() {
