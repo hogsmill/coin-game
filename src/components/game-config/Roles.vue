@@ -61,6 +61,9 @@ export default {
     gameState() {
       return this.$store.getters.getGameState;
     },
+    gameName() {
+      return this.$store.getters.getGameName;
+    },
   },
   methods: {
     newRole() {
@@ -74,7 +77,7 @@ export default {
         }
         roles.push(this.gameState.roles[i]);
       }
-      this.socket.emit("updateRoles", roles)
+      this.socket.emit("updateRoles", { gameName: this.gameName, roles: roles })
     },
     addAfter(role) {
       var roles = [];
@@ -84,7 +87,7 @@ export default {
           roles.push(this.newRole());
         }
       }
-      this.socket.emit("updateRoles", roles)
+      this.socket.emit("updateRoles", { gameName: this.gameName, roles: roles })
     },
     updateRole(role) {
       var roles = [];
@@ -95,10 +98,10 @@ export default {
           roles.push(this.gameState.roles[i]);
         }
       }
-      this.socket.emit("updateRoles", roles)
+      this.socket.emit("updateRoles", { gameName: this.gameName, roles: roles })
     },
     updateRoles() {
-      this.socket.emit("updateRoles", this.gameState.roles)
+      this.socket.emit("updateRoles", {gameName: this.gameName, roles: this.gameState.roles })
     }
   },
   created() {
@@ -114,8 +117,9 @@ export default {
   },
   mounted() {
     this.socket.on("updateRoles", (data) => {
-      console.log('After', data)
-      this.$store.dispatch("updateGameStateRoles", data);
+      if (this.gameState.gameName == data.gameName) {
+        this.$store.dispatch("updateGameStateRoles", data.roles)
+      }
     })
   }
 };

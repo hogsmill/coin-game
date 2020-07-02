@@ -69,7 +69,7 @@ export default {
         return this.$store.getters.getInterval;
       },
       set(value) {
-        this.socket.emit("updateInterval", value)
+        this.socket.emit("updateInterval", { gameName: this.gameState.gameName ,value: value })
       },
     },
     gameState() {
@@ -87,10 +87,14 @@ export default {
   },
   mounted() {
     this.socket.on("updateInterval", (data) => {
-      this.$store.dispatch("updateInterval", data);
+      if (this.gameState.gameName == data.gameName) {
+        this.$store.dispatch("updateInterval", data.value)
+      }
     }),
     this.socket.on("updateGameState", (data) => {
-      this.$store.dispatch("updateGameState", data);
+      if (this.gameState.gameName == data.gameName) {
+        this.$store.dispatch("updateGameState", data)
+      }
     })
   }
 };

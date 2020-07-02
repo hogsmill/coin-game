@@ -246,14 +246,16 @@ export default {
   },
   mounted() {
     this.socket.on("go", (data) => {
-      console.log('Game state received in go: ', data.gameState)
-
-      this.$store.dispatch("updateGameState", data.gameState)
-
-      this.run()
+      if (this.gameState.gameName == data.gameState.gameName) {
+        console.log('Game state received in go: ', data.gameState)
+        this.$store.dispatch("updateGameState", data.gameState)
+        this.run()
+      }
     }),
     this.socket.on("playCoin", (data) => {
-      this.playACoin(data.coin, data.role, data.round)
+      if (this.gameState.gameName == data.gameName) {
+        this.playACoin(data.coin, data.role, data.round)
+      }
     })
   }
 };

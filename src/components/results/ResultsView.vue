@@ -126,7 +126,7 @@ export default {
       return round.time >= this.gameState.timeLimit
     },
     playCoin(coin, role, round) {
-      this.socket.emit("playCoin", {coin: coin, role: role, round: round})
+      this.socket.emit("playCoin", { gameName: this.gameState.gameName, coin: coin, role: role, round: round })
     }
   },
   created() {

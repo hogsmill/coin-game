@@ -8,21 +8,21 @@ export const store = new Vuex.Store({
     walkThrough: false,
     host: false,
     showAbout: false,
-    gameName: '',
-    stateSet: false,
-    interval: 250,
-    stopped: false,
-    denominations: {
-      200: 1,
-      100: 7,
-      50: 11,
-      20: 21,
-      10: 6,
-      5: 6,
-      2: 10,
-      1: 20,
-    },
     gameState: {
+      gameName: '',
+      stateSet: false,
+      interval: 250,
+      stopped: false,
+      denominations: {
+        200: 1,
+        100: 7,
+        50: 11,
+        20: 21,
+        10: 6,
+        5: 6,
+        2: 10,
+        1: 20,
+      },
       timeLimit: 60000,
       valueTimeLimit: 10000,
       clickOnCoins: true,
@@ -71,19 +71,19 @@ export const store = new Vuex.Store({
       return state.showAbout;
     },
     getGameName: (state) => {
-      return state.gameName;
+      return state.gameState.gameName;
     },
     getStateSet: (state) => {
-      return state.stateSet;
+      return state.gameState.stateSet;
     },
     getInterval: (state) => {
-      return state.interval;
+      return state.gameState.interval;
     },
     getStopped: (state) => {
-      return state.stopped;
+      return state.gameState.stopped;
     },
     getDenominations: (state) => {
-      return state.denominations;
+      return state.gameState.denominations;
     },
     getGameState: (state) => {
       return state.gameState;
@@ -100,19 +100,19 @@ export const store = new Vuex.Store({
       state.showAbout = payload;
     },
     updateGameName: (state, payload) => {
-      state.gameName = payload;
+      state.gameState.gameName = payload;
     },
     updateStateSet: (state, payload) => {
-      state.stateSet = payload;
+      state.gameState.stateSet = payload;
     },
     updateInterval: (state, payload) => {
-      state.interval = payload;
+      state.gameState.interval = payload;
     },
     updateStopped: (state, payload) => {
-      state.stopped = payload;
+      state.gameState.stopped = payload;
     },
     updateDenominations: (state, payload) => {
-      state.denominations = payload;
+      state.gameState.denominations = payload;
     },
     updateGameState: (state, payload) => {
       state.gameState = payload;
