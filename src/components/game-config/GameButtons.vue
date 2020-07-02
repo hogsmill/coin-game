@@ -3,21 +3,21 @@
     <button id="batch-button"
       class="btn btn-site-primary mb-2"
       @click="go(0)"
-      :disabled="gameState['running']"
+      :disabled="gameState.running"
     >
       Run Batch
     </button>
     <button id="kanban-button"
       class="btn btn-site-primary mb-2"
       @click="go(1)"
-      :disabled="gameState['running']"
+      :disabled="gameState.running"
     >
       Run Kanban
     </button>
     <button id="value-delivery-button"
       class="btn btn-site-primary mb-2"
       @click="go(2)"
-      :disabled="gameState['running']"
+      :disabled="gameState.running"
     >
       Run Value Delivery
     </button>
@@ -25,7 +25,7 @@
       class="btn btn-site-primary mb-2"
       @click="stop()"
       v-if="stateSet && !stopped"
-      :disabled="gameState['running']"
+      :disabled="gameState.running"
     >
       Stop
     </button>
@@ -33,7 +33,7 @@
       class="btn btn-info mb-2"
       @click="start()"
       v-if="stopped"
-      :disabled="gameState['running']"
+      :disabled="gameState.running"
     >
       Start
     </button>
@@ -65,7 +65,7 @@ export default {
     allPlayed(coins) {
       var played = true;
       for (var i = 0; i < coins.length; i++) {
-        if (!coins[i]["played"]) {
+        if (!coins[i].played) {
           played = false;
         }
       }
@@ -73,52 +73,48 @@ export default {
     },
     setCoin(coin, i, roles) {
       if (i < roles.length - 2) {
-        coin["played"] = false;
+        coin.played = false;
       }
       return coin;
     },
     deliverCoin(coin, role, round) {
-      var l = round["roles"].length;
-      if (role.name == round["roles"][l - 1]["name"]) {
-        round["delivered"] = round["delivered"] + parseInt(coin["value"]);
+      var l = round.roles.length;
+      if (role.role == round.roles[l - 1].role) {
+        round.delivered = round.delivered + parseInt(coin.value);
       }
     },
     moveCoins(roundNum) {
       var i, j, coin;
-      var round = this.gameState["rounds"][roundNum];
-      for (i = 0; i < round["roles"].length - 1; i++) {
+      var round = this.gameState.rounds[roundNum];
+      for (i = 0; i < round.roles.length - 1; i++) {
         if (
-          round["roles"][i]["coins"].length &&
-          this.allPlayed(round["roles"][i]["coins"])
+          round.roles[i].coins.length &&
+          this.allPlayed(round.roles[i].coins)
         ) {
-          for (j = 0; j < round["roles"][i]["coins"].length; j++) {
-            coin = round["roles"][i]["coins"][j];
+          for (j = 0; j < round.roles[i].coins.length; j++) {
+            coin = round.roles[i].coins[j];
             coin.played = false;
-            round["roles"][i + 1]["coins"].push(coin);
-            this.deliverCoin(coin, round["roles"][i + 1], round);
+            round.roles[i + 1].coins.push(coin);
+            this.deliverCoin(coin, round.roles[i + 1], round);
           }
-          round["roles"][i]["coins"] = [];
+          round.roles[i].coins = [];
         }
       }
     },
     moveCoin(round) {
-      for (
-        var i = 0;
-        i < this.gameState["rounds"][round]["roles"].length - 1;
-        i++
-      ) {
-        var roles = this.gameState["rounds"][round]["roles"];
+      for (var i = 0; i < this.gameState.rounds[round].roles.length - 1; i++) {
+        var roles = this.gameState.rounds[round].roles
         var role = roles[i];
-        for (var j = 0; j < role["coins"].length; j++) {
-          var coin = role["coins"][j];
-          if (coin["played"]) {
-            coin["played"] = false;
-            roles[i + 1]["coins"].push(coin);
-            role["coins"].splice(j, 1);
+        for (var j = 0; j < role.coins.length; j++) {
+          var coin = role.coins[j];
+          if (coin.played) {
+            coin.played = false;
+            roles[i + 1].coins.push(coin);
+            role.coins.splice(j, 1);
             this.deliverCoin(
               coin,
               roles[i + 1],
-              this.gameState["rounds"][round]
+              this.gameState.rounds[round]
             );
           }
         }
@@ -135,11 +131,11 @@ export default {
         alert("Times Up!")
       } else {
         for (i = 0; i < this.gameState.rounds[roundN].roles.length; i++) {
-          if (this.gameState.rounds[roundN].roles[i].name == role.name) {
+          if (this.gameState.rounds[roundN].roles[i].role == role.role) {
             roleN = i
           }
         }
-        this.gameState.rounds[roundN].roles[roleN].coins[coin]['played'] = true
+        this.gameState.rounds[roundN].roles[roleN].coins[coin].played = true
         this.$store.dispatch("updateGameState", this.gameState);
         if (round.name == "Batch") {
           this.moveCoins(roundN);
@@ -152,50 +148,50 @@ export default {
       var i = 0;
       var played = false;
       while (i < coins.length && !played) {
-        if (!coins[i]["played"]) {
-          coins[i]["played"] = true;
+        if (!coins[i].played) {
+          coins[i].played = true;
           played = true;
         }
         i++;
       }
     },
     playRoleCoins(round) {
-      var roles = this.gameState["rounds"][round]["roles"];
+      var roles = this.gameState.rounds[round].roles;
       var played;
       for (var i = 0; i < roles.length; i++) {
         if (!played) {
-          this.playCoin(roles[i]["coins"]);
+          this.playCoin(roles[i].coins);
         }
       }
     },
     incrementTime(round) {
-      this.gameState["rounds"][round]["time"] =
-        this.gameState["rounds"][round]["time"] + parseInt(this.interval);
-      return this.gameState["rounds"][round]["time"];
+      this.gameState.rounds[round].time =
+        this.gameState.rounds[round].time + parseInt(this.interval)
+      return this.gameState.rounds[round].time
     },
     complete(round) {
       var limit =
-        this.gameState["rounds"][round]["name"] == "Value First"
-          ? this.gameState["valueTimeLimit"]
-          : this.gameState["timeLimit"];
+        this.gameState.rounds[round].name == "Value First"
+          ? this.gameState.valueTimeLimit
+          : this.gameState.timeLimit
       return (
-        this.gameState["rounds"][round]["time"] >= parseInt(limit) ||
-        this.gameState["rounds"][round]["delivered"] == this.gameState["total"]
-      );
+        this.gameState.rounds[round].time >= parseInt(limit) ||
+        this.gameState.rounds[round].delivered == this.gameState.total
+      )
     },
     run() {
-      var round = this.gameState["round"];
+      var round = this.gameState.round
       if (!this.gameState["clickOnCoins"]) {
         this.playRoleCoins(round)
-        if (this.gameState["rounds"][round]["name"] == "Batch") {
+        if (this.gameState.rounds[round].name == "Batch") {
           this.moveCoins(round);
         } else {
           this.moveCoin(round);
         }
       }
-      this.incrementTime(this.gameState["round"]);
-      if (!this.complete(this.gameState["round"])) {
-        setTimeout(this.run, this.interval);
+      this.incrementTime(this.gameState.round);
+      if (!this.complete(this.gameState.round)) {
+        setTimeout(this.run, this.interval)
       }
     },
     shuffleArray(array) {
@@ -228,7 +224,7 @@ export default {
       this.$store.dispatch("updateStopped", true);
     },
     go(round) {
-      var coins = this.getCoins(this.gameState["rounds"][round]["name"])
+      var coins = this.getCoins(this.gameState.rounds[round].name)
       var gameState = this.$store.getters.getGameState
       gameState.stateSet = true
       gameState.round = round

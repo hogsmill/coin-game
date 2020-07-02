@@ -8,36 +8,34 @@
           <td :style="{ width: setWidth() }">Round</td>
           <td
             v-for="role in gameState.rounds[0]['roles']"
-            :key="role['name']"
+            :key="role.role"
             :style="{ width: setWidth() }"
           >
-            {{ role["name"] }}
+            {{ role.role }}
           </td>
           <td :style="{ width: setWidth() }">Delivered</td>
         </thead>
         <tbody>
           <tr v-for="(round, index) in gameState.rounds" :key="index">
-            <td>{{ round["name"] }}</td>
+            <td>{{ round.name }}</td>
             <td
-              v-for="(role, roleIndex) in gameState.rounds[0]['roles']"
+              v-for="(role, roleIndex) in gameState.rounds[0].roles"
               :role="role"
               :roleIndex="roleIndex"
               :key="roleIndex"
             >
-              <div v-if="gameState.rounds[index]['roles'][roleIndex]">
+              <div v-if="gameState.rounds[index].roles[roleIndex]">
                 <div
-                  v-for="(coin, coinIndex) in gameState['rounds'][index][
-                    'roles'
-                  ][roleIndex]['coins']"
+                  v-for="(coin, coinIndex) in gameState.rounds[index].roles[roleIndex].coins"
                   :coin="coin"
                   :coinIndex="coinIndex"
                   :key="coinIndex"
                   class="coin-parent"
-                  @click="playCoin(coinIndex, gameState.rounds[index]['roles'][roleIndex], gameState.rounds[index])"
+                  @click="playCoin(coinIndex, gameState.rounds[index].roles[roleIndex], gameState.rounds[index])"
                 >
                   <div
                     class="coin"
-                    data-toggle="tooltip" data-placement="top" :title="coinNames[coin['value']]"
+                    data-toggle="tooltip" data-placement="top" :title="coinNames[coin.value]"
                     :class="[getClassName(role), getValueName(coin)]"
                   ></div>
                 </div>
@@ -45,7 +43,7 @@
             </td>
             <td>
               <div>
-                £{{ value(round["delivered"]) }} in {{ time(round["time"]) }}
+                £{{ value(round.delivered) }} in {{ time(round.time) }}
               </div>
               <div v-if="outOfTime(round)" class="missed">Missed delivery</div>
             </td>
@@ -95,13 +93,13 @@ export default {
   },
   methods: {
     setWidth() {
-      return 100 / (this.gameState["roles"].length + 1) + "%";
+      return 100 / (this.gameState.roles.length + 1) + "%";
     },
     getClassName(role) {
-      return role["name"].replace(" ", "-").toLowerCase();
+      return role.role.replace(" ", "-").toLowerCase();
     },
     getValueName(coin) {
-      var classStr = this.coinClasses[coin["value"]];
+      var classStr = this.coinClasses[coin.value];
       if (coin["played"]) {
         classStr = classStr + " played";
       }
@@ -120,12 +118,12 @@ export default {
       var pounds = Math.floor(n / 100);
       var pence = n - pounds * 100;
       if (pence < 10) {
-        pence = "0" + pence;
+        pence = "0" + pence
       }
-      return pounds + "." + pence;
+      return pounds + "." + pence
     },
     outOfTime(round) {
-      return round["time"] >= this.gameState["timeLimit"];
+      return round.time >= this.gameState.timeLimit
     },
     playCoin(coin, role, round) {
       this.socket.emit("playCoin", {coin: coin, role: role, round: round})

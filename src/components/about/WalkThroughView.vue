@@ -245,7 +245,6 @@ export default {
   mounted() {
     const self = this;
     if (location.search.match("walkThrough")) {
-      console.log(self.walkThrough);
       self.$store.dispatch("updateWalkThrough", true);
       self.$modal.show("walk-through");
     }

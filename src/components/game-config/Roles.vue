@@ -11,8 +11,8 @@
           <input
             class="form-check-input mr-neg-10"
             type="checkbox"
-            checked="role['include']"
-            v-model="role['include']"
+            checked="role.include"
+            v-model="role.include"
           />
         </div>
         <button
@@ -23,7 +23,7 @@
           + &xutri;
         </button>
         <button
-          v-if="role['name'] != 'Customer'"
+          v-if="role.role != 'Customer'"
           @click.prevent="addAfter(role)"
           class="btn btn-site-primary mb-2"
           data-toggle="tooltip" data-placement="top" title="Add role after"
@@ -33,14 +33,14 @@
         <input
           type="text"
           class="form-control mb-2 ml-1 col-md-6"
-          v-bind:id="role['name'].replace(' ', '')"
-          v-model.lazy="role['name']"
+          v-bind:id="role.role.replace(' ', '')"
+          v-model.lazy="role.role"
         />
         <button
           class="btn btn-site-primary mb-2 update-role"
           @click.prevent="updateRoles()"
           @click="updateRoles()"
-          data-toggle="tooltip" data-placement="top" title="Update role name"
+          data-toggle="tooltip" data-placement="top" title="Update role"
         >
         &crarr;
         </button>
@@ -64,26 +64,26 @@ export default {
   methods: {
     addBefore(role) {
       var roles = [];
-      for (var i = 0; i < this.gameState["roles"].length; i++) {
-        if (role["name"] == this.gameState["roles"][i]["name"]) {
+      for (var i = 0; i < this.gameState.roles.length; i++) {
+        if (role.role == this.gameState.roles[i].role) {
           roles.push({ name: "New Role", include: true });
         }
-        roles.push(this.gameState["roles"][i]);
+        roles.push(this.gameState.roles[i]);
       }
       this.socket.emit("updateRoles", roles)
     },
     addAfter(role) {
       var roles = [];
-      for (var i = 0; i < this.gameState["roles"].length; i++) {
-        roles.push(this.gameState["roles"][i]);
-        if (role["name"] == this.gameState["roles"][i]["name"]) {
+      for (var i = 0; i < this.gameState.roles.length; i++) {
+        roles.push(this.gameState.roles[i]);
+        if (role.role == this.gameState.roles[i].role) {
           roles.push({ name: "New Role", include: true });
         }
       }
       this.socket.emit("updateRoles", roles)
     },
     updateRoles() {
-      this.socket.emit("updateRoles", this.gameState["roles"])
+      this.socket.emit("updateRoles", this.gameState.roles)
     }
   },
   created() {
