@@ -77,10 +77,6 @@ export default {
     if (params.isParam("host")) {
       this.$store.dispatch("updateHost", true)
     }
-    if (params.isParam("walkThrough")) {
-      this.$store.dispatch("updateWalkThrough", true)
-      this.$modal.show("walk-through")
-    }
   }
 }
 </script>
