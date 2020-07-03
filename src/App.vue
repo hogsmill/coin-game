@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import params from './lib/params.js'
+
 import Header from "./components/Header.vue";
 import GameName from "./components/GameName.vue";
 import Denominations from "./components/game-config/Denominations.vue";
@@ -72,18 +74,15 @@ export default {
     }
   },
   created() {
-    var search = location.search.replace('?', '').split('&')
-    for (var i = 0; i < search.length; i++) {
-      if (search[i] == "host") {
-        this.$store.dispatch("updateHost", true)
-      }
-      if (search[i] == "walkThrough") {
-        this.$store.dispatch("updateWalkThrough", true)
-        this.$modal.show("walk-through")
-      }
+    if (params.isParam("host")) {
+      this.$store.dispatch("updateHost", true)
+    }
+    if (params.isParam("walkThrough")) {
+      this.$store.dispatch("updateWalkThrough", true)
+      this.$modal.show("walk-through")
     }
   }
-};
+}
 </script>
 
 <style>
