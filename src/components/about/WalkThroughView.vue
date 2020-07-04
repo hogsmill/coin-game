@@ -163,11 +163,11 @@
           </div>
         </div>
       </div>
-      <div class="buttons" v-if="step < 10">
+      <div class="buttons" v-if="step < noOfScreens()">
         <button class="btn btn-info" @click="incrementStep">Next</button>
         <button class="btn btn-info" @click="hide()">Skip</button>
       </div>
-      <div class="buttons" v-if="step == 10">
+      <div class="buttons" v-if="step == noOfScreens()">
         <button class="btn btn-info" @click="hide()">Play Game</button>
       </div>
     </modal>
@@ -175,6 +175,8 @@
 </template>
 
 <script>
+import params from '../../lib/params.js'
+
 export default {
   data() {
     return {
@@ -194,6 +196,9 @@ export default {
     };
   },
   methods: {
+    noOfScreens() {
+      return Object.keys(this.positions).length + 1
+    },
     setDefault() {
       var elem = document.getElementsByClassName("vm--modal")[0].getBoundingClientRect()
       this.default = {
@@ -250,7 +255,7 @@ export default {
   },
   mounted() {
     const self = this;
-    if (location.search.match("walkThrough")) {
+    if (params.isParam("walkThrough")) {
       self.$store.dispatch("updateWalkThrough", true);
       self.$modal.show("walk-through");
     }
