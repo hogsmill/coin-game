@@ -52,9 +52,10 @@
 </template>
 
 <script>
-import io from "socket.io-client";
-
 export default {
+  props: [
+    'socket'
+  ],
   methods: {
     updateGameState() {
       this.socket.emit("updateGameState", this.$store.getters.getGameState)
@@ -75,15 +76,6 @@ export default {
     gameState() {
       return this.$store.getters.getGameState;
     }
-  },
-  created() {
-    var host = "77.68.122.69"
-    if (location.hostname == 'localhost') {
-      host = 'localhost'
-    }
-    var connStr = "http://" + host + ":3000"
-    console.log("Connecting to: " + connStr)
-    this.socket = io(connStr)
   },
   mounted() {
     this.socket.on("updateInterval", (data) => {

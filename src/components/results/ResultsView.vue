@@ -60,11 +60,11 @@
 </template>
 
 <script>
-import io from "socket.io-client";
-
-
 export default {
   name: "Results",
+  props: [
+    'socket'
+  ],
   data() {
     return {
       roleEditing: '',
@@ -153,15 +153,6 @@ export default {
     playCoin(coin, role, round) {
       this.socket.emit("playCoin", { gameName: this.gameState.gameName, coin: coin, role: role, round: round })
     }
-  },
-  created() {
-    var host = "77.68.122.69"
-    if (location.hostname == 'localhost') {
-      host = 'localhost'
-    }
-    var connStr = "http://" + host + ":3000"
-    console.log("Connecting to: " + connStr)
-    this.socket = io(connStr)
   },
   mounted() {
     this.socket.on("updateRoles", (data) => {

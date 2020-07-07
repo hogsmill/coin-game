@@ -10,9 +10,9 @@
       <GameName />
       <div class="container">
         <div :class="{'not-host' : !isHost}" class="card-deck">
-          <app-denominations></app-denominations>
-          <app-roles></app-roles>
-          <app-control></app-control>
+          <app-denominations v-bind:socket="socket"></app-denominations>
+          <app-roles v-bind:socket="socket"></app-roles>
+          <app-control v-bind:socket="socket"></app-control>
         </div>
         <div v-if="!isHost && !stateSet" class="form-check">
           <input
@@ -23,14 +23,16 @@
           />
           <label for="clickCoins" id="click-coins">Click on Coins</label>
         </div>
-        <app-game-buttons></app-game-buttons>
+        <app-game-buttons v-bind:socket="socket"></app-game-buttons>
       </div>
-      <ResultsView v-bind:gameState="gameState" />
+      <ResultsView v-bind:gameState="gameState" v-bind:socket="socket" />
     </div>
   </div>
 </template>
 
 <script>
+import io from "socket.io-client";
+
 import params from './lib/params.js'
 
 import Header from "./components/Header.vue";
@@ -74,10 +76,18 @@ export default {
     }
   },
   created() {
+    var host = "77.68.122.69"
+    if (location.hostname == 'localhost') {
+      host = 'localhost'
+    }
+    var connStr = "http://" + host + ":3000"
+    console.log("Connecting to: " + connStr)
+    this.socket = io(connStr)
+
     if (params.isParam("host")) {
       this.$store.dispatch("updateHost", true)
     }
-  }
+  },
 }
 </script>
 

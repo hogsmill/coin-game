@@ -41,9 +41,10 @@
 </template>
 
 <script>
-import io from "socket.io-client";
-
 export default {
+  props: [
+    'socket'
+  ],
   computed: {
     stateSet() {
       return this.$store.getters.getStateSet;
@@ -234,15 +235,6 @@ export default {
       }
       this.socket.emit("go", { gameState: gameState });
     },
-  },
-  created() {
-    var host = "77.68.122.69"
-    if (location.hostname == 'localhost') {
-      host = 'localhost'
-    }
-    var connStr = "http://" + host + ":3000"
-    console.log("Connecting to: " + connStr)
-    this.socket = io(connStr)
   },
   mounted() {
     this.socket.on("go", (data) => {

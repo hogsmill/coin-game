@@ -51,9 +51,10 @@
 </template>
 
 <script>
-import io from "socket.io-client";
-
 export default {
+  props: [
+    'socket'
+  ],
   computed: {
     stateSet() {
       return this.$store.getters.getStateSet;
@@ -103,17 +104,6 @@ export default {
     updateRoles() {
       this.socket.emit("updateRoles", {gameName: this.gameName, roles: this.gameState.roles })
     }
-  },
-  created() {
-    var host = "77.68.122.69"
-    if (location.hostname == 'localhost') {
-      host = 'localhost'
-    }
-    var connStr = "http://" + host + ":3000"
-    console.log("Connecting to: " + connStr)
-    this.socket = io(connStr)
-
-    this.$store.dispatch("updateGameStateRoles", this.gameState.roles);
   },
   mounted() {
     this.socket.on("updateRoles", (data) => {

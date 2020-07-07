@@ -130,9 +130,11 @@
 </template>
 
 <script>
-import io from "socket.io-client";
 
 export default {
+  props: [
+    'socket'
+  ],
   computed: {
     stateSet() {
       return this.$store.getters.getStateSet;
@@ -168,15 +170,6 @@ export default {
     updateDenominations() {
       this.socket.emit("updateDenominations", { gameName: this.gameState.gameName, value: this.denominations })
     }
-  },
-  created() {
-    var host = "77.68.122.69"
-    if (location.hostname == 'localhost') {
-      host = 'localhost'
-    }
-    var connStr = "http://" + host + ":3000"
-    console.log("Connecting to: " + connStr)
-    this.socket = io(connStr)
   },
   mounted() {
     this.socket.on("updateDenominations", (data) => {
