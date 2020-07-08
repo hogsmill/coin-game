@@ -105,6 +105,9 @@ export default {
       this.socket.emit("updateRoles", {gameName: this.gameName, roles: this.gameState.roles })
     }
   },
+  created() {
+    this.$store.dispatch("updateGameStateRoles", this.gameState.roles);
+  },
   mounted() {
     this.socket.on("updateRoles", (data) => {
       if (this.gameState.gameName == data.gameName) {

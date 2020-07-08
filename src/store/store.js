@@ -30,7 +30,7 @@ export const store = new Vuex.Store({
       round: 0,
       total: 0,
       roles: [
-        { role: "Product Owner", include: true, name: "Steve" },
+        { role: "Product Owner", include: true, name: "" },
         { role: "Developer", include: true, name: "" },
         { role: "Tester", include: true, name: "" },
         { role: "Integrator", include: true, name: "" },
