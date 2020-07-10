@@ -110,7 +110,7 @@ export default {
   },
   mounted() {
     this.socket.on("updateRoles", (data) => {
-      if (this.gameState.gameName == data.gameName) {
+      if (this.gameName == data.gameName) {
         this.$store.dispatch("updateGameStateRoles", data.roles)
       }
     })

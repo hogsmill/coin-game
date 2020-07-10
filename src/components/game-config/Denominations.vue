@@ -168,12 +168,12 @@ export default {
       return (n / sum) * 100 + "%";
     },
     updateDenominations() {
-      this.socket.emit("updateDenominations", { gameName: this.gameState.gameName, value: this.denominations })
+      this.socket.emit("updateDenominations", { gameName: this.gameName, value: this.denominations })
     }
   },
   mounted() {
     this.socket.on("updateDenominations", (data) => {
-      if (this.gameState.gameName == data.gameName) {
+      if (this.gameName == data.gameName) {
         this.$store.dispatch("updateDenominations", data.value)
       }
     })

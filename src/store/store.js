@@ -8,9 +8,11 @@ export const store = new Vuex.Store({
     walkThrough: false,
     host: false,
     showAbout: false,
+    gameName: '',
+    myName: '',
+    players: [],
     clickedRole: {},
     gameState: {
-      gameName: '',
       stateSet: false,
       interval: 250,
       stopped: false,
@@ -72,7 +74,13 @@ export const store = new Vuex.Store({
       return state.showAbout;
     },
     getGameName: (state) => {
-      return state.gameState.gameName;
+      return state.gameName;
+    },
+    getMyName: (state) => {
+      return state.myName;
+    },
+    getPlayers: (state) => {
+      return state.players;
     },
     getStateSet: (state) => {
       return state.gameState.stateSet;
@@ -101,7 +109,21 @@ export const store = new Vuex.Store({
       state.showAbout = payload;
     },
     updateGameName: (state, payload) => {
-      state.gameState.gameName = payload;
+      state.gameName = payload;
+    },
+    updateMyName: (state, payload) => {
+      state.myName = payload;
+    },
+    addPlayer: (state, payload) => {
+      var found = false
+      for (var i = 0; i < state.players.length; i++) {
+        if (state.players[i] == payload) {
+          found = true
+        }
+      }
+      if (!found) {
+        state.players.push(payload)
+      }
     },
     updateStateSet: (state, payload) => {
       state.gameState.stateSet = payload;
@@ -130,6 +152,9 @@ export const store = new Vuex.Store({
         state.gameState.rounds[i].roles = roles
       }
     },
+    updatePlayers: (state, payload) => {
+      state.players = payload;
+    },
     updateGameStateRound: (state, payload) => {
       state.gameState.round = payload;
     },
@@ -149,6 +174,15 @@ export const store = new Vuex.Store({
     },
     updateGameName: ({ commit }, payload) => {
       commit("updateGameName", payload);
+    },
+    updateMyName: ({ commit }, payload) => {
+      commit("updateMyName", payload);
+    },
+    updatePlayers: ({ commit }, payload) => {
+      commit("updatePlayers", payload);
+    },
+    addPlayer: ({ commit }, payload) => {
+      commit("addPlayer", payload);
     },
     updateStateSet: ({ commit }, payload) => {
       commit("updateStateSet", payload);

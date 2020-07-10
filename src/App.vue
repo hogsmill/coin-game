@@ -7,11 +7,13 @@
     </div>
     <div v-else>
       <h1>The Coin Game</h1>
+      <MyName v-bind:socket="socket" />
       <GameName />
       <div class="container">
         <div :class="{'not-host' : !isHost}" class="card-deck">
           <app-denominations v-bind:socket="socket"></app-denominations>
           <app-roles v-bind:socket="socket"></app-roles>
+          <app-players v-bind:socket="socket"></app-players>
           <app-control v-bind:socket="socket"></app-control>
         </div>
         <div v-if="!isHost && !stateSet" class="form-check">
@@ -36,9 +38,11 @@ import io from "socket.io-client";
 import params from './lib/params.js'
 
 import Header from "./components/Header.vue";
+import MyName from "./components/MyName.vue";
 import GameName from "./components/GameName.vue";
 import Denominations from "./components/game-config/Denominations.vue";
 import Roles from "./components/game-config/Roles.vue";
+import Players from "./components/game-config/Players.vue";
 import Control from "./components/game-config/Control.vue";
 import GameButtons from "./components/game-config/GameButtons.vue";
 import AboutView from "./components/about/AboutView.vue";
@@ -51,10 +55,12 @@ export default {
     appHeader: Header,
     appDenominations: Denominations,
     appRoles: Roles,
+    appPlayers: Players,
     appControl: Control,
     appGameButtons: GameButtons,
     AboutView,
     WalkThroughView,
+    MyName,
     GameName,
     ResultsView,
   },

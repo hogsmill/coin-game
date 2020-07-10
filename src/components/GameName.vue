@@ -29,6 +29,7 @@ export default {
     saveGameName: function() {
       var gameName = document.getElementById('game-name').value
       this.$store.dispatch("updateGameName", gameName)
+
       this.hide()
     }
   },

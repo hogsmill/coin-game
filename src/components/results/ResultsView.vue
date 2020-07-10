@@ -6,14 +6,12 @@
       <table class="table table-striped">
         <thead>
           <td :style="{ width: setWidth() }">Round</td>
-          <td
-            v-for="role in gameState.rounds[0]['roles']"
-            :key="role.role"
-            :style="{ width: setWidth() }"
-          >
+          <td v-for="role in gameState.rounds[0]['roles']" :key="role.role" :style="{ width: setWidth() }">
             <span @click="showNameEdit(role.role)"> {{ role.role }} </span>
             <div v-if="roleEditing == role.role" >
-              <input class="role-name-edit" type="text" v-model="role.name" />
+              <select class="form-control" v-model="role.name">
+                <option v-for="(player, index) in players" :key="index">{{player}}</option>
+              </select>
               <button class="btn btn-site-primary mb-2" @click="updateRole(role)">&crarr;</button>
             </div>
             <span v-if="roleEditing != role.role && role.name"><br /> ({{role.name}}) </span>
@@ -91,14 +89,14 @@ export default {
     };
   },
   computed: {
+    players() {
+      return this.$store.getters.getPlayers;
+    },
     stateSet() {
       return this.$store.getters.getStateSet;
     },
     gameState() {
       return this.$store.getters.getGameState;
-    },
-    gameName() {
-      return this.$store.getters.getGameName;
     }
   },
   methods: {
@@ -151,12 +149,12 @@ export default {
       return round.time >= this.gameState.timeLimit
     },
     playCoin(coin, role, round) {
-      this.socket.emit("playCoin", { gameName: this.gameState.gameName, coin: coin, role: role, round: round })
+      this.socket.emit("playCoin", { gameName: this.gameName, coin: coin, role: role, round: round })
     }
   },
   mounted() {
     this.socket.on("updateRoles", (data) => {
-      if (this.gameState.gameName == data.gameName) {
+      if (this.gameName == data.gameName) {
         this.$store.dispatch("updateGameStateRoles", data.roles)
       }
     })

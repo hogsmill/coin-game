@@ -40,6 +40,10 @@ io.on("connection", (socket) => {
 
   socket.on("updateRoles", (data) => { emit("updateRoles", data) })
 
+  socket.on("addPlayer", (data) => { emit("addPlayer", data) })
+
+  socket.on("updatePlayers", (data) => { emit("updatePlayers", data) })
+
   socket.on("updateInterval", (data) => { emit("updateInterval", data) })
 
   socket.on("updateGameState", (data) => { emit("updateGameState", data) })

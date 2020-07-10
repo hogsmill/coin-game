@@ -233,19 +233,19 @@ export default {
       for (var i = 1; i < gameState.roles.length; i++) {
         gameState.roles[i].coins = []
       }
-      this.socket.emit("go", { gameState: gameState });
+      this.socket.emit("go", { gameName: this.gameName, gameState: gameState });
     },
   },
   mounted() {
     this.socket.on("go", (data) => {
-      if (this.gameState.gameName == data.gameState.gameName) {
+      if (this.gameName == data.gameName) {
         console.log('Game state received in go: ', data.gameState)
         this.$store.dispatch("updateGameState", data.gameState)
         this.run()
       }
     }),
     this.socket.on("playCoin", (data) => {
-      if (this.gameState.gameName == data.gameName) {
+      if (this.gameName == data.gameName) {
         this.playACoin(data.coin, data.role, data.round)
       }
     })

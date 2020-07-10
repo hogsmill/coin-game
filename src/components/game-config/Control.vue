@@ -58,7 +58,7 @@ export default {
   ],
   methods: {
     updateGameState() {
-      this.socket.emit("updateGameState", this.$store.getters.getGameState)
+      this.socket.emit("updateGameState", { gameName: this.gameName, gameState: this.$store.getters.getGameState})
     }
   },
   computed: {
@@ -70,7 +70,7 @@ export default {
         return this.$store.getters.getInterval;
       },
       set(value) {
-        this.socket.emit("updateInterval", { gameName: this.gameState.gameName ,value: value })
+        this.socket.emit("updateInterval", { gameName: this.gameName, value: value })
       },
     },
     gameState() {
@@ -79,13 +79,13 @@ export default {
   },
   mounted() {
     this.socket.on("updateInterval", (data) => {
-      if (this.gameState.gameName == data.gameName) {
+      if (this.gameName == data.gameName) {
         this.$store.dispatch("updateInterval", data.value)
       }
     }),
     this.socket.on("updateGameState", (data) => {
-      if (this.gameState.gameName == data.gameName) {
-        this.$store.dispatch("updateGameState", data)
+      if (this.gameName == data.gameName) {
+        this.$store.dispatch("updateGameState", data.gameState)
       }
     })
   }
