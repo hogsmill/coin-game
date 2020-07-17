@@ -32,6 +32,10 @@ input {
   margin-right: -10px !important;
 }
 
+.mb-6 { 
+  margin-bottom: 4rem;
+}
+
 .no-padding-r-l {
   padding-right: 0;
   padding-left: 0;
@@ -87,4 +91,8 @@ input {
 
 .hidden {
   visibility: hidden;
+}
+
+.pointer {
+  cursor: pointer;
 }

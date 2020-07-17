@@ -102,5 +102,4 @@ export default {
 <style>
   .not-host { height: 0px; visibility: hidden; }
   #clickCoins { margin-left: -2rem; }
-  .mb-6 { margin-bottom: 4rem; }
 </style>
