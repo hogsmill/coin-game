@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-light mb-3 col-md-3 no-padding-r-l" v-if="!stateSet">
+  <div class="card bg-light mb-3 col-custom mr-1 no-padding-r-l" v-if="!stateSet">
     <div class="card-body">
       <h5 class="card-title">Denominations</h5>
       <form class="form-inline">
@@ -180,3 +180,11 @@ export default {
   }
 };
 </script>
+
+<style>
+.col-custom {
+  -ms-flex: 0 0 22%;
+  flex: 0 0 22%;
+  max-width: 22%;
+}
+</style>

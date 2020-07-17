@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-light mb-3 col-md-3 no-padding-r-l" v-if="!stateSet">
+  <div class="card bg-light mb-3 col-md-2 no-padding-r-l" v-if="!stateSet">
     <div class="card-body">
       <h5 class="card-title">Control</h5>
       <form class="control">

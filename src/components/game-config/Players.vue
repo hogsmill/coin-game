@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-light mb-3 no-padding-r-l" v-if="!stateSet">
+  <div class="card bg-light mb-3 mr-1 col-md-2 no-padding-r-l" v-if="!stateSet">
     <div class="card-body">
       <h5 class="card-title">Players</h5>
       <form class="form-inline">
@@ -63,3 +63,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.col-md-2 {
+    -ms-flex: 0 0 19%;
+    flex: 0 0 19%;
+    max-width: 19%;
+}
+</style>

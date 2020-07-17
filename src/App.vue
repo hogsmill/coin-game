@@ -12,7 +12,7 @@
         <GameName />
       </div>
       <div class="container">
-        <div :class="{'not-host' : !isHost}" class="card-deck">
+        <div :class="{'not-host' : !isHost}" class="row">
           <app-denominations v-bind:socket="socket"></app-denominations>
           <app-roles v-bind:socket="socket"></app-roles>
           <app-players v-bind:socket="socket"></app-players>

@@ -1,7 +1,7 @@
 <template>
   <div class="my-name float-right" v-if="!showAbout">
-      <button class="btn btn-secondary" v-if="!myName" @click="show">Set My Name</button>
-      <span v-if="myName" @click="show" class="mr-2 pointer">I am: {{myName}}</span>
+      <button class="btn btn-sm btn-secondary" v-if="!myName" @click="show">Set My Name</button>
+      <span v-if="myName" @click="show" class="mr-2 mt-2 pointer">I am: {{myName}}</span>
 
     <modal name="set-my-name" :height="120" :classes="['rounded']">
       <div class="float-right mr-2 mt-1">
