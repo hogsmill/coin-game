@@ -7,8 +7,10 @@
     </div>
     <div v-else>
       <h1>The Coin Game</h1>
-      <MyName v-bind:socket="socket" />
-      <GameName />
+      <div class="col-md-12 mb-6">
+        <MyName v-bind:socket="socket" />
+        <GameName />
+      </div>
       <div class="container">
         <div :class="{'not-host' : !isHost}" class="card-deck">
           <app-denominations v-bind:socket="socket"></app-denominations>
@@ -16,7 +18,7 @@
           <app-players v-bind:socket="socket"></app-players>
           <app-control v-bind:socket="socket"></app-control>
         </div>
-        <div v-if="!isHost && !stateSet" class="form-check">
+        <div v-if="!isHost && !stateSet" class="form-check col-md-12 mb-3 float-left">
           <input
             class="form-check-input"
             id="clickCoins"
@@ -100,4 +102,5 @@ export default {
 <style>
   .not-host { height: 0px; visibility: hidden; }
   #clickCoins { margin-left: -2rem; }
+  .mb-6 { margin-bottom: 4rem; }
 </style>

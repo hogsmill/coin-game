@@ -1,16 +1,20 @@
 <template>
-  <div class="game-name" v-if="!showAbout">
-    <div class="game-name text-right">
-      <button class="btn btn-sm btn-info" v-if="!gameName" @click="show">Set Game Name</button>
+  <div class="game-name float-right" v-if="!showAbout">
+      <button class="btn btn-secondary" v-if="!gameName" @click="show">Set Game Name</button>
       <span v-if="gameName" @click="show">Game: {{gameName}}</span>
-    </div>
 
     <modal name="set-game-name" :height="120" :classes="['rounded']">
-      <div class="text-right"><span @click="hide" class="glyphicon glyphicon-star">x</span></div>
-      <h4>Enter Your Game Name</h4>
-      <div class="set-game-name">
-        <input type="text" id="game-name" class="form-control" />
-        <button class="btn btn-sm btn-info" @click="saveGameName">Save</button>
+      <div class="float-right mr-2 mt-1">
+        <button type="button" class="close" @click="hide" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="mt-4">
+        <h4>Enter Your Game Name</h4>
+        <div class="set-game-name">
+          <input type="text" id="game-name" class="form-control" />
+          <button class="btn btn-secondary" @click="saveGameName">Save</button>
+        </div>
       </div>
     </modal>
 
@@ -45,10 +49,7 @@ export default {
 </script>
 
 <style>
-  .game-name { padding-right: 2px; }
-  .game-name button { font-size: smaller; background-color: #aaa; border: 1px solid #aaa; }
-  .game-name button:hover { color: #aaa; background-color: #fff; }
-  .set-game-name-modal { height: 120px; }
+.set-game-name-modal { height: 120px; }
 
-  #game-name { display: inline-block; width: 30%; margin-right: 6px; }
+#game-name { display: inline-block; width: 30%; margin-right: 6px; }
 </style>
