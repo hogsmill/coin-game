@@ -27,7 +27,7 @@
               :roleIndex="roleIndex"
               :key="roleIndex"
             >
-              <div v-if="gameState.rounds[index].roles[roleIndex]">
+              <div v-if="index == gameState.round && gameState.rounds[index].roles[roleIndex]">
                 <div
                   v-for="(coin, coinIndex) in gameState.rounds[index].roles[roleIndex].coins"
                   :coin="coin"
