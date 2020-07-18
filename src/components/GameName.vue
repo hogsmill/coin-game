@@ -3,7 +3,7 @@
       <button class="btn btn-sm btn-secondary" v-if="!gameName" @click="show">Set Game Name</button>
       <span v-if="gameName" @click="show" class="mr-2 mt-2 pointer">Game: {{gameName}}</span>
 
-    <modal name="set-game-name-modal" :height="120" :classes="['rounded']">
+    <modal name="set-game-name" :height="120" :classes="['rounded', 'set-game-name']">
       <div class="float-right mr-2 mt-1">
         <button type="button" class="close" @click="hide" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -50,7 +50,7 @@ export default {
 
 <style lang="scss">
 
-.set-game-name-modal {
+.set-game-name {
 
   #game-name {
     display: inline-block;
@@ -62,7 +62,7 @@ export default {
 .game-name {
 
   button {
-    font-size: smaller; 
+    font-size: smaller;
   }
 }
 </style>

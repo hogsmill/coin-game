@@ -3,7 +3,7 @@
       <button class="btn btn-sm btn-secondary" v-if="!myName" @click="show">Set My Name</button>
       <span v-if="myName" @click="show" class="mr-2 mt-2 pointer">I am: {{myName}}</span>
 
-    <modal name="set-my-name" :height="120" :classes="['rounded']">
+    <modal name="set-my-name" :height="120" :classes="['rounded', 'set-my-name']">
       <div class="float-right mr-2 mt-1">
         <button type="button" class="close" @click="hide" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -64,7 +64,7 @@ export default {
 
 <style lang="scss">
 
-.my-name-modal {
+.set-my-name {
   height: 120px;
 
   #my-name {
