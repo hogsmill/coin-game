@@ -62,8 +62,23 @@ export default {
 }
 </script>
 
-<style>
-.my-name-modal { height: 120px; }
+<style lang="scss">
 
-#my-name { display: inline-block; width: 30%; margin-right: 6px; }
+.my-name-modal {
+  height: 120px;
+
+  #my-name {
+    display: inline-block;
+    width: 30%;
+    margin-right: 6px;
+  }
+}
+
+.my-name {
+
+  button {
+    font-size: smaller;
+  }
+}
+
 </style>

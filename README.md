@@ -35,3 +35,9 @@ Navigate to coin-game/coin-game/src
 Then run 'node server.js'
 This is will listen on localhost:3000
 ```
+
+## Installing Sass 
+
+```
+npm install -D sass-loader node-sass
+```

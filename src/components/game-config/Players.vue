@@ -57,7 +57,7 @@ export default {
   mounted() {
     this.socket.on("updatePlayers", (data) => {
       if (this.gameName == data.gameName) {
-        this.$store.dispatch("updateGameStatePlayers", data.players)
+        this.$store.dispatch("updatePlayers", data.players)
       }
     })
   }

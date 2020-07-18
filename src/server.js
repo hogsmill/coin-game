@@ -42,6 +42,10 @@ io.on("connection", (socket) => {
 
   socket.on("addPlayer", (data) => { emit("addPlayer", data) })
 
+  socket.on("updateMyName", (data) => { emit("updateMyName", data) })
+
+  socket.on("addMyNameAsAPlayer", (data) => { emit("addMyNameAsAPlayer", data) })
+
   socket.on("updatePlayers", (data) => { emit("updatePlayers", data) })
 
   socket.on("updateInterval", (data) => { emit("updateInterval", data) })
