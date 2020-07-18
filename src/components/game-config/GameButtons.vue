@@ -21,22 +21,6 @@
     >
       Run Value Delivery
     </button>
-    <button
-      class="btn btn-site-primary mb-2"
-      @click="stop()"
-      v-if="stateSet && !stopped"
-      :disabled="gameState.running"
-    >
-      Stop
-    </button>
-    <button
-      class="btn btn-info mb-2"
-      @click="start()"
-      v-if="stopped"
-      :disabled="gameState.running"
-    >
-      Start
-    </button>
   </div>
 </template>
 

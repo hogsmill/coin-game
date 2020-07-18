@@ -53,6 +53,12 @@ io.on("connection", (socket) => {
   socket.on("updateGameState", (data) => { emit("updateGameState", data) })
 
   socket.on("playCoin", (data) => { emit("playCoin", data) })
+
+  socket.on("showLearnings", (data) => { emit("showLearnings", data) })
+
+  socket.on("hideLearnings", (data) => { emit("hideLearnings", data) })
+  
+  socket.on("incrementLearnings", (data) => { emit("incrementLearnings", data) })
 });
 
 var port = process.argv[2] || 3000

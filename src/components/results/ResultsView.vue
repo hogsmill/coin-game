@@ -1,6 +1,6 @@
 <template>
   <div class="results mb-5">
-    <h2>Results</h2>
+    <h2>Results </h2><Learnings v-bind:socket="socket" />
     <div class="narration"></div>
     <div class="container">
       <table class="table table-striped">
@@ -58,11 +58,16 @@
 </template>
 
 <script>
+import Learnings from ".//Learnings.vue";
+
 export default {
   name: "Results",
   props: [
     'socket'
   ],
+  components: {
+    Learnings
+  },
   data() {
     return {
       roleEditing: '',
