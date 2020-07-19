@@ -1,6 +1,6 @@
 <template>
   <div class="game-name float-right" v-if="!showAbout">
-      <button class="btn btn-sm btn-secondary" v-if="!gameName" @click="show">Set Game Name</button>
+      <button class="btn btn-sm btn-secondary smaller-font" v-if="!gameName" @click="show">Set Game Name</button>
       <span v-if="gameName" @click="show" class="mr-2 mt-2 pointer">Game: {{gameName}}</span>
 
     <modal name="set-game-name" :height="120" :classes="['rounded', 'set-game-name']">
@@ -13,7 +13,7 @@
         <h4>Enter Your Game Name</h4>
         <div class="set-game-name">
           <input type="text" id="game-name" class="form-control" />
-          <button class="btn btn-secondary" @click="saveGameName">Save</button>
+          <button class="btn btn-sm btn-secondary smaller-font" @click="saveGameName">Save</button>
         </div>
       </div>
     </modal>
@@ -56,13 +56,6 @@ export default {
     display: inline-block;
     width: 30%;
     margin-right: 6px;
-  }
-}
-
-.game-name {
-
-  button {
-    font-size: smaller;
   }
 }
 </style>
