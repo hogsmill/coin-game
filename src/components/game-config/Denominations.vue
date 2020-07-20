@@ -181,7 +181,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .col-custom {
   -ms-flex: 0 0 22%;
   flex: 0 0 22%;

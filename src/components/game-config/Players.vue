@@ -66,8 +66,8 @@ export default {
 
 <style scoped>
 .col-md-2 {
-    -ms-flex: 0 0 19%;
-    flex: 0 0 19%;
-    max-width: 19%;
+    -ms-flex: 0 0 18%;
+    flex: 0 0 18%;
+    max-width: 18%;
 }
 </style>

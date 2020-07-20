@@ -91,3 +91,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.col-md-2 {
+    -ms-flex: 0 0 22%;
+    flex: 0 0 22%;
+    max-width: 22%;
+}
+</style>
