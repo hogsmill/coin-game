@@ -3,7 +3,7 @@
     <div class="card-body">
       <h5 class="card-title">Players</h5>
       <form class="form-inline">
-        <input type="text" class="form-control mb-2 ml-1 col-md-6" v-model="player" />
+        <input type="text" class="form-control mb-2 ml-1 col-md-8" v-model="player" />
         <button
           class="btn btn-site-primary mb-2 update-role"
           @click.prevent="addPlayer()"
@@ -66,8 +66,8 @@ export default {
 
 <style scoped>
 .col-md-2 {
-    -ms-flex: 0 0 19%;
-    flex: 0 0 19%;
-    max-width: 19%;
+    -ms-flex: 0 0 18%;
+    flex: 0 0 18%;
+    max-width: 18%;
 }
 </style>

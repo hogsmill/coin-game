@@ -93,6 +93,6 @@ input {
   visibility: hidden;
 }
 
-.pointer {
-  cursor: pointer;
+.smaller-font {
+  font-size: smaller;
 }

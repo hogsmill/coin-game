@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-light mb-3 mr-1 col-md-5 no-padding-r-l" v-if="!stateSet">
+  <div class="card bg-light mb-3 mr-1 col-custom no-padding-r-l" v-if="!stateSet">
     <div class="card-body">
       <h5 class="card-title">Roles</h5>
       <form
@@ -33,7 +33,7 @@
         </button>
         <input
           type="text"
-          class="form-control mb-2 ml-1 col-md-6"
+          class="form-control mb-2 ml-1 col-md-5"
           v-bind:id="role.role.replace(' ', '')"
           v-model.lazy="role.role"
         />
@@ -118,10 +118,10 @@ export default {
 };
 </script>
 
-<style>
-.col-md-5 {
-    -ms-flex: 0 0 40%;
-    flex: 0 0 40%;
-    max-width: 40%;
+<style scoped>
+.col-custom {
+    -ms-flex: 0 0 36%;
+    flex: 0 0 36%;
+    max-width: 36%;
 }
 </style>
