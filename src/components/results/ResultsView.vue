@@ -167,7 +167,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 thead {
   font-weight: bold;
 }
@@ -189,6 +189,10 @@ thead {
   background-size: 20px 20px;
   background-repeat: no-repeat;
   background-position: center center;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
   .played, .customer { opacity: 1; }
 
