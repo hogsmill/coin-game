@@ -180,10 +180,31 @@ import params from '../../lib/params.js'
 export default {
   data() {
     return {
-      step: 1
+      step: 1,
+      default: { width: 600, height: 260 },
+      positions: {
+        2: { height: 290 },
+        3: { target: "batch-button", width: 400, height: 240 },
+        4: { target: "kanban-button", width: 400, height: 255 },
+        5: { target: "value-delivery-button", width: 400, height: 380 },
+        6: { target: "click-coins", width: 400, height: 300 },
+        7: { target: "results-table-body", width: 600, height: 180 },
+        8: { width: 600, height: 460 },
+        9: { width: 800, height: 400 },
+        10: { width: 800, height: 400 }
+      }
     };
   },
   methods: {
+    setDefault() {
+      var elem = document.getElementsByClassName("vm--modal")[0].getBoundingClientRect()
+      this.default = {
+        top: elem.top,
+        left: elem.left,
+        width: elem.width,
+        height: elem.height
+      }
+    },
     show() {
       this.$modal.show("walk-through");
     },
@@ -195,12 +216,30 @@ export default {
       this.show();
     },
     incrementStep() {
-      this.step = this.step + 1;
-      var elem = document.getElementsByClassName("vm--modal")[0];
-      elem.style.minWidth = "320px";
-      elem.style.maxWidth = "740px";
-      elem.style.width = "50%";
-      elem.style.height = "420px";
+      if (this.step == 1) {
+        this.setDefault()
+      }
+      this.step = this.step + 1
+      var elem = document.getElementsByClassName("vm--modal")[0]
+      var target, positions = {}
+      if (this.positions[this.step].target) {
+        target = document.getElementById(this.positions[this.step].target)
+        target = target.getBoundingClientRect()
+        positions.left = target.left + 30
+        positions.top = target.top + 30
+      } else {
+        positions = this.default
+      }
+      if (this.positions[this.step].width) {
+        positions.width = this.positions[this.step].width
+      }
+      if (this.positions[this.step].height) {
+        positions.height = this.positions[this.step].height
+      }
+      elem.style.left = positions.left + 'px'
+      elem.style.top = positions.top + 'px'
+      elem.style.width = positions.width + 'px'
+      elem.style.height = positions.height +'px'
     }
   },
   computed: {
