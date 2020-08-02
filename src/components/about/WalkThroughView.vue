@@ -60,7 +60,7 @@
         </p>
         <p>
           There is no time limit on this round, but note the time it takes to
-          deliver all the cons to the customer
+          deliver all the coins to the customer
         </p>
       </div>
       <div class="mt-4" v-if="step == 5">
