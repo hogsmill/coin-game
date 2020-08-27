@@ -1,7 +1,7 @@
 <template>
   <div class="my-name float-right" v-if="!showAbout">
       <button class="btn btn-sm btn-secondary smaller-font" v-if="!myName" @click="show">Set My Name</button>
-      <span v-if="myName" @click="show" class="mr-2 mt-2 pointer p-2 bg-light">I am: {{myName}}</span>
+      <span v-if="myName" @click="show" class="mr-2 mt-2 pointer p-2 bg-light">I am: {{myName.name}}</span>
 
     <modal name="set-my-name" :height="120" :classes="['rounded', 'set-my-name']">
       <div class="float-right mr-2 mt-1">
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from 'uuid';
+
 export default {
   props: [
     'socket'
@@ -34,10 +36,22 @@ export default {
       this.$modal.hide('set-my-name');
     },
     saveMyName: function() {
-      var myName = document.getElementById('my-name').value
-      this.$store.dispatch("updateMyName", myName)
-      this.socket.emit("addMyNameAsAPlayer", {gameName: this.gameName, player: myName })
-
+      var oldName = this.myName
+      var newName = document.getElementById('my-name').value
+      var myNameData
+      if (!oldName.id) {
+        var uuid = uuidv4()
+        myNameData = {id: uuid, name: newName}
+        this.$store.dispatch("setMyName", myNameData)
+      } else {
+        myNameData = {id: this.myName.id, name: newName}
+        this.$store.dispatch("changeName", {name: newName})
+        localStorage.setItem("myName-cg", JSON.stringify(myNameData));
+        if (this.gameName) {
+          this.socket.emit("changeName", {gameName: this.gameName, name: oldName, newName: newName})
+        }
+      }
+      this.socket.emit("addPlayer", {gameName: this.gameName, name: myNameData})
       this.hide()
     }
   },
@@ -51,13 +65,6 @@ export default {
     myName() {
       return this.$store.getters.getMyName
     }
-  },
-  mounted() {
-    this.socket.on("addMyNameAsAPlayer", (data) => {
-      if (this.gameName == data.gameName) {
-        this.$store.dispatch("addPlayer", data.player)
-      }
-    })
   }
 }
 </script>

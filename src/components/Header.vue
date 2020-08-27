@@ -17,13 +17,14 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item" :class="{ active: !showAbout }">
-          <a class="nav-link pointer" @click="updateShowAbout(false)"
-            >Simulation</a
-          >
+        <li class="nav-item" :class="{active: showTab == 'game'}">
+          <a class="nav-link pointer" @click="updateShowTab('game')">Game</a>
         </li>
-        <li class="nav-item" :class="{ active: showAbout }">
-          <a class="nav-link pointer" @click="updateShowAbout(true)">About</a>
+        <li class="nav-item" :class="{active: showTab == 'facilitator'}">
+          <a class="nav-link pointer" @click="updateShowTab('facilitator')">Facilitator</a>
+        </li>
+        <li class="nav-item" :class="{active: showTab == 'about'}">
+          <a class="nav-link pointer" @click="updateShowTab('about')">About</a>
         </li>
       </ul>
     </div>
@@ -33,14 +34,14 @@
 <script>
 export default {
   computed: {
-    showAbout() {
-      return this.$store.getters.getShowAbout;
-    },
+    showTab() {
+      return this.$store.getters.getShowTab;
+    }
   },
   methods: {
-    updateShowAbout(payload) {
-      this.$store.dispatch("updateShowAbout", payload);
-    },
-  },
+    updateShowTab(payload) {
+      this.$store.dispatch("updateShowTab", payload);
+    }
+  }
 };
 </script>

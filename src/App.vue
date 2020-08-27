@@ -2,34 +2,27 @@
   <div id="app" class="mb-4">
     <appHeader></appHeader>
     <WalkThroughView />
-    <div v-if="showAbout">
+    <h1>The Coin Game</h1>
+    <div v-if="showTab == 'about'">
       <AboutView />
     </div>
-    <div v-else>
-      <h1>The Coin Game</h1>
-      <div class="col-md-12 mb-6">
+    <div v-if="showTab != 'about'">
+      <div class="game-params">
         <MyName v-bind:socket="socket" />
-        <GameName />
+        <GameName v-bind:socket="socket" />
       </div>
       <div class="container">
-        <div :class="{'not-host' : !isHost}" class="row">
+        <div v-if="showTab == 'facilitator'" :class="{'not-host' : !isHost}">
           <app-denominations v-bind:socket="socket"></app-denominations>
           <app-roles v-bind:socket="socket"></app-roles>
           <app-players v-bind:socket="socket"></app-players>
           <app-control v-bind:socket="socket"></app-control>
         </div>
-        <div v-if="!isHost && !stateSet" class="form-check col-md-12 mb-3 float-left">
-          <input
-            class="form-check-input"
-            id="clickCoins"
-            type="checkbox"
-            v-model.lazy="gameState['clickOnCoins']"
-          />
-          <label for="clickCoins" id="click-coins">Click on Coins</label>
+        <div v-if="showTab == 'game'">
+          <app-game-buttons v-bind:socket="socket"></app-game-buttons>
+          <ResultsView v-bind:gameState="gameState" v-bind:socket="socket" />
         </div>
-        <app-game-buttons v-bind:socket="socket"></app-game-buttons>
       </div>
-      <ResultsView v-bind:gameState="gameState" v-bind:socket="socket" />
     </div>
   </div>
 </template>
@@ -73,11 +66,14 @@ export default {
     walkThrough() {
       return this.$store.getters.getWalkThrough;
     },
-    showAbout() {
-      return this.$store.getters.getShowAbout;
+    showTab() {
+      return this.$store.getters.getShowTab;
     },
     stateSet() {
       return this.$store.getters.getStateSet;
+    },
+    gameName() {
+      return this.$store.getters.getGameName;
     },
     gameState() {
       return this.$store.getters.getGameState;
@@ -95,11 +91,38 @@ export default {
     if (params.isParam("host")) {
       this.$store.dispatch("updateHost", true)
     }
-  },
+
+    this.socket.on("updateGameState", (data) => {
+      if (this.gameName == data.gameName) {
+        this.$store.dispatch("updateGameState", data)
+      }
+    })
+  }
 }
 </script>
 
-<style>
+<style lang="scss">
   .not-host { height: 0px; visibility: hidden; }
   #clickCoins { margin-left: -2rem; }
+
+  .game-params {
+    height: 30px;
+  }
+
+  .config {
+    margin: 0 auto;
+    max-width: 800px;
+    .control-header {
+      h5 {
+        width: 50%;
+        display: inline-block;
+        text-align: left;
+      }
+      span {
+        width: 50%;
+        display: inline-block;
+        text-align: right;
+      }
+    }
+  }
 </style>

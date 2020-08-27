@@ -224,7 +224,7 @@ export default {
     this.socket.on("go", (data) => {
       if (this.gameName == data.gameName) {
         console.log('Game state received in go: ', data.gameState)
-        this.$store.dispatch("updateGameState", data.gameState)
+        //this.$store.dispatch("updateGameState", data.gameState)
         this.run()
       }
     }),

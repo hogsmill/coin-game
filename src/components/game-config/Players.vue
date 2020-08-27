@@ -1,11 +1,10 @@
 <template>
-  <div class="card bg-light mb-3 mr-1 col-md-2 no-padding-r-l" v-if="!stateSet">
+  <div class="card bg-light mb-3 no-padding-r-l" v-if="!stateSet">
     <div class="card-body">
       <h5 class="card-title">Players</h5>
       <form class="form-inline">
         <input type="text" class="form-control mb-2 ml-1 col-md-8" v-model="player" />
-        <button
-          class="btn btn-site-primary mb-2 update-role"
+        <button class="btn btn-site-primary mb-2 update-role"
           @click.prevent="addPlayer()"
           @click="addPlayer()"
           data-toggle="tooltip" data-placement="top" title="Add player"
@@ -14,7 +13,7 @@
         </button>
       </form>
       <div v-for="(player, index) in players" :key="index">
-        <div>{{player}}</div>
+        <div>{{player.name}}</div>
       </div>
     </div>
   </div>
@@ -65,9 +64,5 @@ export default {
 </script>
 
 <style scoped>
-.col-md-2 {
-    -ms-flex: 0 0 18%;
-    flex: 0 0 18%;
-    max-width: 18%;
-}
+
 </style>

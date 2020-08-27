@@ -7,13 +7,11 @@ export const store = new Vuex.Store({
   state: {
     walkThrough: false,
     host: false,
-    showAbout: false,
+    showTab: 'game',
     gameName: '',
     myName: '',
-    players: [],
     clickedRole: {},
     gameState: {
-      stateSet: false,
       interval: 250,
       stopped: false,
       denominations: {
@@ -31,6 +29,7 @@ export const store = new Vuex.Store({
       clickOnCoins: true,
       round: 0,
       total: 0,
+      players: [],
       roles: [
         { role: "Product Owner", include: true, name: "" },
         { role: "Developer", include: true, name: "" },
@@ -70,8 +69,8 @@ export const store = new Vuex.Store({
     getHost: (state) => {
       return state.host;
     },
-    getShowAbout: (state) => {
-      return state.showAbout;
+    getShowTab: (state) => {
+      return state.showTab;
     },
     getGameName: (state) => {
       return state.gameName;
@@ -80,10 +79,7 @@ export const store = new Vuex.Store({
       return state.myName;
     },
     getPlayers: (state) => {
-      return state.players;
-    },
-    getStateSet: (state) => {
-      return state.gameState.stateSet;
+      return state.gameState.players;
     },
     getInterval: (state) => {
       return state.gameState.interval;
@@ -105,28 +101,28 @@ export const store = new Vuex.Store({
     updateHost: (state, payload) => {
       state.host = payload;
     },
-    updateShowAbout: (state, payload) => {
-      state.showAbout = payload;
+    updateShowTab: (state, payload) => {
+      state.showTab = payload;
     },
     updateGameName: (state, payload) => {
       state.gameName = payload;
     },
-    updateMyName: (state, payload) => {
+    setMyName: (state, payload) => {
       state.myName = payload;
+    },
+    changeName: (state, payload) => {
+      state.myName.name = payload.name;
     },
     addPlayer: (state, payload) => {
       var found = false
-      for (var i = 0; i < state.players.length; i++) {
-        if (state.players[i] == payload) {
+      for (var i = 0; i < state.gameState.players.length; i++) {
+        if (state.gameState.players[i] == payload) {
           found = true
         }
       }
       if (!found) {
-        state.players.push(payload)
+        state.gameState.players.push(payload)
       }
-    },
-    updateStateSet: (state, payload) => {
-      state.gameState.stateSet = payload;
     },
     updateInterval: (state, payload) => {
       state.gameState.interval = payload;
@@ -138,22 +134,33 @@ export const store = new Vuex.Store({
       state.gameState.denominations = payload;
     },
     updateGameState: (state, payload) => {
-      state.gameState = payload;
-    },
-    updateGameStateRoles: (state, payload) => {
-      state.gameState.roles = payload;
-      var i, roles = []
-      for (i = 0; i < payload.length; i++) {
-        if (payload[i].include) {
-          roles.push(payload[i])
+      state.gameState = payload.gameState;
+      var roles = []
+      for (var r = 0; r < state.gameState.roles.length; r++) {
+        if (state.gameState.roles[r].include) {
+          roles.push(state.gameState.roles[r])
         }
       }
-      for (i = 0; i < state.gameState.rounds.length; i++) {
-        state.gameState.rounds[i].roles = roles
+      for (var i = 0; i < state.gameState.roles.length; i++) {
+        for (var j = 0; j < state.gameState.rounds.length; j++) {
+          state.gameState.rounds[j].roles = roles
+        }
       }
     },
+    //updateGameStateRoles: (state, payload) => {
+    //  state.gameState.roles = payload;
+    //  var i, roles = []
+    //  for (i = 0; i < payload.length; i++) {
+    //    if (payload[i].include) {
+    //      roles.push(payload[i])
+    //    }
+    //  }
+    //  for (i = 0; i < state.gameState.rounds.length; i++) {
+    //    state.gameState.rounds[i].roles = roles
+    //  }
+    //},
     updatePlayers: (state, payload) => {
-      state.players = payload;
+      state.gameState.players = payload;
     },
     updateGameStateRound: (state, payload) => {
       state.gameState.round = payload;
@@ -169,23 +176,26 @@ export const store = new Vuex.Store({
     updateHost: ({ commit }, payload) => {
       commit("updateHost", payload);
     },
-    updateShowAbout: ({ commit }, payload) => {
-      commit("updateShowAbout", payload);
+    updateShowTab: ({ commit }, payload) => {
+      commit("updateShowTab", payload);
     },
     updateGameName: ({ commit }, payload) => {
       commit("updateGameName", payload);
     },
-    updateMyName: ({ commit }, payload) => {
-      commit("updateMyName", payload);
+    setMyName: ({ commit }, payload) => {
+      commit("setMyName", payload);
+    },
+    changeName: ({ commit }, payload) => {
+      commit("changeName", payload);
     },
     updatePlayers: ({ commit }, payload) => {
       commit("updatePlayers", payload);
     },
-    addPlayer: ({ commit }, payload) => {
+    addMyNameAsAPlayer: ({ commit }, payload) => {
       commit("addPlayer", payload);
     },
-    updateStateSet: ({ commit }, payload) => {
-      commit("updateStateSet", payload);
+    addPlayer: ({ commit }, payload) => {
+      commit("addPlayer", payload);
     },
     updateInterval: ({ commit }, payload) => {
       commit("updateInterval", payload);

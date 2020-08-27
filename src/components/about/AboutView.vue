@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <h1>The Coin Game</h1>
     <p class="text-left">
       Explore different delivery strategies and see why delivering highest value
       first is the best risk-reduction strategy. Try 2 different strategies:

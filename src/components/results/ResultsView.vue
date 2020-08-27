@@ -9,8 +9,8 @@
           <td v-for="role in gameState.rounds[0]['roles']" :key="role.role" :style="{ width: setWidth() }">
             <span @click="showNameEdit(role.role)"> {{ role.role }} </span>
             <div v-if="roleEditing == role.role" >
-              <select class="form-control" v-model="role.name">
-                <option v-for="(player, index) in players" :key="index">{{player}}</option>
+              <select id="roleSelect" class="form-control" v-model="role.name">
+                <option v-for="(player, index) in players" :key="index">{{player.name}}</option>
               </select>
               <button class="btn btn-site-primary mb-2" @click="updateRole(role)">&crarr;</button>
             </div>
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import Learnings from ".//Learnings.vue";
+import Learnings from "./Learnings.vue";
 
 export default {
   name: "Results",
@@ -93,32 +93,22 @@ export default {
       }
     };
   },
-  computed: {
-    players() {
-      return this.$store.getters.getPlayers;
-    },
-    stateSet() {
-      return this.$store.getters.getStateSet;
-    },
-    gameState() {
-      return this.$store.getters.getGameState;
-    }
-  },
   methods: {
     showNameEdit(role) {
       this.roleEditing = role
     },
     updateRole(role) {
       this.roleEditing = ''
-      var roles = []
-      for (var i = 0; i < this.gameState.roles.length; i++) {
-        if (this.gameState.roles[i].role == role.role) {
-          roles.push(role)
-        } else {
-          roles.push(this.gameState.roles[i])
-        }
-      }
-      this.socket.emit("updateRoles", { gameName: this.gameName, roles: roles })
+      var name = document.getElementById('roleSelect').value
+      //var roles = []
+      //for (var i = 0; i < this.gameState.roles.length; i++) {
+      //  if (this.gameState.roles[i].role == role.role) {
+      //    roles.push(role)
+      //  } else {
+      //    roles.push(this.gameState.roles[i])
+      //  }
+      //}
+      this.socket.emit("updateGameRole", {gameName: this.gameName, role: role, name: name})
     },
     setWidth() {
       return 100 / (this.gameState.roles.length + 1) + "%";
@@ -157,12 +147,19 @@ export default {
       this.socket.emit("playCoin", { gameName: this.gameName, coin: coin, role: role, round: round })
     }
   },
-  mounted() {
-    this.socket.on("updateRoles", (data) => {
-      if (this.gameName == data.gameName) {
-        this.$store.dispatch("updateGameStateRoles", data.roles)
-      }
-    })
+  computed: {
+    players() {
+      return this.$store.getters.getPlayers;
+    },
+    stateSet() {
+      return this.$store.getters.getStateSet;
+    },
+    gameName() {
+      return this.$store.getters.getGameName;
+    },
+    gameState() {
+      return this.$store.getters.getGameState;
+    }
   }
 };
 </script>
