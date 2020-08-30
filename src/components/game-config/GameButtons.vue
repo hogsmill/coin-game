@@ -1,27 +1,11 @@
 <template>
-  <div class="col-md-12 mb-3" :class="{ running: stateSet }">
-    <button id="batch-button"
-      class="btn btn-site-primary mb-2"
-      @click="go(0)"
-      :disabled="gameState.running"
-    >
-      Run Batch
-    </button>
-    <button id="kanban-button"
-      class="btn btn-site-primary mb-2"
-      @click="go(1)"
-      :disabled="gameState.running"
-    >
-      Run Kanban
-    </button>
-    <button id="value-delivery-button"
-      class="btn btn-site-primary mb-2"
-      @click="go(2)"
-      :disabled="gameState.running"
-    >
-      Run Value Delivery
-    </button>
+
+  <div class="col-md-12 mb-3">
+    <button id="batch-button" class="btn btn-site-primary mb-2" @click="go(0)">Run Batch</button>
+    <button id="kanban-button" class="btn btn-site-primary mb-2" @click="go(1)">Run Kanban</button>
+    <button id="value-delivery-button" class="btn btn-site-primary mb-2" @click="go(2)">Run Value Delivery</button>
   </div>
+
 </template>
 
 <script>
@@ -29,23 +13,6 @@ export default {
   props: [
     'socket'
   ],
-  computed: {
-    stateSet() {
-      return this.$store.getters.getStateSet;
-    },
-    interval() {
-      return this.$store.getters.getInterval;
-    },
-    stopped() {
-      return this.$store.getters.getStopped;
-    },
-    denominations() {
-      return this.$store.getters.getDenominations;
-    },
-    gameState() {
-      return this.$store.getters.getGameState;
-    },
-  },
   methods: {
     allPlayed(coins) {
       var played = true;
@@ -149,11 +116,13 @@ export default {
         }
       }
     },
-    incrementTime(round) {
-      this.gameState.rounds[round].time =
-        this.gameState.rounds[round].time + parseInt(this.interval)
-      return this.gameState.rounds[round].time
-    },
+    //incrementTime(round) {
+    //  this.gameState.rounds[round].time =
+    //    this.gameState.rounds[round].time + parseInt(this.interval)
+    //    console.log('here', round, this.gameState.rounds[round].time)
+//
+    //  return this.gameState.rounds[round].time
+  //  },
     complete(round) {
       var limit =
         this.gameState.rounds[round].name == "Value First"
@@ -164,44 +133,21 @@ export default {
         this.gameState.rounds[round].delivered == this.gameState.total
       )
     },
-    run() {
-      var round = this.gameState.round
-      if (!this.gameState["clickOnCoins"]) {
-        this.playRoleCoins(round)
-        if (this.gameState.rounds[round].name == "Batch") {
-          this.moveCoins(round);
-        } else {
-          this.moveCoin(round);
-        }
-      }
-      this.incrementTime(this.gameState.round);
-      if (!this.complete(this.gameState.round)) {
-        setTimeout(this.run, this.interval)
-      }
-    },
-    shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    },
-    getCoins(round) {
-      var coins = [];
-      for (var denomination in this.denominations) {
-        for (var i = 0; i < this.denominations[denomination]; i++) {
-          coins.push({ value: denomination, played: false });
-        }
-      }
-      if (round == "Value First") {
-        coins = coins.sort(function(a, b) {
-          return parseInt(b.value) - parseInt(a.value);
-        });
-      } else {
-        coins = this.shuffleArray(coins);
-      }
-      return coins;
-    },
+    //run() {
+    //  var round = this.gameState.round
+    //  if (!this.gameState["clickOnCoins"]) {
+    //    this.playRoleCoins(round)
+    //    if (this.gameState.rounds[round].name == "Batch") {
+    //      this.moveCoins(round);
+    //    } else {
+    //      this.moveCoin(round);
+    //    }
+    //  }
+      //this.incrementTime(this.gameState.round);
+      //if (!this.complete(this.gameState.round)) {
+      //  setTimeout(this.run, this.interval)
+      //}
+    //},
     start() {
       this.$store.dispatch("updateStopped", false);
     },
@@ -209,30 +155,38 @@ export default {
       this.$store.dispatch("updateStopped", true);
     },
     go(round) {
-      var coins = this.getCoins(this.gameState.rounds[round].name)
-      var gameState = this.$store.getters.getGameState
-      gameState.stateSet = true
-      gameState.round = round
-      gameState.roles[0].coins = coins
-      for (var i = 1; i < gameState.roles.length; i++) {
-        gameState.roles[i].coins = []
-      }
-      this.socket.emit("go", { gameName: this.gameName, gameState: gameState });
+      this.socket.emit("startRound", {gameName: this.gameName, round: round});
+    },
+  },
+  computed: {
+    interval() {
+      return this.$store.getters.getInterval;
+    },
+    stopped() {
+      return this.$store.getters.getStopped;
+    },
+    denominations() {
+      return this.$store.getters.getDenominations;
+    },
+    gameName() {
+      return this.$store.getters.getGameName;
+    },
+    gameState() {
+      return this.$store.getters.getGameState;
     },
   },
   mounted() {
-    this.socket.on("go", (data) => {
-      if (this.gameName == data.gameName) {
-        console.log('Game state received in go: ', data.gameState)
-        //this.$store.dispatch("updateGameState", data.gameState)
-        this.run()
-      }
-    }),
-    this.socket.on("playCoin", (data) => {
-      if (this.gameName == data.gameName) {
-        this.playACoin(data.coin, data.role, data.round)
-      }
-    })
+    //this.socket.on("run", (data) => {
+    //  if (this.gameName == data.gameName) {
+    //    this.$store.dispatch("updateGameState", data)
+    //    this.run()
+    //  }
+    //})
+    //this.socket.on("playCoin", (data) => {
+    //  if (this.gameName == data.gameName) {
+    //    this.playACoin(data.coin, data.role, data.round)
+    //  }
+    //})
   }
 };
 </script>

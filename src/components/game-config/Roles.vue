@@ -1,6 +1,6 @@
 <template>
 
-  <div class="config card bg-light mb-3 no-padding-r-l" v-if="!stateSet">
+  <div class="config card bg-light mb-3 no-padding-r-l">
     <div class="card-body">
       <div class="control-header">
         <h5 class="card-title">Roles</h5>
@@ -11,6 +11,7 @@
         <form class="form-inline" v-for="(role, roleIndex) in gameState.roles" :key="roleIndex">
           <div class="form-check mb-2 mr-sm-2">
             <input
+              :disabled="role.role == 'Customer'"
               class="form-check-input mr-neg-10"
               type="checkbox"
               checked="role.include"
@@ -68,7 +69,7 @@ export default {
         }
         roles.push(this.gameState.roles[i]);
       }
-      this.socket.emit("updateRoles", { gameName: this.gameName, value: roles })
+      this.socket.emit("updateRoles", { gameName: this.gameName, roles: roles })
     },
     addAfter(role) {
       var roles = [];
@@ -78,7 +79,7 @@ export default {
           roles.push(this.newRole());
         }
       }
-      this.socket.emit("updateRoles", { gameName: this.gameName, value: roles })
+      this.socket.emit("updateRoles", { gameName: this.gameName, roles: roles })
     },
     updateRole(role) {
       var roles = [];
@@ -89,16 +90,13 @@ export default {
           roles.push(this.gameState.roles[i]);
         }
       }
-      this.socket.emit("updateRoles", { gameName: this.gameName, value: roles })
+      this.socket.emit("updateRoles", { gameName: this.gameName, roles: roles })
     },
     updateRoles() {
-      this.socket.emit("updateRoles", {gameName: this.gameName, value: this.gameState.roles })
+      this.socket.emit("updateRoles", {gameName: this.gameName, roles: this.gameState.roles })
     }
   },
   computed: {
-    stateSet() {
-      return this.$store.getters.getStateSet;
-    },
     gameState() {
       return this.$store.getters.getGameState;
     },

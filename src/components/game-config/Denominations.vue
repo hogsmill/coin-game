@@ -1,152 +1,56 @@
 <template>
-  <div class="card bg-light mb-3 no-padding-r-l" v-if="!stateSet">
+  <div class="config card bg-light mb-3 no-padding-r-l">
     <div class="card-body">
-      <h5 class="card-title">Denominations</h5>
-      <form class="form-inline">
-        <div class="form-group">
-          <label class="width-50" for="twoPound">£2</label>
-          <input
-            type="text"
-            class="form-control col-md-3"
-            id="twoPound"
-            name="twoPound"
-            v-model.lazy="denominations['200']"
-            v-on:change="updateDenominations()"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['200']) }"
-          ></div>
-        </div>
-        <div class="form-group">
-          <label class="width-50" for="onePound">£1</label>
-          <input
-            type="text"
-            class="form-control col-md-3"
-            id="onePound"
-            name="onePound"
-            v-model.lazy="denominations['100']"
-            v-on:change="updateDenominations()"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['100']) }"
-          ></div>
-        </div>
-        <div class="form-group">
-          <label class="width-50" for="fifty">50p</label>
-          <input
-            type="text"
-            class="form-control col-md-3"
-            id="fifty"
-            name="fifty"
-            v-model.lazy="denominations['50']"
-            v-on:change="updateDenominations()"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['50']) }"
-          ></div>
-        </div>
-        <div class="form-group">
-          <label class="width-50" for="twenty">20p</label>
-          <input
-            type="text"
-            class="form-control col-md-3"
-            id="twenty"
-            name="twenty"
-            v-model.lazy="denominations['20']"
-            v-on:change="updateDenominations()"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['20']) }"
-          ></div>
-        </div>
-        <div class="form-group">
-          <label class="width-50" for="ten">10p</label>
-          <input
-            type="text"
-            class="form-control col-md-3"
-            id="ten"
-            name="ten"
-            v-model.lazy="denominations['10']"
-            v-on:change="updateDenominations()"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['10']) }"
-          ></div>
-        </div>
-        <div class="form-group">
-          <label class="width-50" for="five">5p</label>
-          <input
-            type="text"
-            class="form-control col-md-3"
-            id="five"
-            name="five"
-            v-model.lazy="denominations['5']"
-            v-on:change="updateDenominations()"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['5']) }"
-          ></div>
-        </div>
-        <div class="form-group">
-          <label class="width-50" for="two">2p</label>
-          <input
-            type="text"
-            class="form-control col-md-3"
-            id="two"
-            name="two"
-            v-model.lazy="denominations['2']"
-            v-on:change="updateDenominations()"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['2']) }"
-          ></div>
-        </div>
-        <div class="form-group">
-          <label class="width-50" for="one">1p</label>
-          <input
-            type="text"
-            class="form-control col-md-3"
-            id="one"
-            name="one"
-            v-model.lazy="denominations['1']"
-            v-on:change="updateDenominations()"
-          />
-          <div
-            class="distribution"
-            :style="{ width: getWidth(denominations['1']) }"
-          ></div>
-        </div>
-      </form>
-      <div class="mt-4">Total: £{{ total() }}</div>
+      <div class="control-header">
+        <h5 class="card-title">Denominations and Currency</h5>
+        <span v-if="showDenominations"  @click="setShowDenominations(false)">&#9650;</span>
+        <span v-if="!showDenominations"  @click="setShowDenominations(true)">&#9660;</span>
+      </div>
+      <div v-if="showDenominations">
+        <form class="form-inline denominations">
+          <Denomination v-bind:socket="socket" v-bind:id="'twoPound'" v-bind:amount="200" v-bind:denominations="denominations" />
+          <Denomination v-bind:socket="socket" v-bind:id="'onePound'" v-bind:amount="100" v-bind:denominations="denominations" />
+          <Denomination v-bind:socket="socket" v-bind:id="'fifty'" v-bind:amount="50" v-bind:denominations="denominations" />
+          <Denomination v-bind:socket="socket" v-bind:id="'twenty'" v-bind:amount="20" v-bind:denominations="denominations" />
+          <Denomination v-bind:socket="socket" v-bind:id="'ten'" v-bind:amount="10" v-bind:denominations="denominations" />
+          <Denomination v-bind:socket="socket" v-bind:id="'five'" v-bind:amount="5" v-bind:denominations="denominations" />
+          <Denomination v-bind:socket="socket" v-bind:id="'two'" v-bind:amount="2" v-bind:denominations="denominations" />
+          <Denomination v-bind:socket="socket" v-bind:id="'one'" v-bind:amount="1" v-bind:denominations="denominations" />
+          <div class="form-group currency">
+            <label for="currency">Currency: </label>
+            <select class="form-control" id="currency" v-on:change="updateCurrency()">
+              <option>-- Select --</option>
+              <option value="pound">&pound;</option>
+              <option value="euro">&euro;</option>
+              <option value="dollar">&dollar;</option>
+            </select>
+          </div>
+        </form>
+        <div class="mt-4">Total: £{{ total() }}</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Denomination from "./denominations/Denomination.vue";
 
 export default {
   props: [
     'socket'
   ],
-  computed: {
-    stateSet() {
-      return this.$store.getters.getStateSet;
-    },
-    denominations() {
-      return this.$store.getters.getDenominations;
-    },
-    gameState() {
-      return this.$store.getters.getGameState;
-    },
+  components: {
+    Denomination
+  },
+  data() {
+    return {
+      showDenominations: false
+    }
   },
   methods: {
+    setShowDenominations(val) {
+      this.showDenominations = val
+    },
     total() {
       var total = 0;
       for (var denomination in this.denominations) {
@@ -169,11 +73,43 @@ export default {
     },
     updateDenominations() {
       this.socket.emit("updateDenominations", { gameName: this.gameName, value: this.denominations })
+    },
+    updateCurrency() {
+      var currency = document.getElementById('currency').value
+      this.socket.emit("updateCurrency", { gameName: this.gameName, value: currency })
+
+    }
+  },
+  computed: {
+    denominations() {
+      return this.$store.getters.getDenominations;
+    },
+    gameName() {
+      return this.$store.getters.getGameName;
+    },
+    gameState() {
+      return this.$store.getters.getGameState;
+    },
+    currency() {
+      return this.$store.getters.getCurrency;
     }
   }
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  .denominations {
+    position: relative;
 
+    .currency {
+      vertical-align: top;
+      position: absolute;
+      top: 0;
+      right: 12px;
+
+      select {
+        margin-left: 6px;
+      }
+    }
+  }
 </style>
