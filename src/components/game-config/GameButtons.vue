@@ -124,10 +124,11 @@ export default {
     //  return this.gameState.rounds[round].time
   //  },
     complete(round) {
+      var scope = this.gameState.clickOnCoins ? 'click' : 'demo'
       var limit =
         this.gameState.rounds[round].name == "Value First"
-          ? this.gameState.valueTimeLimit
-          : this.gameState.timeLimit
+          ? this.gameState.valueTimeLimit[scope]
+          : this.gameState.timeLimit[scope]
       return (
         this.gameState.rounds[round].time >= parseInt(limit) ||
         this.gameState.rounds[round].delivered == this.gameState.total
@@ -174,19 +175,6 @@ export default {
     gameState() {
       return this.$store.getters.getGameState;
     },
-  },
-  mounted() {
-    //this.socket.on("run", (data) => {
-    //  if (this.gameName == data.gameName) {
-    //    this.$store.dispatch("updateGameState", data)
-    //    this.run()
-    //  }
-    //})
-    //this.socket.on("playCoin", (data) => {
-    //  if (this.gameName == data.gameName) {
-    //    this.playACoin(data.coin, data.role, data.round)
-    //  }
-    //})
   }
 };
 </script>

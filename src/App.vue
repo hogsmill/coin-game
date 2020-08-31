@@ -13,6 +13,7 @@
       </div>
       <div class="container">
         <div v-if="showTab == 'facilitator'" :class="{'not-host' : !isHost}">
+          <div class="connections">Current server connections: {{connections.connections}} / {{connections.maxConnections}}</div>
           <app-denominations v-bind:socket="socket"></app-denominations>
           <app-roles v-bind:socket="socket"></app-roles>
           <app-players v-bind:socket="socket"></app-players>
@@ -69,14 +70,14 @@ export default {
     showTab() {
       return this.$store.getters.getShowTab;
     },
-    stateSet() {
-      return this.$store.getters.getStateSet;
-    },
     gameName() {
       return this.$store.getters.getGameName;
     },
     gameState() {
       return this.$store.getters.getGameState;
+    },
+    connections() {
+      return this.$store.getters.getConnections
     }
   },
   created() {
@@ -92,10 +93,26 @@ export default {
       this.$store.dispatch("updateHost", true)
     }
 
+    var gameName = localStorage.getItem("gameName-cg")
+    if (gameName) {
+      this.$store.dispatch("updateGameName", gameName)
+      this.socket.emit("loadGame", {gameName: gameName})
+    }
+
+    var myName = localStorage.getItem("myName-cg")
+    if (myName) {
+      myName = JSON.parse(myName)
+      this.$store.dispatch("setMyName", myName)
+    }
+
     this.socket.on("updateGameState", (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch("updateGameState", data)
       }
+    })
+
+    this.socket.on("updateConnections", (data) => {
+      this.$store.dispatch("updateConnections", data)
     })
   }
 }
@@ -104,6 +121,11 @@ export default {
 <style lang="scss">
   .not-host { height: 0px; visibility: hidden; }
   #clickCoins { margin-left: -2rem; }
+
+  .connections {
+    text-align: right;
+    margin: 6px
+  }
 
   .game-params {
     height: 30px;

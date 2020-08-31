@@ -10,7 +10,7 @@
             <span @click="showNameEdit(role.role)"> {{ role.role }} </span>
             <div v-if="roleEditing == role.role" >
               <select id="roleSelect" class="form-control" v-model="role.name">
-                <option v-for="(player, index) in players" :key="index">{{player.name}}</option>
+                <option v-for="(player, index) in gameState.players" :key="index">{{player.name}}</option>
               </select>
               <button class="btn btn-site-primary mb-2" @click="updateRole(role)">&crarr;</button>
             </div>
@@ -46,7 +46,7 @@
             </td>
             <td>
               <div>
-                £{{ value(round.delivered) }} in {{ time(round.time) }}
+                <span v-html="currency.major"></span>{{ value(round.delivered) }} in {{ time(round.time) }}
               </div>
               <div v-if="outOfTime(round)" class="missed">Missed delivery</div>
             </td>
@@ -100,14 +100,6 @@ export default {
     updateRole(role) {
       this.roleEditing = ''
       var name = document.getElementById('roleSelect').value
-      //var roles = []
-      //for (var i = 0; i < this.gameState.roles.length; i++) {
-      //  if (this.gameState.roles[i].role == role.role) {
-      //    roles.push(role)
-      //  } else {
-      //    roles.push(this.gameState.roles[i])
-      //  }
-      //}
       this.socket.emit("updateGameRole", {gameName: this.gameName, role: role, name: name})
     },
     setWidth() {
@@ -123,8 +115,7 @@ export default {
       }
       return classStr;
     },
-    time(t) {
-      var secs = t / 1000;
+    time(secs) {
       var minutes = Math.floor(secs / 60);
       secs = Math.floor(secs - minutes * 60);
       if (secs < 10) {
@@ -141,24 +132,27 @@ export default {
       return pounds + "." + pence
     },
     outOfTime(round) {
-      return round.time >= this.gameState.timeLimit
+      var scope = this.gameState.clickOnCoins ? 'click' : 'demo'
+      return round.time >= this.gameState.timeLimit[scope]
+    },
+    canPlayCoin(coin, role, round) {
+       return role.role != 'Customer' && !this.outOfTime(round)
     },
     playCoin(coin, role, round) {
-      this.socket.emit("playCoin", { gameName: this.gameName, coin: coin, role: role, round: round })
+      if (this.canPlayCoin(coin, role, round)) {
+        this.socket.emit("playCoin", { gameName: this.gameName, coin: coin, role: role.role, round: round.name })
+      }
     }
   },
   computed: {
-    players() {
-      return this.$store.getters.getPlayers;
-    },
-    stateSet() {
-      return this.$store.getters.getStateSet;
-    },
     gameName() {
       return this.$store.getters.getGameName;
     },
     gameState() {
       return this.$store.getters.getGameState;
+    },
+    currency() {
+      return this.$store.getters.getCurrency;
     }
   }
 };

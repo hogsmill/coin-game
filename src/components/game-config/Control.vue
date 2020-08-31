@@ -13,12 +13,14 @@
             <input type="text" class="form-control" id="interval" name="interval" v-model.lazy="gameState.interval" v-on:change="updateInterval()"/>
           </div>
           <div class="form-group">
-            <label for="timeLimit">Time Limit Per Round (s)</label>
-            <input type="text" class="form-control" id="timeLimit" name="timeLimit" v-model.lazy="gameState.timeLimit" v-on:change="updateTimeLimit()" />
+            <label for="timeLimit">Time Limit Per Round (s) - </label>
+            Demo: <input type="text" class="form-control" id="demoTimeLimit" name="demoTimeLimit" v-model.lazy="gameState.timeLimit.demo" v-on:change="updateDemoTimeLimit()" />
+            Click: <input type="text" class="form-control" id="clickTimeLimit" name="clickTimeLimit" v-model.lazy="gameState.timeLimit.click" v-on:change="updateClickTimeLimit()" />
           </div>
           <div class="form-group">
-            <label for="valueTimeLimit">Value First Round Time Limit (s)</label>
-            <input type="text" class="form-control" id="valueTimeLimit" name="valueTimeLimit" v-model.lazy="gameState.valueTimeLimit" v-on:change="updateValueTimeLimit()" />
+            <label for="valueTimeLimit">Value First Round Time Limit (s) - </label>
+            Demo: <input type="text" class="form-control" id="demoValueTimeLimit" name="demoValueTimeLimit" v-model.lazy="gameState.valueTimeLimit.demo" v-on:change="updateDemoValueTimeLimit()" />
+            Click: <input type="text" class="form-control" id="clickValueTimeLimit" name="clickValueTimeLimit" v-model.lazy="gameState.valueTimeLimit.click" v-on:change="updateClickValueTimeLimit()" />
           </div>
           <div class="form-check always-visible">
             <label for="clickCoins">Click on Coins</label>
@@ -49,13 +51,21 @@ export default {
       var interval = document.getElementById('interval').value
       this.socket.emit("updateInterval", { gameName: this.gameName, value: interval})
     },
-    updateTimeLimit() {
-      var timeLimit = document.getElementById('timeLimit').value
-      this.socket.emit("updateTimeLimit", { gameName: this.gameName, value: timeLimit})
+    updateDemoTimeLimit() {
+      var timeLimit = document.getElementById('demoTimeLimit').value
+      this.socket.emit("updateDemoTimeLimit", { gameName: this.gameName, value: timeLimit})
     },
-    updateValueTimeLimit() {
-      var valueTimeLimit = document.getElementById('valueTimeLimit').value
-      this.socket.emit("updateValueTimeLimit", { gameName: this.gameName, value: valueTimeLimit})
+    updateClickTimeLimit() {
+      var timeLimit = document.getElementById('clickTimeLimit').value
+      this.socket.emit("updateClickTimeLimit", { gameName: this.gameName, value: timeLimit})
+    },
+    updateDemoValueTimeLimit() {
+      var valueTimeLimit = document.getElementById('demoValueTimeLimit').value
+      this.socket.emit("updateDemoValueTimeLimit", { gameName: this.gameName, value: valueTimeLimit})
+    },
+    updateClickValueTimeLimit() {
+      var valueTimeLimit = document.getElementById('clickValueTimeLimit').value
+      this.socket.emit("updateClickValueTimeLimit", { gameName: this.gameName, value: valueTimeLimit})
     },
     updateClickOnCoins() {
       this.clickOnCoins = !this.clickOnCoins
@@ -83,7 +93,7 @@ export default {
       margin-right: 6px;
     }
     input {
-      width: 250px;
+      width: 80px;
       display: inline-block;
     }
   }

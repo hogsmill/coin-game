@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
+    connections: 0,
     walkThrough: false,
     host: false,
     showTab: 'game',
@@ -14,6 +15,7 @@ export const store = new Vuex.Store({
     gameState: {
       interval: 250,
       stopped: false,
+      currency: { major: '&pound;', minor: 'p'},
       denominations: {
         200: 1,
         100: 7,
@@ -24,11 +26,12 @@ export const store = new Vuex.Store({
         2: 10,
         1: 20,
       },
-      timeLimit: 60000,
-      valueTimeLimit: 10000,
+      timeLimit: { demo: 60, click: 120 },
+      valueTimeLimit: { demo: 10, click: 20 },
       clickOnCoins: true,
       round: 0,
       total: 0,
+      valueDelivered: 0,
       players: [],
       roles: [
         { role: "Product Owner", include: true, name: "" },
@@ -90,9 +93,15 @@ export const store = new Vuex.Store({
     getDenominations: (state) => {
       return state.gameState.denominations;
     },
+    getCurrency: (state) => {
+      return state.gameState.currency;
+    },
     getGameState: (state) => {
       return state.gameState;
     },
+    getConnections: (state) => {
+      return state.connections;
+    }
   },
   mutations: {
     updateWalkThrough: (state, payload) => {
@@ -113,60 +122,17 @@ export const store = new Vuex.Store({
     changeName: (state, payload) => {
       state.myName.name = payload.name;
     },
-    addPlayer: (state, payload) => {
-      var found = false
-      for (var i = 0; i < state.gameState.players.length; i++) {
-        if (state.gameState.players[i] == payload) {
-          found = true
-        }
-      }
-      if (!found) {
-        state.gameState.players.push(payload)
-      }
-    },
-    updateInterval: (state, payload) => {
-      state.gameState.interval = payload;
-    },
     updateStopped: (state, payload) => {
       state.gameState.stopped = payload;
     },
-    updateDenominations: (state, payload) => {
-      state.gameState.denominations = payload;
-    },
     updateGameState: (state, payload) => {
       state.gameState = payload.gameState;
-      var roles = []
-      for (var r = 0; r < state.gameState.roles.length; r++) {
-        if (state.gameState.roles[r].include) {
-          roles.push(state.gameState.roles[r])
-        }
-      }
-      for (var i = 0; i < state.gameState.roles.length; i++) {
-        for (var j = 0; j < state.gameState.rounds.length; j++) {
-          state.gameState.rounds[j].roles = roles
-        }
-      }
-    },
-    //updateGameStateRoles: (state, payload) => {
-    //  state.gameState.roles = payload;
-    //  var i, roles = []
-    //  for (i = 0; i < payload.length; i++) {
-    //    if (payload[i].include) {
-    //      roles.push(payload[i])
-    //    }
-    //  }
-    //  for (i = 0; i < state.gameState.rounds.length; i++) {
-    //    state.gameState.rounds[i].roles = roles
-    //  }
-    //},
-    updatePlayers: (state, payload) => {
-      state.gameState.players = payload;
-    },
-    updateGameStateRound: (state, payload) => {
-      state.gameState.round = payload;
     },
     updateGameStateClickCoins: (state, payload) => {
       state.gameState.clickCoins = payload;
+    },
+    updateConnections: (state, payload) => {
+      state.connections = payload
     }
   },
   actions: {
@@ -188,35 +154,17 @@ export const store = new Vuex.Store({
     changeName: ({ commit }, payload) => {
       commit("changeName", payload);
     },
-    updatePlayers: ({ commit }, payload) => {
-      commit("updatePlayers", payload);
-    },
-    addMyNameAsAPlayer: ({ commit }, payload) => {
-      commit("addPlayer", payload);
-    },
-    addPlayer: ({ commit }, payload) => {
-      commit("addPlayer", payload);
-    },
-    updateInterval: ({ commit }, payload) => {
-      commit("updateInterval", payload);
-    },
     updateStopped: ({ commit }, payload) => {
       commit("updateStopped", payload);
-    },
-    updateDenominations: ({ commit }, payload) => {
-      commit("updateDenominations", payload);
     },
     updateGameState: ({ commit }, payload) => {
       commit("updateGameState", payload);
     },
-    updateGameStateRoles: ({ commit }, payload) => {
-      commit("updateGameStateRoles", payload);
-    },
     updateGameStateClickCoins: ({ commit }, payload) => {
       commit("updateGameStateClickCoins", payload);
     },
-    updateGameStateRound: ({ commit }, payload) => {
-      commit("updateGameStateRound", payload);
+    updateConnections: ({ commit }, payload) => {
+      commit("updateConnections", payload);
     }
   },
 });

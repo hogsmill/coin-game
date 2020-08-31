@@ -36,6 +36,7 @@ export default {
     },
     saveGameName: function() {
       var gameName = document.getElementById('game-name').value
+      localStorage.setItem("gameName-cg", gameName);
       this.$store.dispatch("updateGameName", gameName)
       this.socket.emit("loadGame", {gameName: gameName})
 
@@ -62,7 +63,7 @@ export default {
 <style lang="scss">
 
 .restart {
-  margin-right: 12px; 
+  margin-right: 12px;
 }
 
 .set-game-name {
