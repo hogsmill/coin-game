@@ -14,27 +14,27 @@ export default {
     'socket'
   ],
   methods: {
-    allPlayed(coins) {
-      var played = true;
-      for (var i = 0; i < coins.length; i++) {
-        if (!coins[i].played) {
-          played = false;
-        }
-      }
-      return played;
-    },
-    setCoin(coin, i, roles) {
-      if (i < roles.length - 2) {
-        coin.played = false;
-      }
-      return coin;
-    },
-    deliverCoin(coin, role, round) {
-      var l = round.roles.length;
-      if (role.role == round.roles[l - 1].role) {
-        round.delivered = round.delivered + parseInt(coin.value);
-      }
-    },
+    //allPlayed(coins) {
+    //  var played = true;
+    //  for (var i = 0; i < coins.length; i++) {
+    //    if (!coins[i].played) {
+    //      played = false;
+    //    }
+    //  }
+    //  return played;
+    //},
+    //setCoin(coin, i, roles) {
+    //  if (i < roles.length - 2) {
+    //    coin.played = false;
+    //  }
+    //  return coin;
+    //},
+    //deliverCoin(coin, role, round) {
+    //  var l = round.roles.length;
+    //  if (role.role == round.roles[l - 1].role) {
+    //    round.delivered = round.delivered + parseInt(coin.value);
+    //  }
+    //},
     moveCoins(roundNum) {
       var i, j, coin;
       var round = this.gameState.rounds[roundNum];
@@ -72,68 +72,68 @@ export default {
         }
       }
     },
-    playACoin(coin, role, round) {
-      var i, roundN, roleN
-      for (i = 0; i < this.gameState.rounds.length; i++) {
-        if (this.gameState.rounds[i].name == round.name) {
-          roundN = i
-        }
-      }
-      if (this.complete(roundN)) {
-        alert("Times Up!")
-      } else {
-        for (i = 0; i < this.gameState.rounds[roundN].roles.length; i++) {
-          if (this.gameState.rounds[roundN].roles[i].role == role.role) {
-            roleN = i
-          }
-        }
-        this.gameState.rounds[roundN].roles[roleN].coins[coin].played = true
-        this.$store.dispatch("updateGameState", this.gameState);
-        if (round.name == "Batch") {
-          this.moveCoins(roundN);
-        } else {
-          this.moveCoin(roundN);
-        }
-      }
-    },
-    playCoin(coins) {
-      var i = 0;
-      var played = false;
-      while (i < coins.length && !played) {
-        if (!coins[i].played) {
-          coins[i].played = true;
-          played = true;
-        }
-        i++;
-      }
-    },
-    playRoleCoins(round) {
-      var roles = this.gameState.rounds[round].roles;
-      var played;
-      for (var i = 0; i < roles.length; i++) {
-        if (!played) {
-          this.playCoin(roles[i].coins);
-        }
-      }
-    },
+    //playACoin(coin, role, round) {
+    //  var i, roundN, roleN
+    //  for (i = 0; i < this.gameState.rounds.length; i++) {
+    //    if (this.gameState.rounds[i].name == round.name) {
+    //      roundN = i
+    //    }
+    //  }
+    //  if (this.complete(roundN)) {
+    //    alert("Times Up!")
+    //  } else {
+    //    for (i = 0; i < this.gameState.rounds[roundN].roles.length; i++) {
+    //      if (this.gameState.rounds[roundN].roles[i].role == role.role) {
+    //        roleN = i
+    //      }
+    //    }
+    //    this.gameState.rounds[roundN].roles[roleN].coins[coin].played = true
+    //    this.$store.dispatch("updateGameState", this.gameState);
+    //    if (round.name == "Batch") {
+    //      this.moveCoins(roundN);
+    //    } else {
+    //      this.moveCoin(roundN);
+    //    }
+    //  }
+    //},
+    //playCoin(coins) {
+    //  var i = 0;
+    //  var played = false;
+    //  while (i < coins.length && !played) {
+    //    if (!coins[i].played) {
+    //      coins[i].played = true;
+    //      played = true;
+    //    }
+    //    i++;
+    //  }
+    //},
+    //playRoleCoins(round) {
+    //  var roles = this.gameState.rounds[round].roles;
+    //  var played;
+    //  for (var i = 0; i < roles.length; i++) {
+    //    if (!played) {
+    //      this.playCoin(roles[i].coins);
+    //    }
+    //  }
+    //},
     //incrementTime(round) {
     //  this.gameState.rounds[round].time =
     //    this.gameState.rounds[round].time + parseInt(this.interval)
     //    console.log('here', round, this.gameState.rounds[round].time)
-//
+    //
     //  return this.gameState.rounds[round].time
-  //  },
-    complete(round) {
-      var scope = this.gameState.clickOnCoins ? 'click' : 'demo'
-      var limit =
-        this.gameState.rounds[round].name == "Value First"
-          ? this.gameState.valueTimeLimit[scope]
-          : this.gameState.timeLimit[scope]
-      return (
-        this.gameState.rounds[round].time >= parseInt(limit) ||
-        this.gameState.rounds[round].delivered == this.gameState.total
-      )
-    },
+    //},
+    //complete(round) {
+    //  var scope = this.gameState.clickOnCoins ? 'click' : 'demo'
+    //  var limit =
+    //    this.gameState.rounds[round].name == "Value First"
+    //      ? this.gameState.valueTimeLimit[scope]
+    //      : this.gameState.timeLimit[scope]
+    //  return (
+    //    this.gameState.rounds[round].time >= parseInt(limit) ||
+    //    this.gameState.rounds[round].delivered == this.gameState.total
+    //  )
+    //},
     //run() {
     //  var round = this.gameState.round
     //  if (!this.gameState["clickOnCoins"]) {

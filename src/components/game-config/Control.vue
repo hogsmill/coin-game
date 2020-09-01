@@ -24,7 +24,7 @@
           </div>
           <div class="form-check always-visible">
             <label for="clickCoins">Click on Coins</label>
-            <input class="form-check-input mr-neg-10" id="clickOnCoins" type="checkbox" v-model.lazy="gameState.clickOnCoins" @click="updateClickOnCoins()" />
+            <input disabled="true" class="form-check-input mr-neg-10" id="clickOnCoins" type="checkbox" v-model.lazy="gameState.clickOnCoins" @click="updateClickOnCoins()" />
           </div>
         </form>
       </div>

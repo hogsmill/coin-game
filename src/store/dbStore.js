@@ -132,6 +132,48 @@ function updateTime(err, client, db, io, data) {
   })
 }
 
+function _playCoin(err, client, db, io, data, debugOn) {
+
+  if (debugOn) { console.log('playCoin', data) }
+
+  db.collection('coinGame').findOne({gameName: data.gameName}, function(err, res) {
+    if (err) throw err;
+    if (res) {
+      var gameState = res.gameState
+      var roleN = roleFuns.getRoleNFromName(data.role, gameState.roles)
+      var roundN = roundFuns.getRoundNFromName(data.round, gameState.rounds)
+      gameState.rounds[roundN].roles[roleN].coins[data.coin].played = true
+      gameState.rounds[roundN] = coinFuns.moveCoins(gameState.rounds[roundN])
+      data.gameState = gameState
+      db.collection('coinGame').updateOne({"_id": res._id}, {$set: {gameState: gameState}}, function(err, res) {
+        if (err) throw err;
+        io.emit("updateGameState", data)
+      })
+    }
+  })
+}
+
+function playNextCoins(err, client, db, io, data, debugOn) {
+
+  if (debugOn || true) { console.log('playNextCoins') } //data) }
+
+  db.collection('coinGame').findOne({gameName: data.gameName}, function(err, res) {
+    if (err) throw err;
+    if (res) {
+      var gameState = res.gameState
+      //var roundN = roundFuns.getCurrentRound(gameState.rounds)
+      //for (var i = 0; i < round.roles.length; i++) {
+      //  rounds.roles[i] = roleFuns.playNextCoin(rounds.roles[i])
+      //}
+      //round = coinFuns.moveCoins(round)
+      //round = coinFuns.moveCoins(round)
+
+      setTimeout(function() {
+        playNextCoins(err, client, db, io, data, debugOn)
+      }, gameState.interval)
+    }
+  })
+}
 
 module.exports = {
 
@@ -218,6 +260,9 @@ module.exports = {
           if (err) throw err;
           io.emit("updateGameState", data)
           updateTime(err, client, db, io, data)
+          if (!gameState.clickOnCoins) {
+            playNextCoins(err, client, db, io, data, debugOn)
+          }
         })
       }
     })
@@ -227,21 +272,7 @@ module.exports = {
 
     if (debugOn) { console.log('playCoin', data) }
 
-    db.collection('coinGame').findOne({gameName: data.gameName}, function(err, res) {
-      if (err) throw err;
-      if (res) {
-        var gameState = res.gameState
-        var roleN = roleFuns.getRoleNFromName(data.role, gameState.roles)
-        var roundN = roundFuns.getRoundNFromName(data.round, gameState.rounds)
-        gameState.rounds[roundN].roles[roleN].coins[data.coin].played = true
-        gameState.rounds[roundN] = coinFuns.moveCoins(gameState.rounds[roundN])
-        data.gameState = gameState
-        db.collection('coinGame').updateOne({"_id": res._id}, {$set: {gameState: gameState}}, function(err, res) {
-          if (err) throw err;
-          io.emit("updateGameState", data)
-        })
-      }
-    })
+    _playCoin(err, client, db, io, data, debugOn)
   },
 
   // Config
