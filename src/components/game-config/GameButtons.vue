@@ -1,11 +1,15 @@
 <template>
-
   <div class="col-md-12 mb-3">
-    <button id="batch-button" class="btn btn-site-primary mb-2" @click="go(0)">Run Batch</button>
-    <button id="kanban-button" class="btn btn-site-primary mb-2" @click="go(1)">Run Kanban</button>
-    <button id="value-delivery-button" class="btn btn-site-primary mb-2" @click="go(2)">Run Value Delivery</button>
+    <button id="batch-button" class="btn btn-site-primary mb-2" @click="go(0)">
+      Run Batch
+    </button>
+    <button id="kanban-button" class="btn btn-site-primary mb-2" @click="go(1)">
+      Run Kanban
+    </button>
+    <button id="value-delivery-button" class="btn btn-site-primary mb-2" @click="go(2)">
+      Run Value Delivery
+    </button>
   </div>
-
 </template>
 
 <script>
@@ -13,6 +17,23 @@ export default {
   props: [
     'socket'
   ],
+  computed: {
+    interval() {
+      return this.$store.getters.getInterval
+    },
+    stopped() {
+      return this.$store.getters.getStopped
+    },
+    denominations() {
+      return this.$store.getters.getDenominations
+    },
+    gameName() {
+      return this.$store.getters.getGameName
+    },
+    gameState() {
+      return this.$store.getters.getGameState
+    },
+  },
   methods: {
     //allPlayed(coins) {
     //  var played = true;
@@ -36,38 +57,38 @@ export default {
     //  }
     //},
     moveCoins(roundNum) {
-      var i, j, coin;
-      var round = this.gameState.rounds[roundNum];
+      let i, j, coin
+      const round = this.gameState.rounds[roundNum]
       for (i = 0; i < round.roles.length - 1; i++) {
         if (
           round.roles[i].coins.length &&
           this.allPlayed(round.roles[i].coins)
         ) {
           for (j = 0; j < round.roles[i].coins.length; j++) {
-            coin = round.roles[i].coins[j];
-            coin.played = false;
-            round.roles[i + 1].coins.push(coin);
-            this.deliverCoin(coin, round.roles[i + 1], round);
+            coin = round.roles[i].coins[j]
+            coin.played = false
+            round.roles[i + 1].coins.push(coin)
+            this.deliverCoin(coin, round.roles[i + 1], round)
           }
-          round.roles[i].coins = [];
+          round.roles[i].coins = []
         }
       }
     },
     moveCoin(round) {
-      for (var i = 0; i < this.gameState.rounds[round].roles.length - 1; i++) {
-        var roles = this.gameState.rounds[round].roles
-        var role = roles[i];
-        for (var j = 0; j < role.coins.length; j++) {
-          var coin = role.coins[j];
+      for (let i = 0; i < this.gameState.rounds[round].roles.length - 1; i++) {
+        const roles = this.gameState.rounds[round].roles
+        const role = roles[i]
+        for (let j = 0; j < role.coins.length; j++) {
+          const coin = role.coins[j]
           if (coin.played) {
-            coin.played = false;
-            roles[i + 1].coins.push(coin);
-            role.coins.splice(j, 1);
+            coin.played = false
+            roles[i + 1].coins.push(coin)
+            role.coins.splice(j, 1)
             this.deliverCoin(
               coin,
               roles[i + 1],
               this.gameState.rounds[round]
-            );
+            )
           }
         }
       }
@@ -150,31 +171,14 @@ export default {
       //}
     //},
     start() {
-      this.$store.dispatch("updateStopped", false);
+      this.$store.dispatch('updateStopped', false)
     },
     stop() {
-      this.$store.dispatch("updateStopped", true);
+      this.$store.dispatch('updateStopped', true)
     },
     go(round) {
-      this.socket.emit("startRound", {gameName: this.gameName, round: round});
-    },
-  },
-  computed: {
-    interval() {
-      return this.$store.getters.getInterval;
-    },
-    stopped() {
-      return this.$store.getters.getStopped;
-    },
-    denominations() {
-      return this.$store.getters.getDenominations;
-    },
-    gameName() {
-      return this.$store.getters.getGameName;
-    },
-    gameState() {
-      return this.$store.getters.getGameState;
+      this.socket.emit('startRound', {gameName: this.gameName, round: round})
     },
   }
-};
+}
 </script>

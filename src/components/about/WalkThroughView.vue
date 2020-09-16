@@ -21,7 +21,7 @@
             as the best means of satisfying customer need, and the best strategy
             for reducing risk
           </p>
-          <div class="coin-game-round"></div>
+          <div class="coin-game-round" />
         </div>
       </div>
       <div class="mt-4" v-if="step == 2">
@@ -31,10 +31,8 @@
             Project work is simulated - in the real game - by the flipping of
             coins, and the flow of work in a project is simulated by passing the
             coins from role to role - e.g. from a designer to a dev, to a QA and
-            finally delivery to the customer. (<em
-              >yes, we know teams should be cross-functional and no roles, but
-              this is just for the simulation...</em
-            >)
+            finally delivery to the customer. (<em>yes, we know teams should be cross-functional and no roles, but
+              this is just for the simulation...</em>)
           </p>
           <p>In the online version, coins are played by merely clicking them</p>
           <p>
@@ -103,7 +101,7 @@
         <h4>Conclusions (1)</h4>
         <div class="row">
           <div class="col">
-            <div class="walkthrough-graph value-graph"></div>
+            <div class="walkthrough-graph value-graph" />
           </div>
           <div class="col">
             <p>
@@ -125,7 +123,7 @@
         <h4>Conclusions (2)</h4>
         <div class="row">
           <div class="col">
-            <div class="walkthrough-graph risk-graph"></div>
+            <div class="walkthrough-graph risk-graph" />
           </div>
           <div class="col">
             <p>
@@ -145,7 +143,7 @@
         <h4>Conclusions (2)</h4>
         <div class="row">
           <div class="col">
-            <div class="walkthrough-graph risk-graph"></div>
+            <div class="walkthrough-graph risk-graph" />
           </div>
           <div class="col">
             <p>
@@ -164,11 +162,17 @@
         </div>
       </div>
       <div class="buttons" v-if="step < 10">
-        <button class="btn btn-info" @click="incrementStep">Next</button>
-        <button class="btn btn-info" @click="hide()">Skip</button>
+        <button class="btn btn-info" @click="incrementStep">
+          Next
+        </button>
+        <button class="btn btn-info" @click="hide()">
+          Skip
+        </button>
       </div>
       <div class="buttons" v-if="step == 10">
-        <button class="btn btn-info" @click="hide()">Play Game</button>
+        <button class="btn btn-info" @click="hide()">
+          Play Game
+        </button>
       </div>
     </modal>
   </div>
@@ -184,20 +188,35 @@ export default {
       default: { width: 600, height: 260 },
       positions: {
         2: { height: 290 },
-        3: { target: "batch-button", width: 400, height: 240 },
-        4: { target: "kanban-button", width: 400, height: 255 },
-        5: { target: "value-delivery-button", width: 400, height: 380 },
-        6: { target: "click-coins", width: 400, height: 300 },
-        7: { target: "results-table-body", width: 600, height: 180 },
+        3: { target: 'batch-button', width: 400, height: 240 },
+        4: { target: 'kanban-button', width: 400, height: 255 },
+        5: { target: 'value-delivery-button', width: 400, height: 380 },
+        6: { target: 'click-coins', width: 400, height: 300 },
+        7: { target: 'results-table-body', width: 600, height: 180 },
         8: { width: 600, height: 460 },
         9: { width: 800, height: 400 },
         10: { width: 800, height: 400 }
       }
-    };
+    }
+  },
+  computed: {
+    walkThrough() {
+      return this.$store.getters.getWalkThrough
+    },
+    showAbout() {
+      return this.$store.getters.getShowAbout
+    },
+  },
+  mounted() {
+    const self = this
+    if (params.isParam('walkThrough')) {
+      self.$store.dispatch('updateWalkThrough', true)
+      self.$modal.show('walk-through')
+    }
   },
   methods: {
     setDefault() {
-      var elem = document.getElementsByClassName("vm--modal")[0].getBoundingClientRect()
+      const elem = document.getElementsByClassName('vm--modal')[0].getBoundingClientRect()
       this.default = {
         top: elem.top,
         left: elem.left,
@@ -206,22 +225,22 @@ export default {
       }
     },
     show() {
-      this.$modal.show("walk-through");
+      this.$modal.show('walk-through')
     },
     hide() {
-      this.$modal.hide("walk-through");
+      this.$modal.hide('walk-through')
     },
     help() {
-      this.step = 1;
-      this.show();
+      this.step = 1
+      this.show()
     },
     incrementStep() {
       if (this.step == 1) {
         this.setDefault()
       }
       this.step = this.step + 1
-      var elem = document.getElementsByClassName("vm--modal")[0]
-      var target, positions = {}
+      const elem = document.getElementsByClassName('vm--modal')[0]
+      let target, positions = {}
       if (this.positions[this.step].target) {
         target = document.getElementById(this.positions[this.step].target)
         target = target.getBoundingClientRect()
@@ -242,22 +261,7 @@ export default {
       elem.style.height = positions.height +'px'
     }
   },
-  computed: {
-    walkThrough() {
-      return this.$store.getters.getWalkThrough;
-    },
-    showAbout() {
-      return this.$store.getters.getShowAbout;
-    },
-  },
-  mounted() {
-    const self = this;
-    if (params.isParam("walkThrough")) {
-      self.$store.dispatch("updateWalkThrough", true);
-      self.$modal.show("walk-through");
-    }
-  },
-};
+}
 </script>
 
 <style>

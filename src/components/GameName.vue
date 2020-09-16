@@ -1,8 +1,10 @@
 <template>
   <div class="game-name float-right" v-if="!showAbout">
-      <button class="btn btn-sm btn-secondary smaller-font" v-if="!gameName" @click="show">Set Game Name</button>
-      <span v-if="gameName" @click="show" class="mr-2 mt-2 pointer p-2 bg-light">Game: {{gameName}}</span>
-      <span v-if="gameName" title="Restart Game" class="restart" @click="restartGame">&#8635;</span>
+    <button class="btn btn-sm btn-secondary smaller-font" v-if="!gameName" @click="show">
+      Set Game Name
+    </button>
+    <span v-if="gameName" @click="show" class="mr-2 mt-2 pointer p-2 bg-light">Game: {{ gameName }}</span>
+    <span v-if="gameName" title="Restart Game" class="restart" @click="restartGame">&#8635;</span>
 
     <modal name="set-game-name" :height="120" :classes="['rounded', 'set-game-name']">
       <div class="float-right mr-2 mt-1">
@@ -13,12 +15,13 @@
       <div class="mt-4">
         <h4>Enter Your Game Name</h4>
         <div class="set-game-name">
-          <input type="text" id="game-name" class="form-control" />
-          <button class="btn btn-sm btn-secondary smaller-font" @click="saveGameName">Save</button>
+          <input type="text" id="game-name" class="form-control">
+          <button class="btn btn-sm btn-secondary smaller-font" @click="saveGameName">
+            Save
+          </button>
         </div>
       </div>
     </modal>
-
   </div>
 </template>
 
@@ -27,34 +30,34 @@ export default {
   props: [
     'socket'
   ],
-  methods: {
-    show () {
-      this.$modal.show('set-game-name');
-    },
-    hide () {
-      this.$modal.hide('set-game-name');
-    },
-    saveGameName: function() {
-      var gameName = document.getElementById('game-name').value
-      localStorage.setItem("gameName-cg", gameName);
-      this.$store.dispatch("updateGameName", gameName)
-      this.socket.emit("loadGame", {gameName: gameName})
-
-      this.hide()
-    },
-    restartGame() {
-      var restartGame = confirm("Are you sure you want to re-start this game?")
-      if (restartGame) {
-        this.socket.emit("restartGame", {gameName: this.gameName})
-      }
-    }
-  },
   computed: {
     showAbout() {
       return this.$store.getters.getShowAbout
     },
     gameName() {
       return this.$store.getters.getGameName
+    }
+  },
+  methods: {
+    show () {
+      this.$modal.show('set-game-name')
+    },
+    hide () {
+      this.$modal.hide('set-game-name')
+    },
+    saveGameName: function() {
+      const gameName = document.getElementById('game-name').value
+      localStorage.setItem('gameName-cg', gameName)
+      this.$store.dispatch('updateGameName', gameName)
+      this.socket.emit('loadGame', {gameName: gameName})
+
+      this.hide()
+    },
+    restartGame() {
+      const restartGame = confirm('Are you sure you want to re-start this game?')
+      if (restartGame) {
+        this.socket.emit('restartGame', {gameName: this.gameName})
+      }
     }
   },
 }

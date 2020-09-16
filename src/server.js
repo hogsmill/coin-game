@@ -1,94 +1,94 @@
-const app = require("express")();
-const http = require("http").createServer(app);
-const io = require("socket.io")(http);
+const app = require('express')()
+const http = require('http').createServer(app)
+const io = require('socket.io')(http)
 const os = require('os')
 
-var dbStore = require('./store/dbStore.js')
+const dbStore = require('./store/dbStore.js')
 
-var MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient
 
-var prod = os.hostname() == "agilesimulations" ? true : false
-var url = prod ?  "mongodb://127.0.0.1:27017/" : "mongodb://localhost:27017/"
+const prod = os.hostname() == 'agilesimulations' ? true : false
+const url = prod ?  'mongodb://127.0.0.1:27017/' : 'mongodb://localhost:27017/'
 
-var connectDebugOff = prod
-var debugOn = false //!prod
+const connectDebugOff = prod
+const debugOn = false //!prod
 
-var connections = {}
-var maxConnections = 20
+const connections = {}
+const maxConnections = 20
 
 function emit(event, data) {
   if (debugOn) {
-    console.log(event, data);
+    console.log(event, data)
   }
   io.emit(event, data)
 }
 
 function doDb(fun, data) {
   MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
-    if (err) throw err;
-    var db = client.db('db');
+    if (err) throw err
+    const db = client.db('db')
 
     switch(fun) {
       case 'loadGame':
         dbStore.loadGame(err, client, db, io, data, debugOn)
-        break;
+        break
       case 'restartGame':
         dbStore.restartGame(err, client, db, io, data, debugOn)
-        break;
+        break
         case 'addPlayer':
           dbStore.addPlayer(err, client, db, io, data, debugOn)
-          break;
+          break
         case 'updateGameRole':
           dbStore.updateGameRole(err, client, db, io, data, debugOn)
-          break;
+          break
         case 'startRound':
           dbStore.startRound(err, client, db, io, data, debugOn)
-          break;
+          break
         case 'playCoin':
           dbStore.playCoin(err, client, db, io, data, debugOn)
-          break;
+          break
 
       // Config
       case 'updateDenominations':
         dbStore.updateConfig(err, client, db, io, data, 'denominations', debugOn)
-        break;
+        break
       case 'updateCurrency':
         dbStore.updateCurrency(err, client, db, io, data, debugOn)
-        break;
+        break
       case 'updateRoles':
         dbStore.updateRoles(err, client, db, io, data, debugOn)
-        break;
+        break
       case 'updateInterval':
         data.value = parseInt(data.value)
         dbStore.updateConfig(err, client, db, io, data, 'interval', debugOn)
-        break;
+        break
       case 'updateDemoTimeLimit':
         data.value = parseInt(data.value)
         dbStore.updateConfig(err, client, db, io, data, 'timeLimit.demo', debugOn)
-        break;
+        break
       case 'updateClickTimeLimit':
         data.value = parseInt(data.value)
         dbStore.updateConfig(err, client, db, io, data, 'timeLimit.click', debugOn)
-        break;
+        break
       case 'updateDemoValueTimeLimit':
         data.value = parseInt(data.value)
         dbStore.updateConfig(err, client, db, io, data, 'valueTimeLimit.demo', debugOn)
-        break;
+        break
       case 'updateClickValueTimeLimit':
         data.value = parseInt(data.value)
         dbStore.updateConfig(err, client, db, io, data, 'valueTimeLimit.click', debugOn)
-        break;
+        break
       case 'updateClickOnCoins':
         dbStore.updateConfig(err, client, db, io, data, 'clickOnCoins', debugOn)
-        break;
+        break
       default:
         console.log('Unknown function ', fun)
     }
   })
 }
 
-io.on("connection", (socket) => {
-  var connection = socket.handshake.headers.host
+io.on('connection', (socket) => {
+  const connection = socket.handshake.headers.host
   connections[connection] = connections[connection] ? connections[connection] + 1 : 1
   if (Object.keys(connections).length > maxConnections || connections[connection] > maxConnections) {
     console.log(`Too many connections. Socket ${socket.id} closed`)
@@ -98,58 +98,58 @@ io.on("connection", (socket) => {
     emit('updateConnections', {connections: connections, maxConnections: maxConnections})
   }
 
-  socket.on("disconnect", () => {
-    var connection = socket.handshake.headers.host
+  socket.on('disconnect', () => {
+    const connection = socket.handshake.headers.host
     connections[connection] = connections[connection] - 1
     connectDebugOff || console.log(`User with socket id ${socket.id} has disconnected.`)
     emit('updateConnections', {connections: connections, maxConnections: maxConnections})
   })
 
-  socket.on("loadGame", (data) => { doDb("loadGame", data) })
+  socket.on('loadGame', (data) => { doDb('loadGame', data) })
 
-  socket.on("restartGame", (data) => { doDb("restartGame", data) })
+  socket.on('restartGame', (data) => { doDb('restartGame', data) })
 
-  socket.on("addPlayer", (data) => { doDb("addPlayer", data) })
+  socket.on('addPlayer', (data) => { doDb('addPlayer', data) })
 
-  socket.on("updateGameRole", (data) => { doDb("updateGameRole", data) })
+  socket.on('updateGameRole', (data) => { doDb('updateGameRole', data) })
 
-  socket.on("startRound", (data) => { doDb("startRound", data) })
+  socket.on('startRound', (data) => { doDb('startRound', data) })
 
-  socket.on("playCoin", (data) => { doDb("playCoin", data) })
+  socket.on('playCoin', (data) => { doDb('playCoin', data) })
 
   // Config
 
-  socket.on("updateCurrency", (data) => { doDb("updateCurrency", data) })
+  socket.on('updateCurrency', (data) => { doDb('updateCurrency', data) })
 
-  socket.on("updateDenominations", (data) => { doDb("updateDenominations", data) })
+  socket.on('updateDenominations', (data) => { doDb('updateDenominations', data) })
 
-  socket.on("updateRoles", (data) => { doDb("updateRoles", data) })
+  socket.on('updateRoles', (data) => { doDb('updateRoles', data) })
 
-  socket.on("updateInterval", (data) => { doDb("updateInterval", data) })
+  socket.on('updateInterval', (data) => { doDb('updateInterval', data) })
 
-  socket.on("updateDemoTimeLimit", (data) => { doDb("updateDemoTimeLimit", data) })
+  socket.on('updateDemoTimeLimit', (data) => { doDb('updateDemoTimeLimit', data) })
 
-  socket.on("updateClickTimeLimit", (data) => { doDb("updateClickTimeLimit", data) })
+  socket.on('updateClickTimeLimit', (data) => { doDb('updateClickTimeLimit', data) })
 
-  socket.on("updateDemoValueTimeLimit", (data) => { doDb("updateDemoValueTimeLimit", data) })
+  socket.on('updateDemoValueTimeLimit', (data) => { doDb('updateDemoValueTimeLimit', data) })
 
-  socket.on("updateClickValueTimeLimit", (data) => { doDb("updateClickValueTimeLimit", data) })
+  socket.on('updateClickValueTimeLimit', (data) => { doDb('updateClickValueTimeLimit', data) })
 
-  socket.on("updateClickOnCoins", (data) => { doDb("updateClickOnCoins", data) })
+  socket.on('updateClickOnCoins', (data) => { doDb('updateClickOnCoins', data) })
 
   // Learnings
 
-  socket.on("showLearnings", (data) => { emit("showLearnings", data) })
+  socket.on('showLearnings', (data) => { emit('showLearnings', data) })
 
-  socket.on("hideLearnings", (data) => { emit("hideLearnings", data) })
+  socket.on('hideLearnings', (data) => { emit('hideLearnings', data) })
 
-  socket.on("incrementLearnings", (data) => { emit("incrementLearnings", data) })
+  socket.on('incrementLearnings', (data) => { emit('incrementLearnings', data) })
 
   // ---------------------------------------------------
 
   //socket.on("go", (data) => { emit("go", data) })
 
-  socket.on("updateMyName", (data) => { emit("updateMyName", data) })
+  socket.on('updateMyName', (data) => { emit('updateMyName', data) })
 
   //socket.on("addMyNameAsAPlayer", (data) => { emit("addMyNameAsAPlayer", data) })
 
@@ -157,10 +157,10 @@ io.on("connection", (socket) => {
 
   //socket.on("updateGameState", (data) => { emit("updateGameState", data) })
 
-});
+})
 
-var port = process.argv[2] || 3000
+const port = process.argv[2] || 3000
 
 http.listen(port, () => {
-  console.log("Listening on *:" + port);
-});
+  console.log('Listening on *:' + port)
+})

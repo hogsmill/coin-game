@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light mb-4">
     <a class="navbar-brand" href="http://agilesimulations.co.uk">
-      <img src="/lego.png" class="ml-4" height="38px" />
+      <img src="/lego.png" class="ml-4" height="38px">
     </a>
     <button
       class="navbar-toggler"
@@ -12,7 +12,7 @@
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
-      <span class="navbar-toggler-icon"></span>
+      <span class="navbar-toggler-icon" />
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -35,16 +35,16 @@
 export default {
   computed: {
     isHost() {
-      return this.$store.getters.getHost;
+      return this.$store.getters.getHost
     },
     showTab() {
-      return this.$store.getters.getShowTab;
+      return this.$store.getters.getShowTab
     }
   },
   methods: {
     updateShowTab(payload) {
-      this.$store.dispatch("updateShowTab", payload);
+      this.$store.dispatch('updateShowTab', payload)
     }
   }
-};
+}
 </script>

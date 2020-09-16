@@ -2,26 +2,26 @@
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+    [array[i], array[j]] = [array[j], array[i]]
   }
-  return array;
+  return array
 }
 
 function valueDelivered(round) {
-  var delivered = 0;
-  var customer = round.roles[round.roles.length - 1]
-  for (var i = 0; i < customer.coins.length; i++) {
+  let delivered = 0
+  const customer = round.roles[round.roles.length - 1]
+  for (let i = 0; i < customer.coins.length; i++) {
     delivered = delivered + parseInt(customer.coins[i].value)
   }
   return delivered
 }
 
 function moveCoinsIfAllPlayed(roles) {
-  var i, j
+  let i, j
   for (i = 0; i < roles.length - 1; i++) {
-    var allPlayed = true
+    let allPlayed = true
     for (j = 0; j < roles[i].coins.length; j++) {
-      var coin = roles[i].coins[j]
+      const coin = roles[i].coins[j]
       if (!coin.played) {
         allPlayed = false
       }
@@ -38,10 +38,10 @@ function moveCoinsIfAllPlayed(roles) {
 }
 
 function moveCoinsIfPlayed(roles) {
-  for (var i = 0; i < roles.length - 1; i++) {
-    var coins = []
-    for (var j = 0; j < roles[i].coins.length; j++) {
-      var coin = roles[i].coins[j]
+  for (let i = 0; i < roles.length - 1; i++) {
+    const coins = []
+    for (let j = 0; j < roles[i].coins.length; j++) {
+      const coin = roles[i].coins[j]
       if (coin.played) {
         coin.played = false
         roles[i + 1].coins.push(coin)
@@ -57,20 +57,20 @@ function moveCoinsIfPlayed(roles) {
 module.exports = {
 
   getCoins: function(round, denominations) {
-    var coins = [];
-    for (var denomination in denominations) {
-      for (var i = 0; i < denominations[denomination]; i++) {
-        coins.push({ value: denomination, played: false });
+    let coins = []
+    for (const denomination in denominations) {
+      for (let i = 0; i < denominations[denomination]; i++) {
+        coins.push({ value: denomination, played: false })
       }
     }
-    if (round == "Value First") {
+    if (round == 'Value First') {
       coins = coins.sort(function(a, b) {
-        return parseInt(b.value) - parseInt(a.value);
-      });
+        return parseInt(b.value) - parseInt(a.value)
+      })
     } else {
-      coins = shuffleArray(coins);
+      coins = shuffleArray(coins)
     }
-    return coins;
+    return coins
   },
 
   moveCoins: function(round) {

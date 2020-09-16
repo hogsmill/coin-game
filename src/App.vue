@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="mb-4">
-    <appHeader></appHeader>
+    <appHeader />
     <WalkThroughView />
     <h1>The Coin Game</h1>
     <div v-if="showTab == 'about'">
@@ -8,20 +8,22 @@
     </div>
     <div v-if="showTab != 'about'">
       <div class="game-params">
-        <MyName v-bind:socket="socket" />
-        <GameName v-bind:socket="socket" />
+        <MyName :socket="socket" />
+        <GameName :socket="socket" />
       </div>
       <div class="container">
         <div v-if="showTab == 'facilitator'" :class="{'not-host' : !isHost}">
-          <div class="connections">Current server connections: {{connections.connections}} / {{connections.maxConnections}}</div>
-          <app-denominations v-bind:socket="socket"></app-denominations>
-          <app-roles v-bind:socket="socket"></app-roles>
-          <app-players v-bind:socket="socket"></app-players>
-          <app-control v-bind:socket="socket"></app-control>
+          <div class="connections">
+            Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
+          </div>
+          <app-denominations :socket="socket" />
+          <app-roles :socket="socket" />
+          <app-players :socket="socket" />
+          <app-control :socket="socket" />
         </div>
         <div v-if="showTab == 'game'">
-          <app-game-buttons v-bind:socket="socket"></app-game-buttons>
-          <ResultsView v-bind:gameState="gameState" v-bind:socket="socket" />
+          <app-game-buttons :socket="socket" />
+          <ResultsView :game-state="gameState" :socket="socket" />
         </div>
       </div>
     </div>
@@ -29,24 +31,24 @@
 </template>
 
 <script>
-import io from "socket.io-client";
+import io from 'socket.io-client'
 
 import params from './lib/params.js'
 
-import Header from "./components/Header.vue";
-import MyName from "./components/MyName.vue";
-import GameName from "./components/GameName.vue";
-import Denominations from "./components/game-config/Denominations.vue";
-import Roles from "./components/game-config/Roles.vue";
-import Players from "./components/game-config/Players.vue";
-import Control from "./components/game-config/Control.vue";
-import GameButtons from "./components/game-config/GameButtons.vue";
-import AboutView from "./components/about/AboutView.vue";
-import WalkThroughView from "./components/about/WalkThroughView.vue";
-import ResultsView from "./components/results/ResultsView.vue";
+import Header from './components/Header.vue'
+import MyName from './components/MyName.vue'
+import GameName from './components/GameName.vue'
+import Denominations from './components/game-config/Denominations.vue'
+import Roles from './components/game-config/Roles.vue'
+import Players from './components/game-config/Players.vue'
+import Control from './components/game-config/Control.vue'
+import GameButtons from './components/game-config/GameButtons.vue'
+import AboutView from './components/about/AboutView.vue'
+import WalkThroughView from './components/about/WalkThroughView.vue'
+import ResultsView from './components/results/ResultsView.vue'
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     appHeader: Header,
     appDenominations: Denominations,
@@ -62,57 +64,57 @@ export default {
   },
   computed: {
     isHost() {
-      return this.$store.getters.getHost;
+      return this.$store.getters.getHost
     },
     walkThrough() {
-      return this.$store.getters.getWalkThrough;
+      return this.$store.getters.getWalkThrough
     },
     showTab() {
-      return this.$store.getters.getShowTab;
+      return this.$store.getters.getShowTab
     },
     gameName() {
-      return this.$store.getters.getGameName;
+      return this.$store.getters.getGameName
     },
     gameState() {
-      return this.$store.getters.getGameState;
+      return this.$store.getters.getGameState
     },
     connections() {
       return this.$store.getters.getConnections
     }
   },
   created() {
-    var host = "77.68.122.69"
+    let host = '77.68.122.69'
     if (location.hostname == 'localhost') {
       host = 'localhost'
     }
-    var connStr = "http://" + host + ":3000"
-    console.log("Connecting to: " + connStr)
+    const connStr = 'http://' + host + ':3000'
+    console.log('Connecting to: ' + connStr)
     this.socket = io(connStr)
 
-    if (params.isParam("host")) {
-      this.$store.dispatch("updateHost", true)
+    if (params.isParam('host')) {
+      this.$store.dispatch('updateHost', true)
     }
 
-    var gameName = localStorage.getItem("gameName-cg")
+    const gameName = localStorage.getItem('gameName-cg')
     if (gameName) {
-      this.$store.dispatch("updateGameName", gameName)
-      this.socket.emit("loadGame", {gameName: gameName})
+      this.$store.dispatch('updateGameName', gameName)
+      this.socket.emit('loadGame', {gameName: gameName})
     }
 
-    var myName = localStorage.getItem("myName-cg")
+    let myName = localStorage.getItem('myName-cg')
     if (myName) {
       myName = JSON.parse(myName)
-      this.$store.dispatch("setMyName", myName)
+      this.$store.dispatch('setMyName', myName)
     }
 
-    this.socket.on("updateGameState", (data) => {
+    this.socket.on('updateGameState', (data) => {
       if (this.gameName == data.gameName) {
-        this.$store.dispatch("updateGameState", data)
+        this.$store.dispatch('updateGameState', data)
       }
     })
 
-    this.socket.on("updateConnections", (data) => {
-      this.$store.dispatch("updateConnections", data)
+    this.socket.on('updateConnections', (data) => {
+      this.$store.dispatch('updateConnections', data)
     })
   }
 }

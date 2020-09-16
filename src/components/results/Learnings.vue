@@ -8,7 +8,7 @@
         <h4>Conclusions (1)</h4>
         <div class="row">
           <div class="col">
-            <div class="walkthrough-graph value-graph"></div>
+            <div class="walkthrough-graph value-graph" />
           </div>
           <div class="col">
             <p>
@@ -29,7 +29,7 @@
         <h4>Conclusions (2)</h4>
         <div class="row">
           <div class="col">
-            <div class="walkthrough-graph risk-graph"></div>
+            <div class="walkthrough-graph risk-graph" />
           </div>
           <div class="col">
             <p>
@@ -49,7 +49,7 @@
         <h4>Conclusions (2)</h4>
         <div class="row">
           <div class="col">
-            <div class="walkthrough-graph risk-graph"></div>
+            <div class="walkthrough-graph risk-graph" />
           </div>
           <div class="col">
             <p>
@@ -84,41 +84,41 @@ export default {
   data() {
     return {
       step: 1
-    };
-  },
-  methods: {
-    show() {
-      this.socket.emit("showLearnings", { gameName: this.gameName });
-    },
-    hide() {
-      this.socket.emit("hideLearnings", { gameName: this.gameName });
-    },
-    incrementStep() {
-      this.socket.emit("incrementLearnings", { gameName: this.gameName });
-    },
-    _incrementStep() {
-      this.step = this.step + 1;
     }
   },
   mounted() {
-    const self = this;
-    this.socket.on("showLearnings", (data) => {
+    const self = this
+    this.socket.on('showLearnings', (data) => {
       if (this.gameName == data.gameName) {
-        self.$modal.show("learnings");
+        self.$modal.show('learnings')
       }
     })
 
-    this.socket.on("hideLearnings", (data) => {
+    this.socket.on('hideLearnings', (data) => {
       if (this.gameName == data.gameName) {
-        self.$modal.hide("learnings");
+        self.$modal.hide('learnings')
       }
     })
 
-    this.socket.on("incrementLearnings", (data) => {
+    this.socket.on('incrementLearnings', (data) => {
       if (this.gameName == data.gameName) {
-        self._incrementStep();
+        self._incrementStep()
       }
     })
+  },
+  methods: {
+    show() {
+      this.socket.emit('showLearnings', { gameName: this.gameName })
+    },
+    hide() {
+      this.socket.emit('hideLearnings', { gameName: this.gameName })
+    },
+    incrementStep() {
+      this.socket.emit('incrementLearnings', { gameName: this.gameName })
+    },
+    _incrementStep() {
+      this.step = this.step + 1
+    }
   }
 }
 </script>

@@ -1,7 +1,7 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
@@ -34,29 +34,29 @@ export const store = new Vuex.Store({
       valueDelivered: 0,
       players: [],
       roles: [
-        { role: "Product Owner", include: true, name: "" },
-        { role: "Developer", include: true, name: "" },
-        { role: "Tester", include: true, name: "" },
-        { role: "Integrator", include: true, name: "" },
-        { role: "Customer", include: true, name: "" },
+        { role: 'Product Owner', include: true, name: '' },
+        { role: 'Developer', include: true, name: '' },
+        { role: 'Tester', include: true, name: '' },
+        { role: 'Integrator', include: true, name: '' },
+        { role: 'Customer', include: true, name: '' },
       ],
       rounds: [
         {
-          name: "Batch",
+          name: 'Batch',
           roles: [],
           current: false,
           delivered: 0,
           time: 0,
         },
         {
-          name: "Kanban",
+          name: 'Kanban',
           roles: [],
           current: false,
           delivered: 0,
           time: 0,
         },
         {
-          name: "Value First",
+          name: 'Value First',
           roles: [],
           current: false,
           delivered: 0,
@@ -67,69 +67,69 @@ export const store = new Vuex.Store({
   },
   getters: {
     getWalkThrough: (state) => {
-      return state.walkThrough;
+      return state.walkThrough
     },
     getHost: (state) => {
-      return state.host;
+      return state.host
     },
     getShowTab: (state) => {
-      return state.showTab;
+      return state.showTab
     },
     getGameName: (state) => {
-      return state.gameName;
+      return state.gameName
     },
     getMyName: (state) => {
-      return state.myName;
+      return state.myName
     },
     getPlayers: (state) => {
-      return state.gameState.players;
+      return state.gameState.players
     },
     getInterval: (state) => {
-      return state.gameState.interval;
+      return state.gameState.interval
     },
     getStopped: (state) => {
-      return state.gameState.stopped;
+      return state.gameState.stopped
     },
     getDenominations: (state) => {
-      return state.gameState.denominations;
+      return state.gameState.denominations
     },
     getCurrency: (state) => {
-      return state.gameState.currency;
+      return state.gameState.currency
     },
     getGameState: (state) => {
-      return state.gameState;
+      return state.gameState
     },
     getConnections: (state) => {
-      return state.connections;
+      return state.connections
     }
   },
   mutations: {
     updateWalkThrough: (state, payload) => {
-      state.walkThrough = payload;
+      state.walkThrough = payload
     },
     updateHost: (state, payload) => {
-      state.host = payload;
+      state.host = payload
     },
     updateShowTab: (state, payload) => {
-      state.showTab = payload;
+      state.showTab = payload
     },
     updateGameName: (state, payload) => {
-      state.gameName = payload;
+      state.gameName = payload
     },
     setMyName: (state, payload) => {
-      state.myName = payload;
+      state.myName = payload
     },
     changeName: (state, payload) => {
-      state.myName.name = payload.name;
+      state.myName.name = payload.name
     },
     updateStopped: (state, payload) => {
-      state.gameState.stopped = payload;
+      state.gameState.stopped = payload
     },
     updateGameState: (state, payload) => {
-      state.gameState = payload.gameState;
+      state.gameState = payload.gameState
     },
     updateGameStateClickCoins: (state, payload) => {
-      state.gameState.clickCoins = payload;
+      state.gameState.clickCoins = payload
     },
     updateConnections: (state, payload) => {
       state.connections = payload
@@ -137,34 +137,34 @@ export const store = new Vuex.Store({
   },
   actions: {
     updateWalkThrough: ({ commit }, payload) => {
-      commit("updateWalkThrough", payload);
+      commit('updateWalkThrough', payload)
     },
     updateHost: ({ commit }, payload) => {
-      commit("updateHost", payload);
+      commit('updateHost', payload)
     },
     updateShowTab: ({ commit }, payload) => {
-      commit("updateShowTab", payload);
+      commit('updateShowTab', payload)
     },
     updateGameName: ({ commit }, payload) => {
-      commit("updateGameName", payload);
+      commit('updateGameName', payload)
     },
     setMyName: ({ commit }, payload) => {
-      commit("setMyName", payload);
+      commit('setMyName', payload)
     },
     changeName: ({ commit }, payload) => {
-      commit("changeName", payload);
+      commit('changeName', payload)
     },
     updateStopped: ({ commit }, payload) => {
-      commit("updateStopped", payload);
+      commit('updateStopped', payload)
     },
     updateGameState: ({ commit }, payload) => {
-      commit("updateGameState", payload);
+      commit('updateGameState', payload)
     },
     updateGameStateClickCoins: ({ commit }, payload) => {
-      commit("updateGameStateClickCoins", payload);
+      commit('updateGameStateClickCoins', payload)
     },
     updateConnections: ({ commit }, payload) => {
-      commit("updateConnections", payload);
+      commit('updateConnections', payload)
     }
   },
-});
+})
