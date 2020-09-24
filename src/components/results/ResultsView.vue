@@ -28,7 +28,7 @@
         </thead>
         <tbody id="results-table-body">
           <tr v-for="(round, index) in gameState.rounds" :key="index">
-            <td>{{ round.name }} {{ round.running }}</td>
+            <td>{{ round.name }}</td>
             <td
               v-for="(role, roleIndex) in gameState.rounds[0].roles"
               :role="role"
