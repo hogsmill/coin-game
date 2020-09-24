@@ -54,7 +54,7 @@
             </td>
             <td>
               <div>
-                <span v-html="currency.major" />{{ value(round.delivered) }} in {{ time(round.time) }}
+                {{ currencyLabel() }}{{ value(round.delivered) }} in {{ time(round.time) }}
               </div>
               <div v-if="outOfTime(round)" class="missed">
                 Missed delivery
@@ -68,6 +68,8 @@
 </template>
 
 <script>
+import stringFuns from '../../lib/stringFuns.js'
+
 import Learnings from './Learnings.vue'
 
 export default {
@@ -128,6 +130,9 @@ export default {
     },
     getClassName(role) {
       return role.role.replace(' ', '-').toLowerCase()
+    },
+    currencyLabel() {
+      return stringFuns.htmlDecode(this.currency.major)
     },
     getValueName(coin) {
       let classStr = this.coinClasses[coin.value]

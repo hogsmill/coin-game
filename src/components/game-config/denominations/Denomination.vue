@@ -1,12 +1,14 @@
 <template>
   <div class="form-group">
-    <label class="width-50" :for="id" v-html="getLabel(amount)" />
+    <label class="width-50" :for="id">{{ getLabel(amount) }}</label>
     <input type="text" class="form-control col-md-3" :id="id" :name="id" v-model.lazy="denominations[amount]" @change="updateDenominations()">
     <div class="distribution" :style="{ width: getWidth(denominations[amount]) }" />
   </div>
 </template>
 
 <script>
+import stringFuns from '../../../lib/stringFuns.js'
+
 export default {
   props: [
     'socket',
@@ -22,9 +24,9 @@ export default {
   methods: {
     getLabel(n) {
       if (n >= 100) {
-        return this.currency.major + n / 100
+        return stringFuns.htmlDecode(this.currency.major) + (n / 100)
       } else {
-        return n + this.currency.minor
+        return n + stringFuns.htmlDecode(this.currency.minor)
       }
     },
     getWidth(n) {

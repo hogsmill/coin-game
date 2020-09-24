@@ -19,8 +19,8 @@
             &crarr;
           </button>
         </form>
-        <div v-for="(player, index) in players" :key="index">
-          <div>{{ player.name }}</div>
+        <div v-for="(p, index) in players" :key="index">
+          <div>{{ p.name }}</div>
         </div>
       </div>
     </div>
