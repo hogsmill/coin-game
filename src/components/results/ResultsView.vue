@@ -159,7 +159,8 @@ export default {
     },
     outOfTime(round) {
       const scope = this.gameState.clickOnCoins ? 'click' : 'demo'
-      return round.time >= this.gameState.timeLimit[scope]
+      const timeLimit = round.name == 'Value First' ? this.gameState.valueTimeLimit[scope] : this.gameState.timeLimit[scope]
+      return round.time >= timeLimit
     },
     canPlayCoin(coin, role, round) {
        return role.role != 'Customer' && !this.outOfTime(round)
