@@ -1,10 +1,31 @@
 <template>
   <span class="learnings">
 
-    <button class="btn btn-sm btn-secondary mb-2" @click="show()">Show Learnings</button>
+    <button class="btn btn-sm btn-secondary mb-2" :disabled="running()" @click="show()">Show Learnings</button>
 
     <modal name="learnings" id="learnings" :height="480" :classes="['rounded']">
       <div class="mt-4 conclusions" v-if="step == 1">
+        <h4>Results</h4>
+        <div class="row">
+          <table class="results-table">
+            <thead>
+              <th>Round</th>
+              <th>Time</th>
+              <th>Value Delivered</th>
+              <th>Customer</th>
+            </thead>
+            <tbody>
+              <tr v-for="(round, index) in gameState.rounds" :key="index">
+                <td>{{ round.name }}</td>
+                <td>{{ time(round.time) }}</td>
+                <td>{{ value(round.delivered) }}</td>
+                <td>{{ customer(round) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="mt-4 conclusions" v-if="step == 2">
         <h4>Conclusions (1)</h4>
         <div class="row">
           <div class="col">
@@ -25,7 +46,7 @@
           </div>
         </div>
       </div>
-      <div class="mt-4 conclusions" v-if="step == 2">
+      <div class="mt-4 conclusions" v-if="step == 3">
         <h4>Conclusions (2)</h4>
         <div class="row">
           <div class="col">
@@ -45,7 +66,7 @@
           </div>
         </div>
       </div>
-      <div class="mt-4 conclusions" v-if="step == 3">
+      <div class="mt-4 conclusions" v-if="step == 4">
         <h4>Conclusions (2)</h4>
         <div class="row">
           <div class="col">
@@ -68,8 +89,8 @@
         </div>
       </div>
       <div class="buttons">
-        <button v-if="step < 3" class="btn btn-info" @click="incrementStep">Next</button>
-        <button v-if="step >= 3" class="btn btn-info" @click="hide()">Done</button>
+        <button v-if="step < 4" class="btn btn-info" @click="incrementStep">Next</button>
+        <button v-if="step >= 4" class="btn btn-info" @click="hide()">Done</button>
       </div>
     </modal>
 
@@ -77,6 +98,8 @@
 </template>
 
 <script>
+import stringFuns from '../../lib/stringFuns.js'
+
 export default {
   props: [
     'socket'
@@ -84,6 +107,14 @@ export default {
   data() {
     return {
       step: 1
+    }
+  },
+  computed: {
+    gameState() {
+      return this.$store.getters.getGameState
+    },
+    currency() {
+      return this.$store.getters.getCurrency
     }
   },
   mounted() {
@@ -107,10 +138,18 @@ export default {
     })
   },
   methods: {
+    running() {
+      let r = false
+      for (let i = 0; i < this.gameState.rounds.length; i++) {
+        r = r || this.gameState.rounds[i].running
+      }
+      return r
+    },
     show() {
       this.socket.emit('showLearnings', { gameName: this.gameName })
     },
     hide() {
+      this.step = 1
       this.socket.emit('hideLearnings', { gameName: this.gameName })
     },
     incrementStep() {
@@ -118,7 +157,42 @@ export default {
     },
     _incrementStep() {
       this.step = this.step + 1
+    },
+    time(secs) {
+      return stringFuns.timeString(secs)
+    },
+    value(n) {
+      return stringFuns.htmlDecode(this.currency.major) + stringFuns.valueString(n)
+    },
+    customer(round) {
+      let emoji = ''
+      switch(round.name) {
+        case 'Batch':
+          emoji = '&#128543;'
+          break
+        case 'Kanban':
+          emoji = '&#128529;'
+          break
+        case 'Value First':
+          emoji = '&#128522;'
+          break
+      }
+      return stringFuns.htmlDecode(emoji)
     }
   }
 }
 </script>
+
+<style lang="scss">
+
+  .results-table {
+    font-size: x-large;
+    width: 80%;
+    margin: 20px auto 32px auto;
+
+    th, td {
+      padding: 6px;
+      border: 1px solid;
+    }
+  }
+</style>

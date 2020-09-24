@@ -28,14 +28,14 @@
         </thead>
         <tbody id="results-table-body">
           <tr v-for="(round, index) in gameState.rounds" :key="index">
-            <td>{{ round.name }}</td>
+            <td>{{ round.name }} {{ round.running }}</td>
             <td
               v-for="(role, roleIndex) in gameState.rounds[0].roles"
               :role="role"
               :roleIndex="roleIndex"
               :key="roleIndex"
             >
-              <div v-if="index == gameState.round && gameState.rounds[index].roles[roleIndex]">
+              <div v-if="round.running && index == gameState.round && gameState.rounds[index].roles[roleIndex]">
                 <div
                   v-for="(coin, coinIndex) in gameState.rounds[index].roles[roleIndex].coins"
                   :coin="coin"
@@ -54,10 +54,10 @@
             </td>
             <td>
               <div>
-                {{ currencyLabel() }}{{ value(round.delivered) }} in {{ time(round.time) }}
+                {{ value(round.delivered) }} in {{ time(round.time) }}
               </div>
               <div v-if="outOfTime(round)" class="missed">
-                Missed delivery
+                Out of Time!
               </div>
             </td>
           </tr>
@@ -131,9 +131,6 @@ export default {
     getClassName(role) {
       return role.role.replace(' ', '-').toLowerCase()
     },
-    currencyLabel() {
-      return stringFuns.htmlDecode(this.currency.major)
-    },
     getValueName(coin) {
       let classStr = this.coinClasses[coin.value]
       if (coin.played) {
@@ -142,20 +139,10 @@ export default {
       return classStr
     },
     time(secs) {
-      const minutes = Math.floor(secs / 60)
-      secs = Math.floor(secs - minutes * 60)
-      if (secs < 10) {
-        secs = '0' + secs
-      }
-      return minutes + ':' + secs
+      return stringFuns.timeString(secs)
     },
     value(n) {
-      const pounds = Math.floor(n / 100)
-      let pence = n - pounds * 100
-      if (pence < 10) {
-        pence = '0' + pence
-      }
-      return pounds + '.' + pence
+      return stringFuns.htmlDecode(this.currency.major) + stringFuns.valueString(n)
     },
     outOfTime(round) {
       const scope = this.gameState.clickOnCoins ? 'click' : 'demo'

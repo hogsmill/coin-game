@@ -256,6 +256,7 @@ module.exports = {
         const coins = coinFuns.getCoins(gameState.rounds[data.round].name, gameState.denominations)
         gameState.rounds[data.round].roles[0].coins = coins
         gameState.rounds[data.round].running = true
+        gameState.rounds[data.round].time = 0
         data.gameState = gameState
         db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
           if (err) throw err
