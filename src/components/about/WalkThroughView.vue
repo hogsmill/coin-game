@@ -69,7 +69,7 @@
           however, and the amount of value delivered is recorded.
         </p>
         <p>
-          typically, despite having only one sixth of the time of round 1, most
+          Typically, despite having only one sixth of the time of round 1, most
           of the value - usually 80% to 85% - will be delivered. This will also
           typically be in 50% or less of the time of round 2, so most of the
           value is delivered in much less time.
@@ -79,14 +79,14 @@
       <div class="mt-4" v-if="step == 6">
         <h4>Game Play</h4>
         <p>
-          Check the <em>Click Coins</em> checkbox to play the game as you would
+          Click the 'Play' buttons to play each round of the game as you would
           round a table; everybody's browser will update as the coins are
           clicked, so the next role can click coins as soon as they are
           available to be played
         </p>
         <p>
-          Uncheck the box to run in demo mode; if you're presenting to
-          management or C-Suite, or doing an online presentation
+          The game can also be run in demo mode; if you're presenting to
+          management or C-Suite, or doing an online presentation (<em>not currently available</em>)
         </p>
       </div>
       <div class="mt-4" v-if="step == 7">
@@ -161,15 +161,29 @@
           </div>
         </div>
       </div>
-      <div class="buttons" v-if="step < 10">
+      <div class="mt-4" v-if="step == 11">
+        <h4>Play The Game</h4>
+        <p>
+          To play the game, all players need to set the same <b>Game Name</b>.
+        </p>
+        <p>
+          The current state of the game will then be updated in real time
+          whenever a coin is clicked so you can play the game as interactively as
+          if you were doing it round a table!
+        </p>
+        <p>
+          Enjoy!
+        </p>
+      </div>
+      <div class="buttons" v-if="step < 11">
         <button class="btn btn-info" @click="incrementStep">
           Next
         </button>
-        <button class="btn btn-info" @click="hide()">
+        <button class="btn btn-info" @click="skip()">
           Skip
         </button>
       </div>
-      <div class="buttons" v-if="step == 10">
+      <div class="buttons" v-if="step == 11">
         <button class="btn btn-info" @click="hide()">
           Play Game
         </button>
@@ -195,7 +209,8 @@ export default {
         7: { target: 'results-table-body', width: 600, height: 180 },
         8: { width: 600, height: 460 },
         9: { width: 800, height: 400 },
-        10: { width: 800, height: 400 }
+        10: { width: 800, height: 400 },
+        11: { width: 800, height: 400 }
       }
     }
   },
@@ -226,6 +241,9 @@ export default {
     },
     show() {
       this.$modal.show('walk-through')
+    },
+    skip() {
+      this.step = 11
     },
     hide() {
       this.$modal.hide('walk-through')
