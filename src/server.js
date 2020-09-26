@@ -1,3 +1,17 @@
+const fs = require('fs');
+const ON_DEATH = require('death')({uncaughtException: true})
+
+ON_DEATH(function(signal, err) {
+  let logStr = new Date() + ' ' + signal + "\n"
+  if (err.stack) {
+    logStr = '  ' + err.stack + "\n"
+  }
+  fs.appendFile('server.log', logStr, function (err) {
+    if (err) console.log(err);
+    process.exit()
+  });
+})
+
 const app = require('express')()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
