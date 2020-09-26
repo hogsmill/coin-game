@@ -68,28 +68,6 @@ function _loadGame(err, client, db, io, data, debugOn) {
   })
 }
 
-function updateConfig(err, client, db, io, data, field, debugOn) {
-
-  if (debugOn) { console.log('updateInterval', data) }
-
-  db.collection('coinGame').findOne({gameName: data.gameName}, function(err, res) {
-    if (err) throw err
-    if (res) {
-      const gameState = res.gameState
-      const round = gameState.rounds[data.round]
-      if (round.running) {
-        round.time = round.time + 1
-      }
-      gameState[field] = data.value
-      data.gameState = gameState
-      db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
-        if (err) throw err
-        io.emit('updateGameState', data)
-      })
-    }
-  })
-}
-
 function _updateRoles(gameState, roles) {
   gameState.roles = roles
   for (let i = 0; i < gameState.rounds.length; i++) {
@@ -287,7 +265,12 @@ module.exports = {
       if (err) throw err
       if (res) {
         const gameState = res.gameState
-        gameState[field] = data.value
+        if (field.match(/\./)) {
+          const fields = field.split('.')
+          gameState[fields[0]][fields[1]] = data.value
+        } else {
+          gameState[field] = data.value
+        }
         data.gameState = gameState
         db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
           if (err) throw err
