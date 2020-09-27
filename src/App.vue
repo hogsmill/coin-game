@@ -95,6 +95,12 @@ export default {
       this.$store.dispatch('updateHost', true)
     }
 
+    if (params.getParam('game')) {
+      const game = params.getParam('game')
+      this.$store.dispatch('updateGameName', game)
+      localStorage.setItem('gameName-cg', game)
+    }
+
     const gameName = localStorage.getItem('gameName-cg')
     if (gameName) {
       this.$store.dispatch('updateGameName', gameName)
