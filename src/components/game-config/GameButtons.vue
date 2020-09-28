@@ -24,9 +24,6 @@ export default {
     stopped() {
       return this.$store.getters.getStopped
     },
-    denominations() {
-      return this.$store.getters.getDenominations
-    },
     gameName() {
       return this.$store.getters.getGameName
     },

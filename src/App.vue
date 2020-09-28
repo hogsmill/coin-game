@@ -22,7 +22,6 @@
           <app-control :socket="socket" />
         </div>
         <div v-if="showTab == 'game'">
-          <app-game-buttons :socket="socket" />
           <ResultsView :game-state="gameState" :socket="socket" />
         </div>
       </div>
@@ -42,7 +41,6 @@ import Denominations from './components/game-config/Denominations.vue'
 import Roles from './components/game-config/Roles.vue'
 import Players from './components/game-config/Players.vue'
 import Control from './components/game-config/Control.vue'
-import GameButtons from './components/game-config/GameButtons.vue'
 import AboutView from './components/about/AboutView.vue'
 import WalkThroughView from './components/about/WalkThroughView.vue'
 import ResultsView from './components/results/ResultsView.vue'
@@ -55,7 +53,6 @@ export default {
     appRoles: Roles,
     appPlayers: Players,
     appControl: Control,
-    appGameButtons: GameButtons,
     AboutView,
     WalkThroughView,
     MyName,

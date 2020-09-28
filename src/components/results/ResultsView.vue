@@ -1,34 +1,17 @@
 <template>
   <div class="results mb-5">
-    <h2>Results </h2><Learnings :socket="socket" />
+    <Learnings :socket="socket" />
     <div class="narration" />
     <div class="container">
       <table class="table table-striped">
-        <thead>
-          <td :style="{ width: setWidth() }">
-            Round
-          </td>
-          <td v-for="role in gameState.rounds[0]['roles']" :key="role.role" :style="{ width: setWidth() }">
-            <span @click="showNameEdit(role.role)"> {{ role.role }} </span>
-            <div v-if="roleEditing == role.role">
-              <select id="roleSelect" class="form-control" v-model="role.name">
-                <option v-for="(player, index) in gameState.players" :key="index">
-                  {{ player.name }}
-                </option>
-              </select>
-              <button class="btn btn-site-primary mb-2" @click="updateRole(role)">
-                &crarr;
-              </button>
-            </div>
-            <span v-if="roleEditing != role.role && role.name"><br> ({{ role.name }}) </span>
-          </td>
-          <td :style="{ width: setWidth() }">
-            Delivered
-          </td>
-        </thead>
+        <Header :socket="socket" />
         <tbody id="results-table-body">
           <tr v-for="(round, index) in gameState.rounds" :key="index">
-            <td>{{ round.name }}</td>
+            <td>
+              <button :id="round.name + '-button'" class="btn btn-site-primary mb-2" @click="go(index)">
+                Run {{ round.name }}
+              </button>
+            </td>
             <td
               v-for="(role, roleIndex) in gameState.rounds[0].roles"
               :role="role"
@@ -71,18 +54,19 @@
 import stringFuns from '../../lib/stringFuns.js'
 
 import Learnings from './Learnings.vue'
+import Header from './table/Header.vue'
 
 export default {
   name: 'Results',
   components: {
-    Learnings
+    Learnings,
+    Header
   },
   props: [
     'socket'
   ],
   data() {
     return {
-      roleEditing: '',
       coinClasses: {
         1: 'one-p',
         2: 'two-p',
@@ -117,17 +101,6 @@ export default {
     }
   },
   methods: {
-    showNameEdit(role) {
-      this.roleEditing = role
-    },
-    updateRole(role) {
-      this.roleEditing = ''
-      const name = document.getElementById('roleSelect').value
-      this.socket.emit('updateGameRole', {gameName: this.gameName, role: role, name: name})
-    },
-    setWidth() {
-      return 100 / (this.gameState.roles.length + 1) + '%'
-    },
     getClassName(role) {
       return role.role.replace(' ', '-').toLowerCase()
     },
@@ -156,7 +129,10 @@ export default {
       if (this.canPlayCoin(coin, role, round)) {
         this.socket.emit('playCoin', { gameName: this.gameName, coin: coin, role: role.role, round: round.name })
       }
-    }
+    },
+    go(round) {
+      this.socket.emit('startRound', {gameName: this.gameName, round: round})
+    },
   }
 }
 </script>
