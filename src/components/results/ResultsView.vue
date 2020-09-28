@@ -8,9 +8,7 @@
         <tbody id="results-table-body">
           <tr v-for="(round, index) in gameState.rounds" :key="index">
             <td>
-              <button :id="round.name + '-button'" class="btn btn-site-primary mb-2" @click="go(index)">
-                Run {{ round.name }}
-              </button>
+              <RunButton :socket="socket" :round="round" :index="index" />
             </td>
             <td
               v-for="(role, roleIndex) in gameState.rounds[0].roles"
@@ -55,12 +53,14 @@ import stringFuns from '../../lib/stringFuns.js'
 
 import Learnings from './Learnings.vue'
 import Header from './table/Header.vue'
+import RunButton from './table/RunButton.vue'
 
 export default {
   name: 'Results',
   components: {
     Learnings,
-    Header
+    Header,
+    RunButton
   },
   props: [
     'socket'
@@ -129,10 +129,7 @@ export default {
       if (this.canPlayCoin(coin, role, round)) {
         this.socket.emit('playCoin', { gameName: this.gameName, coin: coin, role: role.role, round: round.name })
       }
-    },
-    go(round) {
-      this.socket.emit('startRound', {gameName: this.gameName, round: round})
-    },
+    }
   }
 }
 </script>
