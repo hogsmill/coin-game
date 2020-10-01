@@ -95,9 +95,6 @@ export default {
       }
       return (n / sum) * 100 + '%'
     },
-    updateDenominations() {
-      this.socket.emit('updateDenominations', { gameName: this.gameName, value: this.denominations })
-    },
     updateCurrency() {
       const currency = document.getElementById('currency').value
       this.socket.emit('updateCurrency', { gameName: this.gameName, value: currency })

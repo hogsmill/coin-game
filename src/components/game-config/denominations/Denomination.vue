@@ -19,6 +19,9 @@ export default {
   computed: {
     currency() {
       return this.$store.getters.getCurrency
+    },
+    gameName() {
+      return this.$store.getters.getGameName
     }
   },
   methods: {
@@ -37,7 +40,7 @@ export default {
       return (n / sum) * 100 + '%'
     },
     updateDenominations() {
-      this.socket.emit('updateDenominations', { gameName: this.gameName, value: this.denominations })
+      this.socket.emit('updateDenominations', { gameName: this.gameName, value: stringFuns.stringObjToInt(this.denominations) })
     }
   }
 }

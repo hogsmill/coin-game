@@ -22,6 +22,14 @@ const StringFuns = {
       secs = '0' + secs
     }
     return minutes + ':' + secs
+  },
+
+  stringObjToInt: function(obj) {
+    const keys = Object.keys(obj)
+    for (let i = 0; i < keys.length; i++) {
+      obj[keys[i]] = parseInt(obj[keys[i]])
+    }
+    return obj
   }
 }
 
