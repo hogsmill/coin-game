@@ -59,6 +59,7 @@ function _loadGame(err, client, db, io, data, debugOn) {
       io.emit('updateGameState', {gameName: data.gameName, gameState: res.gameState})
     } else {
       const game = {gameName: data.gameName, gameState: createNewGame()}
+      game.created = new Date().toISOString()
       if (debugOn) { console.log('Created new game \'' + data.gameName + '\'') }
       db.collection('coinGame').insertOne(game, function(err, res) {
         if (err) throw err
