@@ -120,8 +120,10 @@ function _playCoin(err, client, db, io, data, debugOn) {
       const gameState = res.gameState
       const roleN = roleFuns.getRoleNFromName(data.role, gameState.roles)
       const roundN = roundFuns.getRoundNFromName(data.round, gameState.rounds)
-      gameState.rounds[roundN].roles[roleN].coins[data.coin].played = true
-      gameState.rounds[roundN] = coinFuns.moveCoins(gameState.rounds[roundN])
+      if (gameState.rounds[roundN].roles[roleN].coins[data.coin]) {
+        gameState.rounds[roundN].roles[roleN].coins[data.coin].played = true
+        gameState.rounds[roundN] = coinFuns.moveCoins(gameState.rounds[roundN])
+      }
       data.gameState = gameState
       db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
         if (err) throw err

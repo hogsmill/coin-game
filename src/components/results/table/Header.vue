@@ -12,7 +12,9 @@
               {{ player.name }}
             </option>
           </select>
-          <button class="btn btn-site-primary mb-2" @click="updateRole(role)">&crarr;</button>
+          <button class="btn btn-site-primary mb-2" @click="updateRole(role)">
+            &crarr;
+          </button>
         </div>
         <span v-if="roleEditing != role.role && role.name"><br> ({{ role.name }}) </span>
       </td>

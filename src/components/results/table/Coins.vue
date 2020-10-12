@@ -1,11 +1,11 @@
 <template>
   <div v-if="round.running && index == gameState.round && gameState.rounds[index].roles[roleIndex]">
     <div v-for="(coin, coinIndex) in gameState.rounds[index].roles[roleIndex].coins"
-      :coin="coin"
-      :coinIndex="coinIndex"
-      :key="coinIndex"
-      class="coin-parent"
-      @click="playCoin(coinIndex, gameState.rounds[index].roles[roleIndex], gameState.rounds[index])"
+         :coin="coin"
+         :coinIndex="coinIndex"
+         :key="coinIndex"
+         class="coin-parent"
+         @click="playCoin(coinIndex, gameState.rounds[index].roles[roleIndex], gameState.rounds[index])"
     >
       <div
         class="coin"

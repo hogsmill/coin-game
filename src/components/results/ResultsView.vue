@@ -11,8 +11,9 @@
               <RunButton :socket="socket" :round="round" :index="index" />
             </td>
             <td v-for="(role, roleIndex) in gameState.rounds[0].roles"
-              :role="role" :roleIndex="roleIndex" :key="roleIndex">
-              <Coins :socket="socket" :round="round" :role="role" :index="index" :roleIndex="roleIndex" />
+                :role="role" :roleIndex="roleIndex" :key="roleIndex"
+            >
+              <Coins :socket="socket" :round="round" :role="role" :index="index" :role-index="roleIndex" />
             </td>
             <td>
               <div>

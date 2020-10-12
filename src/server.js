@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs')
 const ON_DEATH = require('death')({uncaughtException: true})
 
 ON_DEATH(function(signal, err) {
