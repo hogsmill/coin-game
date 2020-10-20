@@ -64,6 +64,7 @@ function _loadGame(err, client, db, io, data, debugOn) {
       db.collection('coinGame').insertOne(game, function(err, res) {
         if (err) throw err
         io.emit('updateGameState', game)
+        client.close()
       })
     }
   })
@@ -129,6 +130,7 @@ function _playCoin(err, client, db, io, data, debugOn) {
       db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
         if (err) throw err
         io.emit('updateGameState', data)
+        client.close()
       })
     }
   })
@@ -193,6 +195,7 @@ module.exports = {
         db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
           if (err) throw err
           io.emit('updateGameState', data)
+          client.close()
         })
       }
     })
@@ -219,6 +222,7 @@ module.exports = {
         db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
           if (err) throw err
           io.emit('updateGameState', data)
+          client.close()
         })
       }
     })
@@ -278,6 +282,7 @@ module.exports = {
         db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
           if (err) throw err
           io.emit('updateGameState', data)
+          client.close()
         })
       }
     })
@@ -296,6 +301,7 @@ module.exports = {
         db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
           if (err) throw err
           io.emit('updateGameState', data)
+          client.close()
         })
       }
     })
@@ -320,6 +326,7 @@ module.exports = {
         db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
           if (err) throw err
           io.emit('updateGameState', data)
+          client.close()
         })
       }
     })
