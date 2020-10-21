@@ -1,7 +1,6 @@
 const fs = require('fs')
 const ON_DEATH = require('death')({uncaughtException: true})
 
-console.log('dirname', __dirname)
 ON_DEATH(function(signal, err) {
   let logStr = new Date()
   if (signal) {
