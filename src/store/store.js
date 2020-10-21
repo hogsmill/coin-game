@@ -9,6 +9,9 @@ export const store = new Vuex.Store({
     walkThrough: false,
     host: false,
     showTab: 'game',
+    workshop: false,
+    workshopName: '',
+    workshopResults: [],
     gameName: '',
     myName: '',
     clickedRole: {},
@@ -75,6 +78,15 @@ export const store = new Vuex.Store({
     getShowTab: (state) => {
       return state.showTab
     },
+    getWorkshop: (state) => {
+      return state.workshop
+    },
+    getWorkshopName: (state) => {
+      return state.workshopName
+    },
+    getWorkshopResults: (state) => {
+      return state.workshopResults
+    },
     getGameName: (state) => {
       return state.gameName
     },
@@ -113,6 +125,15 @@ export const store = new Vuex.Store({
     updateShowTab: (state, payload) => {
       state.showTab = payload
     },
+    updateWorkshop: (state, payload) => {
+      state.workshop = payload
+    },
+    updateWorkshopName: (state, payload) => {
+      state.workshopName = payload
+    },
+    updateWorkshopResults: (state, payload) => {
+      state.workshopResults = payload.workshopResults
+    },
     updateGameName: (state, payload) => {
       state.gameName = payload
     },
@@ -127,6 +148,10 @@ export const store = new Vuex.Store({
     },
     updateGameState: (state, payload) => {
       state.gameState = payload.gameState
+      if (payload.workshopName) {
+        state.workshop = true
+        state.workshopName = payload.workshopName
+      }
     },
     updateGameStateClickCoins: (state, payload) => {
       state.gameState.clickCoins = payload
@@ -144,6 +169,15 @@ export const store = new Vuex.Store({
     },
     updateShowTab: ({ commit }, payload) => {
       commit('updateShowTab', payload)
+    },
+    updateWorkshop: ({ commit }, payload) => {
+      commit('updateWorkshop', payload)
+    },
+    updateWorkshopName: ({ commit }, payload) => {
+      commit('updateWorkshopName', payload)
+    },
+    updateWorkshopResults: ({ commit }, payload) => {
+      commit('updateWorkshopResults', payload)
     },
     updateGameName: ({ commit }, payload) => {
       commit('updateGameName', payload)

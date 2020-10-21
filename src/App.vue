@@ -69,6 +69,9 @@ export default {
     showTab() {
       return this.$store.getters.getShowTab
     },
+    workshopName() {
+      return this.$store.getters.getWorkshopName
+    },
     gameName() {
       return this.$store.getters.getGameName
     },
@@ -113,6 +116,12 @@ export default {
     this.socket.on('updateGameState', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('updateGameState', data)
+      }
+    })
+
+    this.socket.on('updateWorkshopResults', (data) => {
+      if (this.workshopName == data.workshopName) {
+        this.$store.dispatch('updateWorkshopResults', data)
       }
     })
 

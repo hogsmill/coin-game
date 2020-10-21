@@ -7,22 +7,8 @@
       <div class="mt-4 conclusions" v-if="step == 1">
         <h4>Results</h4>
         <div class="row">
-          <table class="results-table">
-            <thead>
-              <th>Round</th>
-              <th>Time</th>
-              <th>Value Delivered</th>
-              <th>Customer</th>
-            </thead>
-            <tbody>
-              <tr v-for="(round, index) in gameState.rounds" :key="index">
-                <td>{{ round.name }}</td>
-                <td>{{ time(round.time) }}</td>
-                <td>{{ value(round.delivered) }}</td>
-                <td>{{ customer(round) }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <SingleTeam v-if="!workshop" :socket="socket" />
+          <MultipleTeams v-if="workshop" :socket="socket" />
         </div>
       </div>
       <div class="mt-4 conclusions" v-if="step == 2">
@@ -98,9 +84,14 @@
 </template>
 
 <script>
-import stringFuns from '../../lib/stringFuns.js'
+import SingleTeam from './learnings/SingleTeam.vue'
+import MultipleTeams from './learnings/MultipleTeams.vue'
 
 export default {
+  components: {
+    SingleTeam,
+    MultipleTeams
+  },
   props: [
     'socket'
   ],
@@ -110,11 +101,14 @@ export default {
     }
   },
   computed: {
+    workshop() {
+      return this.$store.getters.getWorkshop
+    },
+    workshopName() {
+      return this.$store.getters.getWorkshopName
+    },
     gameState() {
       return this.$store.getters.getGameState
-    },
-    currency() {
-      return this.$store.getters.getCurrency
     }
   },
   mounted() {
@@ -146,6 +140,9 @@ export default {
       return r
     },
     show() {
+      if (this.workshop) {
+        this.socket.emit('getWorkshopResults', { workshopName: this.workshopName })
+      }
       this.socket.emit('showLearnings', { gameName: this.gameName })
     },
     hide() {
@@ -157,42 +154,7 @@ export default {
     },
     _incrementStep() {
       this.step = this.step + 1
-    },
-    time(secs) {
-      return stringFuns.timeString(secs)
-    },
-    value(n) {
-      return stringFuns.htmlDecode(this.currency.major) + stringFuns.valueString(n)
-    },
-    customer(round) {
-      let emoji = ''
-      switch(round.name) {
-        case 'Batch':
-          emoji = '&#128543;'
-          break
-        case 'Kanban':
-          emoji = '&#128529;'
-          break
-        case 'Value First':
-          emoji = '&#128522;'
-          break
-      }
-      return stringFuns.htmlDecode(emoji)
     }
   }
 }
 </script>
-
-<style lang="scss">
-
-  .results-table {
-    font-size: x-large;
-    width: 80%;
-    margin: 20px auto 32px auto;
-
-    th, td {
-      padding: 6px;
-      border: 1px solid;
-    }
-  }
-</style>

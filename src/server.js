@@ -52,18 +52,21 @@ function doDb(fun, data) {
       case 'restartGame':
         dbStore.restartGame(err, client, db, io, data, debugOn)
         break
-        case 'addPlayer':
-          dbStore.addPlayer(err, client, db, io, data, debugOn)
-          break
-        case 'updateGameRole':
-          dbStore.updateGameRole(err, client, db, io, data, debugOn)
-          break
-        case 'startRound':
-          dbStore.startRound(err, client, db, io, data, debugOn)
-          break
-        case 'playCoin':
-          dbStore.playCoin(err, client, db, io, data, debugOn)
-          break
+      case 'getWorkshopResults':
+        dbStore.getWorkshopResults(err, client, db, io, data, debugOn)
+        break
+      case 'addPlayer':
+        dbStore.addPlayer(err, client, db, io, data, debugOn)
+        break
+      case 'updateGameRole':
+        dbStore.updateGameRole(err, client, db, io, data, debugOn)
+        break
+      case 'startRound':
+        dbStore.startRound(err, client, db, io, data, debugOn)
+        break
+      case 'playCoin':
+        dbStore.playCoin(err, client, db, io, data, debugOn)
+        break
 
       // Config
       case 'updateDenominations':
@@ -123,6 +126,8 @@ io.on('connection', (socket) => {
   })
 
   socket.on('loadGame', (data) => { doDb('loadGame', data) })
+
+  socket.on('getWorkshopResults', (data) => { doDb('getWorkshopResults', data) })
 
   socket.on('restartGame', (data) => { doDb('restartGame', data) })
 

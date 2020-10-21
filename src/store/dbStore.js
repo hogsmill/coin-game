@@ -50,15 +50,29 @@ function createNewGame() {
   return gameState
 }
 
+function _updateWorkshopName(res, data, db) {
+  if (!res.workshopName) {
+    res.workshopName = ''
+  }
+  if (data.workshopName) {
+    res.workshopName = data.workshopName
+    db.collection('coinGame').updateOne({'_id': res._id}, {$set: {workshopName: data.workshopName}}, function(err, res) {
+      if (err) throw err
+    })
+  }
+  return res
+}
+
 function _loadGame(err, client, db, io, data, debugOn) {
 
   db.collection('coinGame').findOne({gameName: data.gameName}, function(err, res) {
     if (err) throw err
     if (res) {
       if (debugOn) { console.log('Loading game \'' + data.gameName + '\'') }
-      io.emit('updateGameState', {gameName: data.gameName, gameState: res.gameState})
+      res = _updateWorkshopName(res, data, db)
+      io.emit('updateGameState', {gameName: data.gameName, workshopName: res.workshopName, gameState: res.gameState})
     } else {
-      const game = {gameName: data.gameName, gameState: createNewGame()}
+      const game = {gameName: data.gameName, workshopName: data.workshopName, gameState: createNewGame()}
       game.created = new Date().toISOString()
       if (debugOn) { console.log('Created new game \'' + data.gameName + '\'') }
       db.collection('coinGame').insertOne(game, function(err, res) {
@@ -158,6 +172,20 @@ function playNextCoins(err, client, db, io, data, debugOn) {
   })
 }
 
+function getGameResults(res) {
+  const results = []
+  for (let i = 0; i < res.gameState.rounds.length; i++) {
+    const result = {
+      gameName: res.gameName,
+      name: res.gameState.rounds[i].name,
+      time: res.gameState.rounds[i].time,
+      delivered: res.gameState.rounds[i].delivered
+    }
+    results.push(result)
+  }
+  return results
+}
+
 module.exports = {
 
   loadGame: function(err, client, db, io, data, debugOn) {
@@ -173,6 +201,25 @@ module.exports = {
 
     db.collection('coinGame').deleteMany({gameName: data.gameName}, function(err, res) {
       _loadGame(err, client, db, io, data, debugOn)
+    })
+  },
+
+  getWorkshopResults: function(err, client, db, io, data, debugOn) {
+
+    if (debugOn) { console.log('getWorkshopResults', data) }
+
+    db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, res) {
+      if (err) throw err
+      if (res.length) {
+        const results = []
+        for (let r = 0; r < res.length; r++) {
+          const result = getGameResults(res[r])
+          results.push(result)
+        }
+        data.workshopResults = results
+        io.emit('updateWorkshopResults', data)
+        client.close()
+      }
     })
   },
 
