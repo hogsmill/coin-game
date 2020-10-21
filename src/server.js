@@ -1,6 +1,7 @@
 const fs = require('fs')
 const ON_DEATH = require('death')({uncaughtException: true})
 
+console.log('dirname', __dirname)
 ON_DEATH(function(signal, err) {
   let logStr = new Date()
   if (signal) {
@@ -9,7 +10,7 @@ ON_DEATH(function(signal, err) {
   if (err && err.stack) {
     logStr = logStr + '  ' + err.stack + '\n'
   }
-  fs.appendFile('server.log', logStr, function (err) {
+  fs.appendFile(__dirname + '/server.log', logStr, function (err) {
     if (err) console.log(logStr)
     process.exit()
   })
