@@ -31,7 +31,7 @@ const connectDebugOff = prod
 const debugOn = !prod
 
 const connections = {}
-const maxConnections = 20
+const maxConnections = 500
 
 function emit(event, data) {
   if (debugOn) {

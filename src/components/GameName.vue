@@ -1,10 +1,14 @@
 <template>
   <div class="game-name float-right" v-if="!showAbout">
-    <button class="btn btn-sm btn-secondary smaller-font" v-if="!gameName" @click="show">
+    <button class="btn btn-sm btn-secondary smaller-font" v-if="!gameName && !workshop" @click="show">
       Set Game Name
     </button>
+    <button class="btn btn-sm btn-secondary smaller-font" v-if="!gameName && workshop" @click="show">
+      Set Team Name
+    </button>
     <span v-if="workshopName" @click="show" class="mr-2 mt-2 pointer p-2 bg-light">Workshop: {{ workshopName }}</span>
-    <span v-if="gameName" @click="show" class="mr-2 mt-2 pointer p-2 bg-light">Game: {{ gameName }}</span>
+    <span v-if="gameName && !workshop" @click="show" class="mr-2 mt-2 pointer p-2 bg-light">Game: {{ gameName }}</span>
+    <span v-if="gameName && workshop" @click="show" class="mr-2 mt-2 pointer p-2 bg-light">Team: {{ gameName }}</span>
     <span v-if="gameName" title="Restart Game" class="restart" @click="restartGame">&#8635;</span>
 
     <modal name="set-game-name" :height="240" :classes="['rounded', 'set-game-name']">
@@ -23,7 +27,12 @@
         </div>
       </div>
       <div class="mt-4">
-        <h4>Enter Your Game Name</h4>
+        <h4 v-if="!workshop">
+          Enter Your Game Name
+        </h4>
+        <h4 v-if="workshop">
+          Enter Your Team Name
+        </h4>
         <div class="set-game-name">
           <input type="text" id="game-name" class="form-control" :value="gameName">
           <button class="btn btn-sm btn-secondary smaller-font" @click="saveGameName">
