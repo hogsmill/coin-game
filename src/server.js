@@ -9,7 +9,7 @@ ON_DEATH(function(signal, err) {
   if (err && err.stack) {
     logStr = logStr + '  ' + err.stack + '\n'
   }
-  fs.appendFile(__dirname + '/server.log', logStr, function (err) {
+  fs.appendFile(__dirname + '/../server.log', logStr, function (err) {
     if (err) console.log(logStr)
     process.exit()
   })
