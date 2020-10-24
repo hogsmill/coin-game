@@ -9,9 +9,9 @@
     <tbody>
       <tr v-for="(result, index) in workshopResults" :key="index">
         <td>{{ result[0].gameName }}</td>
-        <td>{{ value(result[0].delivered) }} in {{ time(result[0].time) }}</td>
-        <td>{{ value(result[1].delivered) }} in {{ time(result[1].time) }}</td>
-        <td>{{ value(result[2].delivered) }} in {{ time(result[2].time) }}</td>
+        <td><span v-if="result[0].time > 0">{{ value(result[0].delivered) }} in {{ time(result[0].time) }}</span></td>
+        <td><span v-if="result[0].time > 0">{{ value(result[1].delivered) }} in {{ time(result[1].time) }}</span></td>
+        <td><span v-if="result[0].time > 0">{{ value(result[2].delivered) }} in {{ time(result[2].time) }}</span></td>
       </tr>
     </tbody>
   </table>
