@@ -136,7 +136,7 @@ function _playCoin(err, client, db, io, data, debugOn) {
       const gameState = res.gameState
       const roleN = roleFuns.getRoleNFromName(data.role, gameState.roles)
       const roundN = roundFuns.getRoundNFromName(data.round, gameState.rounds)
-      if (gameState.rounds[roundN].roles[roleN].coins[data.coin]) {
+      if (gameState.rounds[roundN].roles[roleN].coins && gameState.rounds[roundN].roles[roleN].coins[data.coin]) {
         gameState.rounds[roundN].roles[roleN].coins[data.coin].played = true
         gameState.rounds[roundN] = coinFuns.moveCoins(gameState.rounds[roundN])
       }
