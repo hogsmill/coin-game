@@ -46,7 +46,7 @@
           <div class="feedback-form">
             <input type="text" id="email" class="form-control" placeholder="Email (optional)">
             <br>
-            <textarea id="comments" rows="6" class="form-control" placeholder="Your comments"></textarea>
+            <textarea id="comments" rows="6" class="form-control" placeholder="Your comments" />
             <br>
             <button class="btn btn-sm btn-secondary smaller-font" @click="sendFeedback()">
               Send Feedback
@@ -59,7 +59,10 @@
 </template>
 
 <script>
-const axios = require('axios')
+//const axios = require('axios')
+
+import mailFuns from '../lib/mail.js'
+
 
 export default {
   computed: {
@@ -84,19 +87,26 @@ export default {
       this.$modal.hide('feedback')
     },
     sendFeedback() {
-      axios.get('http://agilesimulations.co.uk/mail.php', {
-        data: {
-          action: this.thisGame + 'Feedback',
-          email: encodeURIComponent(document.getElementById('email').value),
-          comments: encodeURIComponent(document.getElementById('comments').value)
-        }
-      })
-      .then(function (response) {
-        console.log(response)
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+      mailFuns.post({
+        action: this.thisGame + 'Feedback',
+        email: encodeURIComponent(document.getElementById('email').value),
+        comments: encodeURIComponent(document.getElementById('comments').value)
+        },
+        'Thanks for your feedback - we appreciate it!'
+      )
+      //axios.get('http://agilesimulations.co.uk/mail.php', {
+      //  data: {
+      //    action: this.thisGame + 'Feedback',
+      //    email: encodeURIComponent(document.getElementById('email').value),
+      //    comments: encodeURIComponent(document.getElementById('comments').value)
+      //  }
+      //})
+      //.then(function (response) {
+      //  console.log(response)
+      //})
+      //.catch(function (error) {
+      //  console.log(error)
+      //})
     }
   }
 }
