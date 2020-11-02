@@ -84,7 +84,7 @@ export default {
       this.$modal.hide('feedback')
     },
     sendFeedback() {
-      axios.get('http://agilesimulations.co.uk/mail.php', {
+      axios.get('/mail.php', {
         action: this.thisGame + 'Feedback',
         email: encodeURIComponent(document.getElementById('email').value),
         comments: encodeURIComponent(document.getElementById('comments').value)
