@@ -84,10 +84,12 @@ export default {
       this.$modal.hide('feedback')
     },
     sendFeedback() {
-      axios.get('/mail.php', {
-        action: this.thisGame + 'Feedback',
-        email: encodeURIComponent(document.getElementById('email').value),
-        comments: encodeURIComponent(document.getElementById('comments').value)
+      axios.get('http://agilesimulations.co.uk/mail.php', {
+        data: {
+          action: this.thisGame + 'Feedback',
+          email: encodeURIComponent(document.getElementById('email').value),
+          comments: encodeURIComponent(document.getElementById('comments').value)
+        }
       })
       .then(function (response) {
         console.log(response)
