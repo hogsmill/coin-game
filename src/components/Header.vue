@@ -88,25 +88,12 @@ export default {
     },
     sendFeedback() {
       mailFuns.post({
-        action: this.thisGame + 'Feedback',
+        action: 'Feedback from ' + this.thisGame,
         email: encodeURIComponent(document.getElementById('email').value),
         comments: encodeURIComponent(document.getElementById('comments').value)
         },
         'Thanks for your feedback - we appreciate it!'
       )
-      //axios.get('http://agilesimulations.co.uk/mail.php', {
-      //  data: {
-      //    action: this.thisGame + 'Feedback',
-      //    email: encodeURIComponent(document.getElementById('email').value),
-      //    comments: encodeURIComponent(document.getElementById('comments').value)
-      //  }
-      //})
-      //.then(function (response) {
-      //  console.log(response)
-      //})
-      //.catch(function (error) {
-      //  console.log(error)
-      //})
     }
   }
 }
