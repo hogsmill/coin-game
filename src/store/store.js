@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
+    thisGame: 'The Coin Game',
     connections: 0,
     walkThrough: false,
     host: false,
@@ -69,6 +70,9 @@ export const store = new Vuex.Store({
     },
   },
   getters: {
+    thisGame: (state) => {
+      return state.thisGame
+    },
     getWalkThrough: (state) => {
       return state.walkThrough
     },

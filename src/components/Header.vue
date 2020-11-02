@@ -26,14 +26,46 @@
         <li class="nav-item" :class="{active: showTab == 'about'}">
           <a class="nav-link pointer" @click="updateShowTab('about')">About</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link pointer" @click="show()">Feedback</a>
+        </li>
       </ul>
+
+      <modal name="feedback" :height="400" :classes="['rounded', 'feedback']">
+        <div class="float-right mr-2 mt-1">
+          <button type="button" class="close" @click="hide" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="mt-4">
+          <h4>Feedback</h4>
+          <p class="feedback-form">
+            Thanks for playing {{ thisGame }}; we'd love to hear any feedback you have
+            so that we can constantly improve things.
+          </p>
+          <div class="feedback-form">
+            <input type="text" id="email" class="form-control" placeholder="Email (optional)">
+            <br>
+            <textarea id="comments" rows="6" class="form-control" placeholder="Your comments"></textarea>
+            <br>
+            <button class="btn btn-sm btn-secondary smaller-font" @click="sendFeedback()">
+              Send Feedback
+            </button>
+          </div>
+        </div>
+      </modal>
     </div>
   </nav>
 </template>
 
 <script>
+const axios = require('axios')
+
 export default {
   computed: {
+    thisGame() {
+      return this.$store.getters.thisGame
+    },
     isHost() {
       return this.$store.getters.getHost
     },
@@ -44,7 +76,42 @@ export default {
   methods: {
     updateShowTab(payload) {
       this.$store.dispatch('updateShowTab', payload)
+    },
+    show () {
+      this.$modal.show('feedback')
+    },
+    hide () {
+      this.$modal.hide('feedback')
+    },
+    sendFeedback() {
+      axios.post('http://agilesimulations.co.uk/mail.php', {
+        action: this.thisGame + 'Feedback',
+        email: encodeURIComponent(document.getElementById('email').value),
+        comments: encodeURIComponent(document.getElementById('comments').value)
+      })
+      .then(function (response) {
+        console.log(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
     }
   }
 }
 </script>
+
+<style>
+  .feedback {
+    letter-spacing: 0;
+    color: #212529;
+  }
+
+  p.feedback-form {
+    margin-bottom: 12px;
+  }
+
+  .feedback-form {
+    width: 80%;
+    margin: 0 auto;
+  }
+</style>
