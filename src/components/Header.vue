@@ -59,10 +59,7 @@
 </template>
 
 <script>
-//const axios = require('axios')
-
 import mailFuns from '../lib/mail.js'
-
 
 export default {
   computed: {
@@ -94,6 +91,7 @@ export default {
         },
         'Thanks for your feedback - we appreciate it!'
       )
+      this.hide()
     }
   }
 }
