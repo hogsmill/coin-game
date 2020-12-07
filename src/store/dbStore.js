@@ -68,12 +68,16 @@ function _loadGame(err, client, db, io, data, debugOn) {
   db.collection('coinGame').findOne({gameName: data.gameName}, function(err, res) {
     if (err) throw err
     if (res) {
+      db.collection('coinGame').updateOne({'_id': res._id}, {$set: {lastaccess: new Date().toISOString()} }, function(err) {
+        if (err) throw err
+      })
       if (debugOn) { console.log('Loading game \'' + data.gameName + '\'') }
       res = _updateWorkshopName(res, data, db)
       io.emit('updateGameState', {gameName: data.gameName, workshopName: res.workshopName, gameState: res.gameState})
     } else {
       const game = {gameName: data.gameName, workshopName: data.workshopName, gameState: createNewGame()}
       game.created = new Date().toISOString()
+      game.lastaccess = new Date().toISOString()
       if (debugOn) { console.log('Created new game \'' + data.gameName + '\'') }
       db.collection('coinGame').insertOne(game, function(err, res) {
         if (err) throw err
