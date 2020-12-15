@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="mb-4">
-    <appHeader />
+    <Header />
     <WalkThroughView />
     <h1>The Coin Game</h1>
     <div v-if="showTab == 'about'">
@@ -16,10 +16,9 @@
           <div class="connections">
             Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
           </div>
-          <app-denominations :socket="socket" />
-          <app-roles :socket="socket" />
-          <app-players :socket="socket" />
-          <app-control :socket="socket" />
+          <Denominations :socket="socket" />
+          <Roles :socket="socket" />
+          <Control :socket="socket" />
         </div>
         <div v-if="showTab == 'game'">
           <ResultsView :game-state="gameState" :socket="socket" />
@@ -39,7 +38,6 @@ import MyName from './components/MyName.vue'
 import GameName from './components/GameName.vue'
 import Denominations from './components/game-config/Denominations.vue'
 import Roles from './components/game-config/Roles.vue'
-import Players from './components/game-config/Players.vue'
 import Control from './components/game-config/Control.vue'
 import AboutView from './components/about/AboutView.vue'
 import WalkThroughView from './components/about/WalkThroughView.vue'
@@ -48,11 +46,10 @@ import ResultsView from './components/results/ResultsView.vue'
 export default {
   name: 'App',
   components: {
-    appHeader: Header,
-    appDenominations: Denominations,
-    appRoles: Roles,
-    appPlayers: Players,
-    appControl: Control,
+    Header,
+    Denominations,
+    Roles,
+    Control,
     AboutView,
     WalkThroughView,
     MyName,
@@ -97,8 +94,18 @@ export default {
 
     if (params.getParam('game')) {
       const game = params.getParam('game')
+      this.$store.dispatch('updateWorkshopName', '')
       this.$store.dispatch('updateGameName', game)
+      this.$store.dispatch('updateWorkshop', false)
       localStorage.setItem('gameName-cg', game)
+    }
+
+    if (params.getParam('workshop')) {
+      const workshop = params.getParam('workshop')
+      this.$store.dispatch('updateGameName', '')
+      this.$store.dispatch('updateWorkshopName', workshop)
+      this.$store.dispatch('updateWorkshop', true)
+      localStorage.setItem('workshopName-cg', workshop)
     }
 
     const gameName = localStorage.getItem('gameName-cg')
@@ -150,9 +157,19 @@ export default {
     max-width: 800px;
     .control-header {
       h5 {
-        width: 50%;
+        width: 90%;
         display: inline-block;
         text-align: left;
+      }
+      .fas {
+        color: #888;
+        font-size: x-large;
+        float: right;
+
+        &:hover {
+          cursor: pointer;
+          color: #5a6268
+        }
       }
       span {
         width: 50%;

@@ -5,8 +5,8 @@
         <h5 class="card-title">
           Denominations and Currency
         </h5>
-        <span v-if="showDenominations" @click="setShowDenominations(false)">&#9650;</span>
-        <span v-if="!showDenominations" @click="setShowDenominations(true)">&#9660;</span>
+        <i v-if="showDenominations" @click="setShowDenominations(false)" title="collapse" class="fas fa-caret-up toggle" />
+        <i v-if="!showDenominations" @click="setShowDenominations(true)" title="expand" class="fas fa-caret-down toggle" />
       </div>
       <div v-if="showDenominations">
         <form class="form-inline denominations">

@@ -5,8 +5,8 @@
         <h5 class="card-title">
           Roles
         </h5>
-        <span v-if="showRoles" @click="setShowRoles(false)">&#9650;</span>
-        <span v-if="!showRoles" @click="setShowRoles(true)">&#9660;</span>
+        <i v-if="showRoles" @click="setShowRoles(false)" title="collapse" class="fas fa-caret-up toggle" />
+        <i v-if="!showRoles" @click="setShowRoles(true)" title="expand" class="fas fa-caret-down toggle" />
       </div>
       <div v-if="showRoles">
         <form class="form-inline" v-for="(role, roleIndex) in gameState.roles" :key="roleIndex">

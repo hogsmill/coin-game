@@ -5,8 +5,8 @@
         <h5 class="card-title">
           Control
         </h5>
-        <span v-if="showControl" @click="setShowControl(false)">&#9650;</span>
-        <span v-if="!showControl" @click="setShowControl(true)">&#9660;</span>
+        <i v-if="showControl" @click="setShowControl(false)" title="collapse" class="fas fa-caret-up toggle" />
+        <i v-if="!showControl" @click="setShowControl(true)" title="expand" class="fas fa-caret-down toggle" />
       </div>
       <div v-if="showControl">
         <form class="control">

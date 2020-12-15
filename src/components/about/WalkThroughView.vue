@@ -137,13 +137,13 @@ export default {
       step: 1,
       default: { width: 600, height: 260 },
       positions: {
-        2: { height: 290 },
-        3: { target: 'batch-button', width: 400, height: 240 },
-        4: { target: 'kanban-button', width: 400, height: 255 },
-        5: { target: 'value-delivery-button', width: 400, height: 380 },
-        6: { width: 400, height: 300 },
-        7: { target: 'results-table-body', width: 600, height: 180 },
-        8: { width: 600, height: 280 }
+        2: { height: 300 },
+        3: { height: 240 },
+        4: { height: 255 },
+        5: { height: 330 },
+        6: { height: 300 },
+        7: { height: 180 },
+        8: { height: 280 }
       }
     }
   },
