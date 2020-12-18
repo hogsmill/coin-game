@@ -528,7 +528,7 @@ module.exports = {
                     gameRes[r].gameState.roles = roleFuns.addNewRole(gameRes[r].gameState.roles, data.role)
                     break
                 }
-                gameRes[r].gameState.rounds = roleFuns.updateRolesInRounds(gameRes[r].gameState.rounds, roles)
+                gameRes[r].gameState.rounds = roleFuns.updateRolesInRounds(gameRes[r].gameState.rounds, gameRes[r].gameState.roles)
                 updateEditingGame(db, io, gameRes[r], data)
               }
             }
