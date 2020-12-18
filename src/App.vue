@@ -2,24 +2,26 @@
   <div id="app" class="mb-4">
     <Header />
     <WalkThroughView />
-    <h1>The Coin Game</h1>
+    <h1>
+      The Coin Game
+    </h1>
+    <h2>
+      <span v-if="workshopName || gameName">(</span>
+      <span v-if="workshopName">{{ workshopName }}</span>
+      <span v-if="!workshopName && gameName">{{ gameName }}</span>
+      <span v-if="workshopName && gameName">, {{ gameName }}</span>
+      <span v-if="myName">, {{ myName.name }}</span>
+      <span v-if="workshopName || gameName">)</span>
+    </h2>
     <div v-if="showTab == 'about'">
       <AboutView />
     </div>
     <div v-if="showTab != 'about'">
       <div class="game-params">
-        <MyName :socket="socket" />
-        <GameName :socket="socket" />
+        <SetGame :socket="socket" />
       </div>
       <div class="container">
-        <div v-if="showTab == 'facilitator'" :class="{'not-host' : !isHost}">
-          <div class="connections">
-            Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
-          </div>
-          <Denominations :socket="socket" />
-          <Roles :socket="socket" />
-          <Control :socket="socket" />
-        </div>
+        <FacilitatorView v-if="showTab == 'facilitator'" :socket="socket" />
         <div v-if="showTab == 'game'">
           <ResultsView :game-state="gameState" :socket="socket" />
         </div>
@@ -34,32 +36,23 @@ import io from 'socket.io-client'
 import params from './lib/params.js'
 
 import Header from './components/Header.vue'
-import MyName from './components/MyName.vue'
-import GameName from './components/GameName.vue'
-import Denominations from './components/game-config/Denominations.vue'
-import Roles from './components/game-config/Roles.vue'
-import Control from './components/game-config/Control.vue'
+import SetGame from './components/SetGame.vue'
 import AboutView from './components/about/AboutView.vue'
 import WalkThroughView from './components/about/WalkThroughView.vue'
+import FacilitatorView from './components/FacilitatorView.vue'
 import ResultsView from './components/results/ResultsView.vue'
 
 export default {
   name: 'App',
   components: {
     Header,
-    Denominations,
-    Roles,
-    Control,
     AboutView,
     WalkThroughView,
-    MyName,
-    GameName,
+    SetGame,
+    FacilitatorView,
     ResultsView
   },
   computed: {
-    isHost() {
-      return this.$store.getters.getHost
-    },
     walkThrough() {
       return this.$store.getters.getWalkThrough
     },
@@ -72,11 +65,11 @@ export default {
     gameName() {
       return this.$store.getters.getGameName
     },
+    myName() {
+      return this.$store.getters.getMyName
+    },
     gameState() {
       return this.$store.getters.getGameState
-    },
-    connections() {
-      return this.$store.getters.getConnections
     }
   },
   created() {
@@ -92,22 +85,20 @@ export default {
       this.$store.dispatch('updateHost', true)
     }
 
-    if (params.getParam('game')) {
-      const game = params.getParam('game')
+    if (params.getParam('workshop')) {
+      const workshop = decodeURIComponent(params.getParam('workshop'))
+      this.$store.dispatch('updateWorkshopName', workshop)
+      this.$store.dispatch('updateGameName', '')
+      localStorage.setItem('workshopName-cg', workshop)
+      this.socket.emit('loadWorkshop', {workshopName: workshop})
+    } else if (params.getParam('game')) {
+      const game = decodeURIComponent(params.getParam('game'))
       this.$store.dispatch('updateWorkshopName', '')
       this.$store.dispatch('updateGameName', game)
       this.$store.dispatch('updateWorkshop', false)
       localStorage.setItem('gameName-cg', game)
     }
-
-    if (params.getParam('workshop')) {
-      const workshop = params.getParam('workshop')
-      this.$store.dispatch('updateGameName', '')
-      this.$store.dispatch('updateWorkshopName', workshop)
-      this.$store.dispatch('updateWorkshop', true)
-      localStorage.setItem('workshopName-cg', workshop)
-    }
-
+/*
     const gameName = localStorage.getItem('gameName-cg')
     if (gameName) {
       this.$store.dispatch('updateGameName', gameName)
@@ -119,6 +110,13 @@ export default {
       myName = JSON.parse(myName)
       this.$store.dispatch('setMyName', myName)
     }
+*/
+
+  this.socket.on('updateWorkshop', (data) => {
+    if (this.workshopName == data.workshopName) {
+      this.$store.dispatch('updateWorkshop', data)
+    }
+  })
 
     this.socket.on('updateGameState', (data) => {
       if (this.gameName == data.gameName) {

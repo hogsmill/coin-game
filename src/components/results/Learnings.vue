@@ -141,16 +141,16 @@ export default {
     },
     show() {
       if (this.workshop) {
-        this.socket.emit('getWorkshopResults', { workshopName: this.workshopName })
+        this.socket.emit('getWorkshopResults', {workshopName: this.workshopName})
       }
-      this.socket.emit('showLearnings', { gameName: this.gameName })
+      this.socket.emit('showLearnings', {gameName: this.gameName})
     },
     hide() {
       this.step = 1
-      this.socket.emit('hideLearnings', { gameName: this.gameName })
+      this.socket.emit('hideLearnings', {gameName: this.gameName})
     },
     incrementStep() {
-      this.socket.emit('incrementLearnings', { gameName: this.gameName })
+      this.socket.emit('incrementLearnings', {gameName: this.gameName})
     },
     _incrementStep() {
       this.step = this.step + 1

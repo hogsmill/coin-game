@@ -48,6 +48,9 @@ function doDb(fun, data) {
     const db = client.db('db')
 
     switch(fun) {
+      case 'loadWorkshop':
+        dbStore.loadWorkshop(err, client, db, io, data, debugOn)
+        break
       case 'loadGame':
         dbStore.loadGame(err, client, db, io, data, debugOn)
         break
@@ -70,15 +73,42 @@ function doDb(fun, data) {
         dbStore.playCoin(err, client, db, io, data, debugOn)
         break
 
-      // Config
-      case 'updateDenominations':
-        dbStore.updateConfig(err, client, db, io, data, 'denominations', debugOn)
+      // Facilitator
+      case 'loadWorkshops':
+        dbStore.loadWorkshops(err, client, db, io, data, debugOn)
+        break
+      case 'loadEditingWorkshop':
+        dbStore.loadEditingWorkshop(err, client, db, io, data, debugOn)
+        break
+      case 'loadEditingGame':
+        dbStore.loadEditingGame(err, client, db, io, data, debugOn)
+        break
+      case 'addGame':
+        dbStore.addGame(err, client, db, io, data, debugOn)
+        break
+      case 'updateDenomination':
+        dbStore.updateCurrency(err, client, db, io, 'denomination', data, debugOn)
         break
       case 'updateCurrency':
-        dbStore.updateCurrency(err, client, db, io, data, debugOn)
+        dbStore.updateCurrency(err, client, db, io, 'currency', data, debugOn)
         break
-      case 'updateRoles':
-        dbStore.updateRoles(err, client, db, io, data, debugOn)
+      case 'setRoleInclude':
+        dbStore.updateRoles(err, client, db, io, 'setRoleInclude', data, debugOn)
+        break
+      case 'moveRoleUp':
+        dbStore.updateRoles(err, client, db, io, 'moveRoleUp', data, debugOn)
+        break
+      case 'moveRoleDown':
+        dbStore.updateRoles(err, client, db, io, 'moveRoleDown', data, debugOn)
+        break
+      case 'updateRoleName':
+        dbStore.updateRoles(err, client, db, io, 'updateRoleName', data, debugOn)
+        break
+      case 'deleteRole':
+        dbStore.updateRoles(err, client, db, io, 'deleteRole', data, debugOn)
+        break
+      case 'addNewRole':
+        dbStore.updateRoles(err, client, db, io, 'addNewRole', data, debugOn)
         break
       case 'updateInterval':
         data.value = parseInt(data.value)
@@ -127,6 +157,8 @@ io.on('connection', (socket) => {
     emit('updateConnections', {connections: connections, maxConnections: maxConnections})
   })
 
+  socket.on('loadWorkshop', (data) => { doDb('loadWorkshop', data) })
+
   socket.on('loadGame', (data) => { doDb('loadGame', data) })
 
   socket.on('getWorkshopResults', (data) => { doDb('getWorkshopResults', data) })
@@ -141,13 +173,31 @@ io.on('connection', (socket) => {
 
   socket.on('playCoin', (data) => { doDb('playCoin', data) })
 
-  // Config
+  // Facilitator
+
+  socket.on('loadWorkshops', (data) => { doDb('loadWorkshops', data) })
+
+  socket.on('loadEditingWorkshop', (data) => { doDb('loadEditingWorkshop', data) })
+
+  socket.on('loadEditingGame', (data) => { doDb('loadEditingGame', data) })
+
+  socket.on('addGame', (data) => { doDb('addGame', data) })
 
   socket.on('updateCurrency', (data) => { doDb('updateCurrency', data) })
 
-  socket.on('updateDenominations', (data) => { doDb('updateDenominations', data) })
+  socket.on('updateDenomination', (data) => { doDb('updateDenomination', data) })
 
-  socket.on('updateRoles', (data) => { doDb('updateRoles', data) })
+  socket.on('setRoleInclude', (data) => { doDb('setRoleInclude', data) })
+
+  socket.on('moveRoleUp', (data) => { doDb('moveRoleUp', data) })
+
+  socket.on('moveRoleDown', (data) => { doDb('moveRoleDown', data) })
+
+  socket.on('updateRoleName', (data) => { doDb('updateRoleName', data) })
+
+  socket.on('deleteRole', (data) => { doDb('deleteRole', data) })
+
+  socket.on('addNewRole', (data) => { doDb('addNewRole', data) })
 
   socket.on('updateInterval', (data) => { doDb('updateInterval', data) })
 
@@ -174,10 +224,6 @@ io.on('connection', (socket) => {
   //socket.on("go", (data) => { emit("go", data) })
 
   socket.on('updateMyName', (data) => { emit('updateMyName', data) })
-
-  //socket.on("addMyNameAsAPlayer", (data) => { emit("addMyNameAsAPlayer", data) })
-
-  //socket.on("updatePlayers", (data) => { emit("updatePlayers", data) })
 
   //socket.on("updateGameState", (data) => { emit("updateGameState", data) })
 

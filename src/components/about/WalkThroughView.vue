@@ -46,7 +46,7 @@
         <p>
           In this round, all coins must be played by a role before being passed
           on <em>en masse</em>. This simulates a batch, or waterfall approach.
-          The round stops after {{ gameState.timeLimit.click }} seconds, and it is
+          The round stops after {{ gameState.config.timeLimit.click }} seconds, and it is
           extremely unlikely that any value will reach the customer in this time.
         </p>
       </div>
@@ -65,7 +65,7 @@
         <h4>Round 3: Value Delivery</h4>
         <p>
           This round is also kanban (coins passed on immediately), but the timer
-          stops <em>after {{ gameState.valueTimeLimit.click }} seconds!</em>. Coins are click highest-value first,
+          stops <em>after {{ gameState.config.valueTimeLimit.click }} seconds!</em>. Coins are click highest-value first,
           however, and the amount of value delivered is recorded.
         </p>
         <p>

@@ -11,13 +11,24 @@ export const store = new Vuex.Store({
     host: false,
     showTab: 'game',
     workshop: false,
+    workshops: [],
+    editing: {
+      workshop: '',
+      game: ''
+    },
     workshopName: '',
     workshopResults: [],
     gameName: '',
     myName: '',
     clickedRole: {},
+    currencies: [],
     gameState: {
-      interval: 250,
+      config: {
+        interval: 250,
+        timeLimit: {demo: 60, click: 120 },
+        valueTimeLimit: {demo: 10, click: 20 },
+        clickOnCoins: true
+     },
       stopped: false,
       currency: { major: '&pound;', minor: 'p'},
       denominations: {
@@ -30,9 +41,6 @@ export const store = new Vuex.Store({
         2: 10,
         1: 20,
       },
-      timeLimit: { demo: 60, click: 120 },
-      valueTimeLimit: { demo: 10, click: 20 },
-      clickOnCoins: true,
       round: 0,
       total: 0,
       valueDelivered: 0,
@@ -82,6 +90,15 @@ export const store = new Vuex.Store({
     getShowTab: (state) => {
       return state.showTab
     },
+    getWorkshops: (state) => {
+      return state.workshops
+    },
+    getEditingWorkshop: (state) => {
+      return state.editing.workshop
+    },
+    getEditingGame: (state) => {
+      return state.editing.game
+    },
     getWorkshop: (state) => {
       return state.workshop
     },
@@ -101,7 +118,7 @@ export const store = new Vuex.Store({
       return state.gameState.players
     },
     getInterval: (state) => {
-      return state.gameState.interval
+      return state.gameState.config.interval
     },
     getStopped: (state) => {
       return state.gameState.stopped
@@ -129,6 +146,15 @@ export const store = new Vuex.Store({
     updateShowTab: (state, payload) => {
       state.showTab = payload
     },
+    updateWorkshops: (state, payload) => {
+      state.workshops = payload
+    },
+    setEditingWorkshop: (state, payload) => {
+      state.editing.workshop = payload
+    },
+    setEditingGame: (state, payload) => {
+      state.editing.game = payload
+    },
     updateWorkshop: (state, payload) => {
       state.workshop = payload
     },
@@ -152,10 +178,6 @@ export const store = new Vuex.Store({
     },
     updateGameState: (state, payload) => {
       state.gameState = payload.gameState
-      if (payload.workshopName) {
-        state.workshop = true
-        state.workshopName = payload.workshopName
-      }
     },
     updateGameStateClickCoins: (state, payload) => {
       state.gameState.clickCoins = payload
@@ -173,6 +195,15 @@ export const store = new Vuex.Store({
     },
     updateShowTab: ({ commit }, payload) => {
       commit('updateShowTab', payload)
+    },
+    updateWorkshops: ({ commit }, payload) => {
+      commit('updateWorkshops', payload)
+    },
+    setEditingWorkshop: ({ commit }, payload) => {
+      commit('setEditingWorkshop', payload)
+    },
+    setEditingGame: ({ commit }, payload) => {
+      commit('setEditingGame', payload)
     },
     updateWorkshop: ({ commit }, payload) => {
       commit('updateWorkshop', payload)

@@ -1,4 +1,23 @@
 
+function swap(roles, a, b) {
+  const role = roles[a]
+  roles[a] = roles[b]
+  roles[b] = role
+  return roles
+}
+
+function roundRoles(roles) {
+  const newRoles = []
+  for (let i = 0; i < roles.length; i++) {
+    newRoles.push({
+      role: roles[i].role,
+      name: '',
+      coins: []
+    })
+  }
+  return newRoles
+}
+
 module.exports = {
 
   getRoleNFromName: function(name, roles) {
@@ -7,6 +26,73 @@ module.exports = {
         return i
       }
     }
-  }
+  },
 
+  setRoleInclude: function(roles, role, include) {
+    const newRoles = []
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i].role == role.role) {
+        roles[i].include = include
+      }
+      newRoles.push(roles[i])
+    }
+    return newRoles
+  },
+
+  moveRoleDown: function(roles, role) {
+    for (let i = 0; i < roles.length + 1; i++) {
+      if (roles[i].role == role.role) {
+        return swap(roles, i, i + 1)
+      }
+    }
+  },
+
+  moveRoleUp: function(roles, role) {
+    for (let i = 0; i < roles.length + 1; i++) {
+      if (roles[i].role == role.role) {
+        return swap(roles, i - 1, i)
+      }
+    }
+  },
+
+  updateRoleName: function(roles, role, newRole) {
+    const newRoles = []
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i].role == role.role) {
+        roles[i].role = newRole
+      }
+      newRoles.push(roles[i])
+    }
+    return newRoles
+  },
+
+  deleteRole: function(roles, role) {
+    const newRoles = []
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i].role != role.role) {
+        newRoles.push(roles[i])
+      }
+    }
+    return newRoles
+  },
+
+  addNewRole: function(roles, role) {
+    const newRoles = JSON.parse(JSON.stringify(roles))
+    newRoles.push({
+      role: role,
+      include: true,
+      name: ''
+    })
+    return newRoles
+  },
+
+  updateRolesInRounds: function(rounds, roles) {
+    const newRounds = []
+    for (let i = 0; i < rounds.length; i++) {
+      const round = rounds[i]
+      round.roles = roundRoles(roles)
+      newRounds.push(round)
+    }
+    return newRounds
+  }
 }

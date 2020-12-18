@@ -78,7 +78,7 @@ export default {
     },
     playCoin(coin, role, round) {
       if (this.canPlayCoin(coin, role, round)) {
-        this.socket.emit('playCoin', { gameName: this.gameName, coin: coin, role: role.role, round: round.name })
+        this.socket.emit('playCoin', {gameName: this.gameName, coin: coin, role: role.role, round: round.name})
       }
     }
   }
