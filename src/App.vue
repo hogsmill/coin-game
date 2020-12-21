@@ -100,7 +100,8 @@ export default {
       this.$store.dispatch('updateGameName', game)
       this.$store.dispatch('updateWorkshop', false)
       localStorage.setItem('gameName-cg', game)
-    } 
+    }
+
 
     const workshopName = localStorage.getItem('workshopName-cg')
     const gameName = localStorage.getItem('gameName-cg')
