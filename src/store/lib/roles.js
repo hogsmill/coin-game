@@ -112,14 +112,12 @@ module.exports = {
   },
 
   updateRolesInRounds: function(rounds, roles) {
-    console.log('Roles', roles)
     const newRounds = []
     for (let i = 0; i < rounds.length; i++) {
       const round = rounds[i]
       round.roles = roundRoles(roles)
       newRounds.push(round)
     }
-    console.log('New Rounds', newRounds)
     return newRounds
   }
 }

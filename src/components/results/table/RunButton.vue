@@ -14,11 +14,14 @@ export default {
   computed: {
     gameName() {
       return this.$store.getters.getGameName
+    },
+    workshopName() {
+      return this.$store.getters.getWorkshopName
     }
   },
   methods: {
     go(round) {
-      this.socket.emit('startRound', {gameName: this.gameName, round: round})
+      this.socket.emit('startRound', {workshopName: this.workshopName, gameName: this.gameName, round: round})
     }
   }
 }

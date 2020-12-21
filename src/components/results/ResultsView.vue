@@ -1,6 +1,7 @@
 <template>
   <div class="results mb-5">
     <Learnings :socket="socket" />
+    <Restart :socket="socket" />
     <div class="narration" />
     <div class="container">
       <table class="table table-striped">
@@ -19,8 +20,11 @@
               <div>
                 {{ value(round.delivered) }} in {{ time(round.time) }}
               </div>
-              <div v-if="outOfTime(round)" class="missed">
+              <div v-if="outOfTime(round)" class="result missed">
                 Out of Time!
+              </div>
+              <div v-if="allDelivered(round)" class="result all-delivered">
+                All Delivered!
               </div>
             </td>
           </tr>
@@ -31,10 +35,12 @@
 </template>
 
 <script>
+import roundFuns from '../../lib/roundFuns.js'
 import stringFuns from '../../lib/stringFuns.js'
 import timeFuns from '../../lib/timeFuns.js'
 
 import Learnings from './Learnings.vue'
+import Restart from './Restart.vue'
 import Header from './table/Header.vue'
 import RunButton from './table/RunButton.vue'
 import Coins from './table/Coins.vue'
@@ -43,6 +49,7 @@ export default {
   name: 'Results',
   components: {
     Learnings,
+    Restart,
     Header,
     RunButton,
     Coins
@@ -70,6 +77,9 @@ export default {
     },
     outOfTime(round) {
       return timeFuns.outOfTime(round, this.gameState)
+    },
+    allDelivered(round) {
+      return roundFuns.allDelivered(round, this.gameState)
     }
   }
 }
@@ -80,10 +90,19 @@ thead {
   font-weight: bold;
 }
 
-.missed {
-  margin-top: 12px;
-  color: red;
-  font-weight: bold;
+.results {
+  .result {
+    margin-top: 12px;
+    font-weight: bold;
+
+    &.missed {
+      color: red;
+    }
+
+    &.all-delivered {
+      color: green;
+    }
+  }
 }
 
 </style>
