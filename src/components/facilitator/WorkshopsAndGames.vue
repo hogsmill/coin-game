@@ -49,7 +49,7 @@
                 <option value="">
                   -- Select --
                 </option>
-                <option v-for="(game, index) in editingWorkshop.games" :key="index"
+                <option v-for="(game, index) in editingWorkshop ? editingWorkshop.games : []" :key="index"
                         :selected="editingGame && game.gameName == editingGame.gameName">
                   {{ game }}
                 </option>
