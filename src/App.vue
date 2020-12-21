@@ -100,12 +100,14 @@ export default {
       this.$store.dispatch('updateGameName', game)
       this.$store.dispatch('updateWorkshop', false)
       localStorage.setItem('gameName-cg', game)
-    }
+    } 
 
+    const workshopName = localStorage.getItem('workshopName-cg')
     const gameName = localStorage.getItem('gameName-cg')
-    if (gameName) {
+    if (workshopName && gameName) {
+      this.$store.dispatch('updateWorkshopName', workshopName)
       this.$store.dispatch('updateGameName', gameName)
-      this.socket.emit('loadGame', {gameName: gameName})
+      this.socket.emit('loadGame', { workshopName: workshopName, gameName: gameName })
     }
 
     let myName = localStorage.getItem('myName-cg')

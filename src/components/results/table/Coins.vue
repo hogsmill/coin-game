@@ -82,8 +82,10 @@ export default {
     canPlayCoin(coin, role, round) {
       let canPlay = true
       if (this.gameState.config.namedRolesClick) {
-        this.socket.emit('status', 'Unable to play that coin - that is not your role...')
         canPlay = role.name == this.myName.name
+        if (!canPlay) {
+          this.socket.emit('status', 'Unable to play that coin - that is not your role...')
+        }
       }
       return canPlay && role.role != 'Customer' && !this.outOfTime(round)
     },

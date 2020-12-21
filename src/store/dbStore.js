@@ -332,7 +332,7 @@ module.exports = {
 
     if (debugOn) { console.log('updateGameRole', data) }
 
-    db.collection('coinGame').findOne({gameName: data.gameName}, function(err, res) {
+    db.collection('coinGame').findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
       if (err) throw err
       if (res) {
         let gameState = res.gameState

@@ -36,6 +36,9 @@ export default {
     }
   },
   computed: {
+    workshopName() {
+      return this.$store.getters.getWorkshopName
+    },
     gameName() {
       return this.$store.getters.getGameName
     },
@@ -53,7 +56,7 @@ export default {
     updateRole(role) {
       this.roleEditing = ''
       const name = document.getElementById('roleSelect').value
-      this.socket.emit('updateGameRole', {gameName: this.gameName, role: role, name: name})
+      this.socket.emit('updateGameRole', { workshopName: this.workshopName, gameName: this.gameName, role: role, name: name })
     },
   }
 }

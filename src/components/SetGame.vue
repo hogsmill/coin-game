@@ -117,7 +117,7 @@ export default {
     _setGame(gameName) {
       localStorage.setItem('gameName-cg', gameName)
       this.$store.dispatch('updateGameName', gameName)
-      this.socket.emit('loadGame', {workshopName: this.workshopName, gameName: gameName})
+      this.socket.emit('loadGame', { workshopName: this.workshopName, gameName: gameName })
     },
     selectGame() {
       const gameName = document.getElementById('selected-game-name').value
@@ -134,12 +134,6 @@ export default {
       })
       localStorage.setItem('myName-cg', JSON.stringify(myName))
       this.$store.dispatch('setMyName', myName)
-    },
-    restartGame() {
-      const restartGame = confirm('Are you sure you want to re-start this game?')
-      if (restartGame) {
-        this.socket.emit('restartGame', {gameName: this.gameName})
-      }
     }
   },
 }

@@ -114,19 +114,19 @@ export default {
   mounted() {
     const self = this
     this.socket.on('showLearnings', (data) => {
-      if (this.gameName == data.gameName) {
+      if (this.scope(data)) {
         self.$modal.show('learnings')
       }
     })
 
     this.socket.on('hideLearnings', (data) => {
-      if (this.gameName == data.gameName) {
+      if (this.scope(data)) {
         self.$modal.hide('learnings')
       }
     })
 
     this.socket.on('incrementLearnings', (data) => {
-      if (this.gameName == data.gameName) {
+      if (this.scope(data)) {
         self._incrementStep()
       }
     })
@@ -139,18 +139,25 @@ export default {
       }
       return r
     },
+    scope(data) {
+      let scope = false
+      if (this.workshopName) {
+        scope = this.workshopName == data.workshopName
+      } else if (this.gameName == data.gameName)
+        scope = this.gameName == data.gameName
+    },
     show() {
       if (this.workshop) {
-        this.socket.emit('getWorkshopResults', {workshopName: this.workshopName})
+        this.socket.emit('getWorkshopResults', { workshopName: this.workshopName })
       }
-      this.socket.emit('showLearnings', {gameName: this.gameName})
+      this.socket.emit('showLearnings', { workshopName: this.workshopName, gameName: this.gameName })
     },
     hide() {
       this.step = 1
-      this.socket.emit('hideLearnings', {gameName: this.gameName})
+      this.socket.emit('hideLearnings', { workshopName: this.workshopName, gameName: this.gameName })
     },
     incrementStep() {
-      this.socket.emit('incrementLearnings', {gameName: this.gameName})
+      this.socket.emit('incrementLearnings', { workshopName: this.workshopName, gameName: this.gameName })
     },
     _incrementStep() {
       this.step = this.step + 1
