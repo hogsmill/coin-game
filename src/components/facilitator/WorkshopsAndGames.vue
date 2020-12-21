@@ -23,10 +23,9 @@
                 </button>
               </div>
               <select id="selected-workshop" @change="selectWorkshop()">
-                <option value="">
-                  -- Select --
-                </option>
-                <option v-for="(workshop, index) in workshops" :key="index" :value="workshop.workshopName ? workshop.workshopName : ''">
+                <option v-for="(workshop, index) in workshops" :key="index"
+                        :value="workshop.workshopName ? workshop.workshopName : ''"
+                        :selected="workshop.workshopName == editingWorkshop.workshopName">
                   {{ workshop.workshopName ? workshop.workshopName : 'No Workshop (Single team Game)' }}
                 </option>
               </select>
@@ -50,7 +49,8 @@
                 <option value="">
                   -- Select --
                 </option>
-                <option v-for="(game, index) in editingWorkshop.games" :key="index">
+                <option v-for="(game, index) in editingWorkshop.games" :key="index"
+                        :selected="editingGame && game.gameName == editingGame.gameName">
                   {{ game }}
                 </option>
               </select>

@@ -1,4 +1,25 @@
 
+const standardRoles = [
+  {name: 'Standard Roles',
+   roles: [
+     { role: 'Product Owner', include: true, name: '' },
+     { role: 'Developer', include: true, name: '' },
+     { role: 'Tester', include: true, name: '' },
+     { role: 'Integrator', include: true, name: '' },
+     { role: 'Customer', include: true, name: '' }
+    ]
+  },
+  {name: 'Standard States',
+   roles: [
+     { role: 'To Do', include: true, name: '' },
+     { role: 'In Progress', include: true, name: '' },
+     { role: 'In Test', include: true, name: '' },
+     { role: 'Demo', include: true, name: '' },
+     { role: 'Customer', include: true, name: '' }
+    ]
+  }
+]
+
 function swap(roles, a, b) {
   const role = roles[a]
   roles[a] = roles[b]
@@ -26,6 +47,10 @@ module.exports = {
         return i
       }
     }
+  },
+
+  getStandardRoles: function() {
+    return standardRoles
   },
 
   setRoleInclude: function(roles, role, include) {

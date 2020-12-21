@@ -98,7 +98,7 @@ export default {
       this.$store.dispatch('updateWorkshop', false)
       localStorage.setItem('gameName-cg', game)
     }
-/*
+
     const gameName = localStorage.getItem('gameName-cg')
     if (gameName) {
       this.$store.dispatch('updateGameName', gameName)
@@ -110,13 +110,12 @@ export default {
       myName = JSON.parse(myName)
       this.$store.dispatch('setMyName', myName)
     }
-*/
 
-  this.socket.on('updateWorkshop', (data) => {
-    if (this.workshopName == data.workshopName) {
-      this.$store.dispatch('updateWorkshop', data)
-    }
-  })
+    this.socket.on('updateWorkshop', (data) => {
+      if (this.workshopName == data.workshopName) {
+        this.$store.dispatch('updateWorkshop', data)
+      }
+    })
 
     this.socket.on('updateGameState', (data) => {
       if (this.gameName == data.gameName) {

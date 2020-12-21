@@ -148,9 +148,15 @@ export const store = new Vuex.Store({
     },
     updateWorkshops: (state, payload) => {
       state.workshops = payload
+      if (!state.editing.workshop) {
+        state.editing.workshop = state.workshops.find(function(w) {
+          return w.workshopName == ''
+        })
+      }
     },
     setEditingWorkshop: (state, payload) => {
       state.editing.workshop = payload
+      state.editing.game = null
     },
     setEditingGame: (state, payload) => {
       state.editing.game = payload

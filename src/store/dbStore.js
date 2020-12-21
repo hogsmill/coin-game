@@ -443,11 +443,8 @@ module.exports = {
         }
         players.push(data.player)
         gameState.players = players
-        data.gameState = gameState
-        db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
-          if (err) throw err
-          _loadEditingGame(err, client, db, io, data, debugOn)
-        })
+        res.gameState = gameState
+        updateEditingGame(db, io, res, data)
       }
     })
   },
@@ -456,22 +453,32 @@ module.exports = {
 
     if (debugOn) { console.log('updateConfig', field, data) }
 
-    db.collection('coinGameWorkshops').findOne({workshopName: data.workshopName}, function(err, res) {
-      if (err) throw err
-      if (res) {
-        res = configFuns.setConfig(res, field, data.value)
-        updateEditingWorkshop(db, io, res)
-      }
-    })
-    db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, gameRes) {
-      if (err) throw err
-      if (gameRes.length) {
-        for (let r = 0; r < gameRes.length; r++) {
-          gameRes[r].gameState = configFuns.setConfig(gameRes[r].gameState, field, data.value)
-          updateEditingGame(db, io, gameRes[r], data)
+    if (data.workshopName) {
+      db.collection('coinGameWorkshops').findOne({workshopName: data.workshopName}, function(err, res) {
+        if (err) throw err
+        if (res) {
+          res = configFuns.setConfig(res, field, data.value)
+          updateEditingWorkshop(db, io, res)
         }
-      }
-    })
+      })
+      db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, gameRes) {
+        if (err) throw err
+        if (gameRes.length) {
+          for (let r = 0; r < gameRes.length; r++) {
+            gameRes[r].gameState = configFuns.setConfig(gameRes[r].gameState, field, data.value)
+            updateEditingGame(db, io, gameRes[r], data)
+          }
+        }
+      })
+    } else {
+      db.collection('coinGame').findOne({workshopName: '', gameName: data.gameName}, function(err, res) {
+        if (err) throw err
+        if (res) {
+          res.gameState = configFuns.setConfig(res.gameState, field, data.value)
+          updateEditingGame(db, io, res, data)
+        }
+      })
+    }
   },
 
   updateRoles: function(err, client, db, io, roleFun, data, debugOn) {
@@ -536,34 +543,34 @@ module.exports = {
         }
       })
     } else {
-      db.collection('coinGame').findOne({gameName: data.gameName}, function(err, res) {
+      console.log('here')
+      db.collection('coinGame').findOne({workshopName: '', gameName: data.gameName}, function(err, res) {
         if (err) throw err
         if (res) {
           let roles
           switch(roleFun) {
             case 'setRoleInclude':
-              roles = roleFuns.setRoleInclude(res.roles, data.role, data.include)
+              res.gameState.roles = roleFuns.setRoleInclude(res.gameState.roles, data.role, data.include)
               break
             case 'moveRoleUp':
-              roles = roleFuns.moveRoleUp(res.roles, data.role)
+              res.gameState.roles = roleFuns.moveRoleUp(res.gameState.roles, data.role)
               break
             case 'moveRoleDown':
-              roles = roleFuns.moveRoleDown(res.roles, data.role)
+              res.gameState.roles = roleFuns.moveRoleDown(res.gameState.roles, data.role)
               break
             case 'updateRoleName':
-              roles = roleFuns.updateRoleName(res.roles, data.role, data.newRole)
+              res.gameState.roles = roleFuns.updateRoleName(res.gameState.roles, data.role, data.newRole)
               break
             case 'deleteRole':
-              roles = roleFuns.deleteRole(res.roles, data.role)
+              res.gameState.roles = roleFuns.deleteRole(res.gameState.roles, data.role)
               break
             case 'addNewRole':
-              roles = roleFuns.addNewRole(res.roles, data.role)
+              res.gameState.roles = roleFuns.addNewRole(res.gameState.roles, data.role)
               break
           }
-          db.collection('coinGame').updateOne({'_id': res._id}, {$set: {roles: roles}}, function(err, res) {
-            if (err) throw err
-            io.emit('setEditingGame', res)
-          })
+          console.log(res.gameState.roles)
+          res.gameState.rounds = roleFuns.updateRolesInRounds(res.gameState.rounds, res.gameState.roles)
+          updateEditingGame(db, io, res, data)
         }
       })
     }
@@ -573,36 +580,53 @@ module.exports = {
 
     if (debugOn) { console.log('updateCurrency', currencyFun, data) }
 
-    db.collection('coinGameWorkshops').findOne({workshopName: data.workshopName}, function(err, res) {
-      if (err) throw err
-      if (res) {
-        switch(currencyFun) {
-          case 'currency':
-            res.currency = currencyFuns.setCurrency(res, data.currency)
-            break
-          case 'denomination':
-            res.denominations = currencyFuns.updateDenomination(res, data.amount, data.number)
-            break
-        }
-        updateEditingWorkshop(db, io, res)
-      }
-    })
-    db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, gameRes) {
-      if (err) throw err
-      if (gameRes.length) {
-        for (let r = 0; r < gameRes.length; r++) {
+    if (data.workshopName) {
+      db.collection('coinGameWorkshops').findOne({workshopName: data.workshopName}, function(err, res) {
+        if (err) throw err
+        if (res) {
           switch(currencyFun) {
             case 'currency':
-              gameRes[r].gameState.currency = currencyFuns.setCurrency(gameRes[r].gameState, data.currency)
+              res.currency = currencyFuns.setCurrency(res, data.currency)
               break
             case 'denomination':
-              gameRes[r].gameState.denominations = currencyFuns.updateDenomination(gameRes[r].gameState, data.amount, data.number)
+              res.denominations = currencyFuns.updateDenomination(res, data.amount, data.number)
               break
           }
-          updateEditingGame(db, io, gameRes[r], data)
+          updateEditingWorkshop(db, io, res)
         }
-      }
-    })
+      })
+      db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, gameRes) {
+        if (err) throw err
+        if (gameRes.length) {
+          for (let r = 0; r < gameRes.length; r++) {
+            switch(currencyFun) {
+              case 'currency':
+                gameRes[r].gameState.currency = currencyFuns.setCurrency(gameRes[r].gameState, data.currency)
+                break
+              case 'denomination':
+                gameRes[r].gameState.denominations = currencyFuns.updateDenomination(gameRes[r].gameState, data.amount, data.number)
+                break
+            }
+            updateEditingGame(db, io, gameRes[r], data)
+          }
+        }
+      })
+    } else {
+      db.collection('coinGame').findOne({workshopName: '', gameName: data.gameName}, function(err, res) {
+        if (err) throw err
+        if (res) {
+          switch(currencyFun) {
+            case 'currency':
+              res.gameState.currency = currencyFuns.setCurrency(res.gameState, data.currency)
+              break
+            case 'denomination':
+              res.gameState.denominations = currencyFuns.updateDenomination(res.gameState, data.amount, data.number)
+              break
+          }
+          updateEditingGame(db, io, res, data)
+        }
+      })
+    }
   }
 
 }
