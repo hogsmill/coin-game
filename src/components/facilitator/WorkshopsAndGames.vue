@@ -15,7 +15,7 @@
             <td>
               <div>
                 <div v-if="editingWorkshop">
-                  Selected: <b>{{ editingWorkshop.workshopName ? editingWorkshop.workshopName : '(None)' }}</b>
+                  Selected: <b>{{ editingWorkshop ? editingWorkshop.workshopName : '(None)' }}</b>
                 </div>
                 <input type="text" id="new-workshop">
                 <button class="btn btn-sm btn-secondary smaller-font" @click="addWorkshop()">
