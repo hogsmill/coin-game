@@ -18,6 +18,7 @@
     </div>
     <div v-if="showTab != 'about'">
       <div class="game-params">
+        <Status :socket="socket" />
         <SetGame :socket="socket" />
       </div>
       <div class="container">
@@ -37,6 +38,7 @@ import params from './lib/params.js'
 
 import Header from './components/Header.vue'
 import SetGame from './components/SetGame.vue'
+import Status from './components/Status.vue'
 import AboutView from './components/about/AboutView.vue'
 import WalkThroughView from './components/about/WalkThroughView.vue'
 import FacilitatorView from './components/FacilitatorView.vue'
@@ -49,6 +51,7 @@ export default {
     AboutView,
     WalkThroughView,
     SetGame,
+    Status,
     FacilitatorView,
     ResultsView
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="game-name float-right" v-if="!showAbout">
+  <div class="game-name" v-if="!showAbout">
     <button class="btn btn-sm btn-secondary smaller-font" @click="show">
       Set Up Game
     </button>
@@ -146,6 +146,12 @@ export default {
 </script>
 
 <style lang="scss">
+
+  .game-name {
+    float: right;
+    width: 110px;
+    display: inline-block;
+  }
 
   .restart {
     margin-right: 12px;

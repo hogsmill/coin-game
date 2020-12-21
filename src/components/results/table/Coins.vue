@@ -52,11 +52,17 @@ export default {
     }
   },
   computed: {
+    workshopName() {
+      return this.$store.getters.getWorkshopName
+    },
     gameName() {
       return this.$store.getters.getGameName
     },
     gameState() {
       return this.$store.getters.getGameState
+    },
+    myName() {
+      return this.$store.getters.getMyName
     }
   },
   methods: {
@@ -74,11 +80,16 @@ export default {
       return timeFuns.outOfTime(round, this.gameState)
     },
     canPlayCoin(coin, role, round) {
-       return role.role != 'Customer' && !this.outOfTime(round)
+      let canPlay = true
+      if (this.gameState.config.namedRolesClick) {
+        this.socket.emit('status', 'Unable to play that coin - that is not your role...')
+        canPlay = role.name == this.myName.name
+      }
+      return canPlay && role.role != 'Customer' && !this.outOfTime(round)
     },
     playCoin(coin, role, round) {
       if (this.canPlayCoin(coin, role, round)) {
-        this.socket.emit('playCoin', {gameName: this.gameName, coin: coin, role: role.role, round: round.name})
+        this.socket.emit('playCoin', {workshopName: this.workshopName, gameName: this.gameName, coin: coin, role: role.role, round: round.name})
       }
     }
   }

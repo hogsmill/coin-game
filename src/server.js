@@ -133,6 +133,9 @@ function doDb(fun, data) {
       case 'updateClickOnCoins':
         dbStore.updateConfig(err, client, db, io, data, 'clickOnCoins', debugOn)
         break
+      case 'updateNamedRolesClick':
+        dbStore.updateConfig(err, client, db, io, data, 'namedRolesClick', debugOn)
+        break
       default:
         console.log('Unknown function ', fun)
     }
@@ -173,6 +176,8 @@ io.on('connection', (socket) => {
 
   socket.on('playCoin', (data) => { doDb('playCoin', data) })
 
+  socket.on('status', (data) => { emit('status', data) })
+
   // Facilitator
 
   socket.on('loadWorkshops', (data) => { doDb('loadWorkshops', data) })
@@ -210,6 +215,8 @@ io.on('connection', (socket) => {
   socket.on('updateClickValueTimeLimit', (data) => { doDb('updateClickValueTimeLimit', data) })
 
   socket.on('updateClickOnCoins', (data) => { doDb('updateClickOnCoins', data) })
+
+  socket.on('updateNamedRolesClick', (data) => { doDb('updateNamedRolesClick', data) })
 
   // Learnings
 

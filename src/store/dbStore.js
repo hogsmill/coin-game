@@ -26,7 +26,8 @@ const config = {
   interval: 250,
   timeLimit: {demo: 60, click: 120 },
   valueTimeLimit: {demo: 10, click: 20 },
-  clickOnCoins: true
+  clickOnCoins: true,
+  namedRolesClick: false
 }
 
 const roles = [

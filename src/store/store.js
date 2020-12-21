@@ -27,7 +27,8 @@ export const store = new Vuex.Store({
         interval: 250,
         timeLimit: {demo: 60, click: 120 },
         valueTimeLimit: {demo: 10, click: 20 },
-        clickOnCoins: true
+        clickOnCoins: true,
+        namedRolesClick: true
      },
       stopped: false,
       currency: { major: '&pound;', minor: 'p'},
@@ -185,9 +186,6 @@ export const store = new Vuex.Store({
     updateGameState: (state, payload) => {
       state.gameState = payload.gameState
     },
-    updateGameStateClickCoins: (state, payload) => {
-      state.gameState.clickCoins = payload
-    },
     updateConnections: (state, payload) => {
       state.connections = payload
     }
@@ -234,9 +232,6 @@ export const store = new Vuex.Store({
     },
     updateGameState: ({ commit }, payload) => {
       commit('updateGameState', payload)
-    },
-    updateGameStateClickCoins: ({ commit }, payload) => {
-      commit('updateGameStateClickCoins', payload)
     },
     updateConnections: ({ commit }, payload) => {
       commit('updateConnections', payload)
