@@ -15,7 +15,7 @@
               Only Named Roles can click coins
             </td>
             <td>
-              <input id="named-roles-click" type="checkbox" :value="editingWorkshop.config.namedRolesClick" @click="updateNamedRolesClick()">
+              <input id="named-roles-click" type="checkbox" :checked="editingWorkshop.config.namedRolesClick" @click="updateNamedRolesClick()">
             </td>
           </tr>
           <tr>
