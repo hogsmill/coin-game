@@ -8,6 +8,7 @@
         <span @click="showNameEdit(role.role)"> {{ role.role }} </span>
         <div v-if="roleEditing == role.role">
           <select id="role-select" v-model="role.name">
+            <option value=""> -- Select -- </option>
             <option v-for="(player, index) in gameState.players" :key="index" :value="player.id">
               {{ player.name }}
             </option>
