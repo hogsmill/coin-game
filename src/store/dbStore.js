@@ -464,6 +464,48 @@ module.exports = {
     })
   },
 
+  changePlayerName: function(err, client, db, io, data, debugOn) {
+
+    if (debugOn) { console.log('changePlayerName', data) }
+
+    db.collection('coinGame').findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
+      if (err) throw err
+      if (res) {
+        const players = [], gameState = res.gameState
+        for (let i = 0; i < gameState.players.length; i++) {
+          const player = gameState.players[i]
+          if (player.id == data.player.id) {
+            player.name = data.newName
+          }
+          players.push(player)
+        }
+        gameState.players = players
+        res.gameState = gameState
+        updateEditingGame(db, io, res, data)
+      }
+    })
+  },
+
+  deletePlayer: function(err, client, db, io, data, debugOn) {
+
+    if (debugOn) { console.log('deletePlayer', data) }
+
+    db.collection('coinGame').findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
+      if (err) throw err
+      if (res) {
+        const players = [], gameState = res.gameState
+        for (let i = 0; i < gameState.players.length; i++) {
+          if (gameState.players[i].id != data.player.id) {
+            players.push(gameState.players[i])
+          }
+        }
+        gameState.players = players
+        res.gameState = gameState
+        updateEditingGame(db, io, res, data)
+      }
+    })
+  },
+
   updateConfig: function(err, client, db, io, data, field, debugOn) {
 
     if (debugOn) { console.log('updateConfig', field, data) }

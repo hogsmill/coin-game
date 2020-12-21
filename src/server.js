@@ -63,6 +63,12 @@ function doDb(fun, data) {
       case 'addPlayer':
         dbStore.addPlayer(err, client, db, io, data, debugOn)
         break
+      case 'changePlayerName':
+        dbStore.changePlayerName(err, client, db, io, data, debugOn)
+        break
+      case 'deletePlayer':
+        dbStore.deletePlayer(err, client, db, io, data, debugOn)
+        break
       case 'updateGameRole':
         dbStore.updateGameRole(err, client, db, io, data, debugOn)
         break
@@ -169,6 +175,10 @@ io.on('connection', (socket) => {
   socket.on('restartGame', (data) => { doDb('restartGame', data) })
 
   socket.on('addPlayer', (data) => { doDb('addPlayer', data) })
+
+  socket.on('changePlayerName', (data) => { doDb('changePlayerName', data) })
+
+  socket.on('deletePlayer', (data) => { doDb('deletePlayer', data) })
 
   socket.on('updateGameRole', (data) => { doDb('updateGameRole', data) })
 

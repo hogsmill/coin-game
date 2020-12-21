@@ -22,10 +22,12 @@
               <table v-if="editingGame" class="player-table">
                 <tr v-for="(player, index) in editingGame.gameState.players" :key="index">
                   <td>
-                    {{ player.name }}
+                    <div class="player-name" v-if="editingPlayer != player.id">{{ player.name }}</div>
+                    <input v-if="editingPlayer == player.id" class="editing-player" :id="'player-' + player.id" type="text" :value="player.name">
                   </td>
                   <td>
-                    <i class="far fa-edit" @click="editPlayer(player)" />
+                    <i v-if="editingPlayer != player.id" class="far fa-edit" @click="editPlayer(player)" />
+                    <i v-if="editingPlayer == player.id" class="far fa-save" @click="changePlayerName(player)" />
                     <i class="far fa-trash-alt" @click="deletePlayer(player)" />
                   </td>
                 </tr>
@@ -47,7 +49,8 @@ export default {
   ],
   data() {
     return {
-      showTeams: false
+      showTeams: false,
+      editingPlayer: ''
     }
   },
   computed: {
@@ -74,6 +77,25 @@ export default {
         this.socket.emit('addPlayer', {workshopName: workshop, gameName: game, player: playerData})
         document.getElementById('new-player').value = ''
       }
+    },
+    editPlayer(player) {
+      this.editingPlayer = player.id
+    },
+    changePlayerName(player) {
+      const workshop = this.editingWorkshop.workshopName
+      const game = this.editingGame.gameName
+      const newName = document.getElementById('player-' + player.id).value
+      this.socket.emit('changePlayerName', { workshopName: workshop, gameName: game, player: player, newName: newName })
+      document.getElementById('player-' + player.id).value = ''
+      this.editingPlayer = ''
+    },
+    deletePlayer(player) {
+      const deletePlayer = confirm('Delete ' + player.name + '?')
+      if (deletePlayer) {
+        const workshop = this.editingWorkshop.workshopName
+        const game = this.editingGame.gameName
+        this.socket.emit('deletePlayer', { workshopName: workshop, gameName: game, player: player })
+      }
     }
   }
 }
@@ -84,6 +106,13 @@ export default {
     td {
       border: none;
       vertical-align: middle;
+
+      .player-name {
+        width: 270px;
+      }
+      .editing-player {
+        margin: 0 0 0 2px;
+      }
     }
   }
 </style>
