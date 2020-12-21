@@ -25,7 +25,7 @@
               <select id="selected-workshop" @change="selectWorkshop()">
                 <option v-for="(workshop, index) in workshops" :key="index"
                         :value="workshop.workshopName ? workshop.workshopName : ''"
-                        :selected="workshop.workshopName == editingWorkshop.workshopName">
+                        :selected="editingWorkshop && workshop.workshopName == editingWorkshop.workshopName">
                   {{ workshop.workshopName ? workshop.workshopName : 'No Workshop (Single team Game)' }}
                 </option>
               </select>
