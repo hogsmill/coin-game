@@ -329,7 +329,6 @@ module.exports = {
         db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
           if (err) throw err
           io.emit('updateGameState', data)
-          client.close()
         })
       }
     })
@@ -339,19 +338,31 @@ module.exports = {
 
     if (debugOn) { console.log('getWorkshopResults', data) }
 
-    db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, res) {
-      if (err) throw err
-      if (res.length) {
-        const results = []
-        for (let r = 0; r < res.length; r++) {
-          const result = getGameResults(res[r])
-          results.push(result)
+    if (data.empty) {
+      db.collection('coinGame').findOne({workshopName: 'None (Single team Game)', gameName: data.gameName}, function(err, res) {
+        if (err) throw err
+        if (res) {
+          const results = [
+            getGameResults(res)
+          ]
+          data.workshopResults = results
+          io.emit('updateWorkshopResults', data)
         }
-        data.workshopResults = results
-        io.emit('updateWorkshopResults', data)
-        client.close()
-      }
-    })
+      })
+    } else {
+      db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, res) {
+        if (err) throw err
+        if (res.length) {
+          const results = []
+          for (let r = 0; r < res.length; r++) {
+            const result = getGameResults(res[r])
+            results.push(result)
+          }
+          data.workshopResults = results
+          io.emit('updateWorkshopResults', data)
+        }
+      })
+    }
   },
 
   updateGameRole: function(err, client, db, io, data, debugOn) {

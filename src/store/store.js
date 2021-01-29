@@ -159,7 +159,6 @@ export const store = new Vuex.Store({
       state.editingGame = payload
     },
     updateWorkshop: (state, payload) => {
-      console.log(payload)
       state.workshop = payload
     },
     updateWorkshopName: (state, payload) => {

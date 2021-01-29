@@ -19,7 +19,12 @@ ON_DEATH(function(signal, err) {
   })
 })
 
-const app = require('express')()
+const express = require('express')
+const cors = require('cors')
+const app = express()
+
+app.use(cors())
+
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 
@@ -245,8 +250,6 @@ io.on('connection', (socket) => {
   socket.on('updateNamedRolesClick', (data) => { doDb('updateNamedRolesClick', data) })
 
   // Learnings
-
-  socket.on('showLearnings', (data) => { emit('showLearnings', data) })
 
   socket.on('hideLearnings', (data) => { emit('hideLearnings', data) })
 

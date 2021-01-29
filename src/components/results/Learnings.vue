@@ -7,8 +7,8 @@
       <div class="mt-4 conclusions" v-if="step == 1">
         <h4>Results</h4>
         <div class="row">
-          <SingleTeam v-if="!workshop" :socket="socket" />
-          <MultipleTeams v-if="workshop" :socket="socket" />
+          <SingleTeam v-if="workshop.empty" :socket="socket" />
+          <MultipleTeams v-if="!workshop.empty" :socket="socket" />
         </div>
       </div>
       <div class="mt-4 conclusions" v-if="step == 2">
@@ -107,26 +107,29 @@ export default {
     workshopName() {
       return this.$store.getters.getWorkshopName
     },
+    gameName() {
+      return this.$store.getters.getGameName
+    },
     gameState() {
       return this.$store.getters.getGameState
     }
   },
   mounted() {
     const self = this
-    this.socket.on('showLearnings', (data) => {
-      if (this.scope(data)) {
+    this.socket.on('updateWorkshopResults', (data) => {
+      if (self.scope(data, self.workshopName, self.gameName)) {
         self.$modal.show('learnings')
       }
     })
 
     this.socket.on('hideLearnings', (data) => {
-      if (this.scope(data)) {
+      if (self.scope(data, self.workshopName, self.gameName)) {
         self.$modal.hide('learnings')
       }
     })
 
     this.socket.on('incrementLearnings', (data) => {
-      if (this.scope(data)) {
+      if (self.scope(data, self.workshopName, self.gameName)) {
         self._incrementStep()
       }
     })
@@ -139,18 +142,13 @@ export default {
       }
       return r
     },
-    scope(data) {
-      let scope = false
-      if (this.workshopName) {
-        scope = this.workshopName == data.workshopName
-      } else if (this.gameName == data.gameName)
-        scope = this.gameName == data.gameName
+    scope(data, workshopName, gameName) {
+      return data.empty
+        ? this.workshop.empty && this.gameName == data.gameName
+        : this.workshopName == data.workshopName && this.gameName == data.gameName
     },
     show() {
-      if (this.workshop) {
-        this.socket.emit('getWorkshopResults', { workshopName: this.workshopName })
-      }
-      this.socket.emit('showLearnings', { workshopName: this.workshopName, gameName: this.gameName })
+      this.socket.emit('getWorkshopResults', { workshopName: this.workshopName, empty: this.workshop.empty, gameName: this.gameName })
     },
     hide() {
       this.step = 1
