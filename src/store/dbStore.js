@@ -73,11 +73,11 @@ function _loadWorkshops(db, io, debugOn) {
   })
 }
 
-function newWorkshop(name, empty, protected) {
+function newWorkshop(name, single, isProtected) {
   return {
     workshopName: name,
-    empty: empty,
-    protected: protected,
+    single: single,
+    isProtected: isProtected,
     currencies: currencies,
     currency: currencies[0],
     denominations: denominations,
@@ -92,12 +92,12 @@ function newWorkshop(name, empty, protected) {
   }
 }
 
-function newGame(workshopName, gameName, protected) {
+function newGame(workshopName, gameName, isProtected) {
   return {
     gameName: gameName,
     workshopName: workshopName,
     gameState: createNewGame(),
-    protected: protected,
+    isProtected: isProtected,
     created: new Date().toISOString(),
     lastaccess: new Date().toISOString()
   }
@@ -338,7 +338,7 @@ module.exports = {
 
     if (debugOn) { console.log('getWorkshopResults', data) }
 
-    if (data.empty) {
+    if (data.single) {
       db.collection('coinGame').findOne({workshopName: 'None (Single team Game)', gameName: data.gameName}, function(err, res) {
         if (err) throw err
         if (res) {
@@ -432,9 +432,9 @@ module.exports = {
 
   checkSystemWorkshops: function(err, client, db, io, debugOn) {
 
-    if (debugOn) { console.log('checkEmptyWorkshop') }
+    if (debugOn) { console.log('checkSystemWorkshops') }
 
-    db.collection('coinGameWorkshops').findOne({empty: true}, function(err, res) {
+    db.collection('coinGameWorkshops').findOne({single: true}, function(err, res) {
       if (err) throw err
       if (!res) {
         const workshop = newWorkshop('None (Single team Game)', true, true)

@@ -28,7 +28,7 @@
                     {{ workshop.workshopName }}
                   </td>
                   <td>
-                    <i v-if="!workshop.protected" @click="deleteWorkshop(workshop.workshopName)" :title="'Delete ' + workshop.workshopName" class="fas fa-trash-alt" />
+                    <i v-if="!workshop.isProtected" @click="deleteWorkshop(workshop.workshopName)" :title="'Delete ' + workshop.workshopName" class="fas fa-trash-alt" />
                   </td>
                 </tr>
               </table>
@@ -36,8 +36,8 @@
           </tr>
           <tr>
             <td>
-              <span v-if="!editingWorkshop.empty">Team</span>
-              <span v-if="editingWorkshop.empty">Game</span>
+              <span v-if="!editingWorkshop.single">Team</span>
+              <span v-if="editingWorkshop.single">Game</span>
             </td>
             <td>
               <div>
@@ -55,7 +55,7 @@
                     {{ game.gameName }}
                   </td>
                   <td>
-                    <i v-if="!game.protected" @click="deleteGame(game.gameName)" :title="'Delete ' + game.gameName" class="fas fa-trash-alt" />
+                    <i v-if="!game.isProtected" @click="deleteGame(game.gameName)" :title="'Delete ' + game.gameName" class="fas fa-trash-alt" />
                   </td>
                 </tr>
               </table>

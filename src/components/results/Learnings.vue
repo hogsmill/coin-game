@@ -7,8 +7,8 @@
       <div class="mt-4 conclusions" v-if="step == 1">
         <h4>Results</h4>
         <div class="row">
-          <SingleTeam v-if="workshop.empty" :socket="socket" />
-          <MultipleTeams v-if="!workshop.empty" :socket="socket" />
+          <SingleTeam v-if="workshop.single" :socket="socket" />
+          <MultipleTeams v-if="!workshop.single" :socket="socket" />
         </div>
       </div>
       <div class="mt-4 conclusions" v-if="step == 2">
@@ -143,12 +143,12 @@ export default {
       return r
     },
     scope(data, workshopName, gameName) {
-      return data.empty
-        ? this.workshop.empty && this.gameName == data.gameName
+      return data.single
+        ? this.workshop.single && this.gameName == data.gameName
         : this.workshopName == data.workshopName && this.gameName == data.gameName
     },
     show() {
-      this.socket.emit('getWorkshopResults', { workshopName: this.workshopName, empty: this.workshop.empty, gameName: this.gameName })
+      this.socket.emit('getWorkshopResults', { workshopName: this.workshopName, single: this.workshop.single, gameName: this.gameName })
     },
     hide() {
       this.step = 1

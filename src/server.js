@@ -20,13 +20,24 @@ ON_DEATH(function(signal, err) {
 })
 
 const express = require('express')
-const cors = require('cors')
 const app = express()
-
-app.use(cors())
-
 const http = require('http').createServer(app)
-const io = require('socket.io')(http)
+const io = require('socket.io')(http, {
+  cors: {
+    origins: ['http://localhost:8098', 'http://agilesimulations.co.uk'],
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
+})
+
+//const express = require('express')
+//const cors = require('cors')
+//const app = express()
+//
+//app.use(cors())
+//
+//const http = require('http').createServer(app)
+//const io = require('socket.io')(http)
 
 const dbStore = require('./store/dbStore.js')
 

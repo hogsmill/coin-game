@@ -62,12 +62,12 @@
 import Selected from './selected/Selected.vue'
 
 export default {
-  props: [
-    'socket'
-  ],
   components: {
     Selected
   },
+  props: [
+    'socket'
+  ],
   data() {
     return {
       showRoles: false

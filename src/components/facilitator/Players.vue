@@ -49,12 +49,12 @@ import { v4 as uuidv4 } from 'uuid'
 import Selected from './selected/Selected.vue'
 
 export default {
-  props: [
-    'socket'
-  ],
   components: {
     Selected
   },
+  props: [
+    'socket'
+  ],
   data() {
     return {
       showTeams: false,
