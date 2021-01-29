@@ -4,7 +4,7 @@
       Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
     </div>
     <WorkshopsAndGames :socket="socket" />
-    <Teams :socket="socket" />
+    <Players :socket="socket" />
     <Roles :socket="socket" />
     <Denominations :socket="socket" />
     <Control :socket="socket" />
@@ -13,7 +13,7 @@
 
 <script>
 import WorkshopsAndGames from './facilitator/WorkshopsAndGames.vue'
-import Teams from './facilitator/Teams.vue'
+import Players from './facilitator/Players.vue'
 import Denominations from './facilitator/Denominations.vue'
 import Roles from './facilitator/Roles.vue'
 import Control from './facilitator/Control.vue'
@@ -21,7 +21,7 @@ import Control from './facilitator/Control.vue'
 export default {
   components: {
     WorkshopsAndGames,
-    Teams,
+    Players,
     Denominations,
     Roles,
     Control
@@ -44,11 +44,8 @@ export default {
     }
   },
   created() {
-    this.socket.emit('loadWorkshops', {})
+    this.socket.emit('loadWorkshops')
 
-    this.socket.on('updateWorkshops', (data) => {
-      this.$store.dispatch('updateWorkshops', data)
-    })
     this.socket.on('setEditingWorkshop', (data) => {
       this.$store.dispatch('setEditingWorkshop', data)
     })

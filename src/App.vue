@@ -88,6 +88,8 @@ export default {
       this.$store.dispatch('updateHost', true)
     }
 
+    this.socket.emit('checkSystemWorkshops')
+
     if (params.getParam('workshop')) {
       const workshop = decodeURIComponent(params.getParam('workshop'))
       this.$store.dispatch('updateWorkshopName', workshop)
@@ -102,7 +104,6 @@ export default {
       localStorage.setItem('gameName-cg', game)
     }
 
-
     const workshopName = localStorage.getItem('workshopName-cg')
     const gameName = localStorage.getItem('gameName-cg')
     if (workshopName && gameName) {
@@ -116,6 +117,10 @@ export default {
       myName = JSON.parse(myName)
       this.$store.dispatch('setMyName', myName)
     }
+
+    this.socket.on('updateWorkshops', (data) => {
+      this.$store.dispatch('updateWorkshops', data)
+    })
 
     this.socket.on('updateWorkshop', (data) => {
       if (this.workshopName == data.workshopName) {

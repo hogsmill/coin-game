@@ -9,6 +9,7 @@
         <i v-if="!showRoles" @click="setShowRoles(true)" title="expand" class="fas fa-caret-down toggle" />
       </div>
       <div v-if="showRoles">
+        <Selected />
         <table class="config-table">
           <!--
           <tr>
@@ -58,10 +59,15 @@
 </template>
 
 <script>
+import Selected from './selected/Selected.vue'
+
 export default {
   props: [
     'socket'
   ],
+  components: {
+    Selected
+  },
   data() {
     return {
       showRoles: false

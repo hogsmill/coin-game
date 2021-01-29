@@ -1,6 +1,6 @@
 <template>
   <div class="game-name" v-if="!showAbout">
-    <button class="btn btn-sm btn-secondary smaller-font" @click="show">
+    <button class="btn btn-sm btn-secondary smaller-font" @click="show()">
       Set Up Game
     </button>
 
@@ -20,9 +20,18 @@
               Workshop
             </td>
             <td>
-              <div>
-                <input type="text" id="workshop-name" class="form-control" :value="workshopName">
-                <i class="fas fa-save" @click="setWorkshop()" />
+              <div v-if="!workshopUrl">
+                <select id="workshop-name" @click="setWorkshop()">
+                  <option>
+                    -- Select --
+                  </option>
+                  <option v-for="(wshop, index) in workshops" :key="index" :value="wshop.workshopName">
+                    {{ wshop.workshopName }}
+                  </option>
+                </select>
+              </div>
+              <div v-if="workshopUrl">
+                <b>{{ workshopUrl }}</b>
               </div>
             </td>
           </tr>
@@ -32,17 +41,18 @@
               <span v-if="!workshopName">Game</span>
             </td>
             <td>
-              <div>
-                <input type="text" id="game-name" class="form-control" :value="gameName">
-                <i class="fas fa-save" @click="setGame()" />
-              </div>
-              <div>
-                <select id="selected-game-name" v-if="workshop.games" @change="selectGame()">
-                  <option>-- Select --</option>
-                  <option v-for="(game, index) in workshop.games" :key="index">
-                    {{ game }}
+              <div v-if="!gameUrl">
+                <select id="game-name" v-if="workshop.games" @change="setGame()">
+                  <option value="">
+                    -- Select --
+                  </option>
+                  <option v-for="(game, index) in workshop.games" :key="index" :value="game.gameName">
+                    {{ game.gameName }}
                   </option>
                 </select>
+              </div>
+              <div v-if="gameUrl">
+                <b>{{ gameUrl }}</b>
               </div>
             </td>
           </tr>
@@ -52,12 +62,10 @@
             </td>
             <td>
               <div>
-                <input type="text" id="my-name" class="form-control" :value="myName.name">
-                <i class="fas fa-save" @click="setWorkshop()" />
-              </div>
-              <div>
-                <select id="selected-player" v-if="players.length" @change="selectMyName()">
-                  <option>-- Select --</option>
+                <select id="my-name" v-if="players.length" @change="setMyName()">
+                  <option value="">
+                    -- Select --
+                  </option>
                   <option v-for="(player, index) in players" :key="index" :value="player.id">
                     {{ player.name }}
                   </option>
@@ -75,13 +83,24 @@
 </template>
 
 <script>
+import params from '../lib/params.js'
+
 export default {
   props: [
     'socket'
   ],
+  data() {
+    return {
+      workshopUrl: '',
+      gameUrl: ''
+    }
+  },
   computed: {
     showAbout() {
       return this.$store.getters.getShowAbout
+    },
+    workshops() {
+      return this.$store.getters.getWorkshops
     },
     workshop() {
       return this.$store.getters.getWorkshop
@@ -99,36 +118,37 @@ export default {
       return this.$store.getters.getMyName
     }
   },
+  created() {
+    this.workshopUrl = params.getParam('workshop')
+    this.gameUrl = params.getParam('game')
+    if (this.gameUrl) {
+      this.workshopUrl = 'None'
+    }
+  },
   methods: {
     show() {
+      this.socket.emit('loadWorkshops')
       this.$modal.show('set-game')
     },
     hide() {
       this.$modal.hide('set-game')
     },
     setWorkshop() {
-      const workshop = document.getElementById('workshop-name').value
+      const workshop = this.workshopUrl ? this.workshopUrl : document.getElementById('workshop-name').value
       localStorage.setItem('workshopName-cg', workshop)
       this.$store.dispatch('updateWorkshopName', workshop)
       this.$store.dispatch('updateGameName', '')
       this.$store.dispatch('setMyName', '')
       this.socket.emit('loadWorkshop', {workshopName: workshop})
     },
-    _setGame(gameName) {
+    setGame() {
+      const gameName = this.gameUrl ? this.gameUrl : document.getElementById('game-name').value
       localStorage.setItem('gameName-cg', gameName)
       this.$store.dispatch('updateGameName', gameName)
       this.socket.emit('loadGame', { workshopName: this.workshopName, gameName: gameName })
     },
-    selectGame() {
-      const gameName = document.getElementById('selected-game-name').value
-      this._setGame(gameName)
-    },
-    setGame() {
-      const gameName = document.getElementById('game-name').value
-      this._setGame(gameName)
-    },
-    selectMyName() {
-      const id = document.getElementById('selected-player').value
+    setMyName() {
+      const id = document.getElementById('my-name').value
       const myName = this.players.find(function(p) {
         return p.id = id
       })

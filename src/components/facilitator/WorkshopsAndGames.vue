@@ -3,7 +3,7 @@
     <div class="card-body">
       <div class="control-header">
         <h5 class="card-title">
-          Workshops and Games (<i>Just select game for single team game</i>)
+          Workshops and Games/Teams
         </h5>
       </div>
       <div>
@@ -14,46 +14,51 @@
             </td>
             <td>
               <div>
-                <div v-if="editingWorkshop">
-                  Selected: <b>{{ editingWorkshop ? editingWorkshop.workshopName : '(None)' }}</b>
-                </div>
                 <input type="text" id="new-workshop">
                 <button class="btn btn-sm btn-secondary smaller-font" @click="addWorkshop()">
                   Add New
                 </button>
               </div>
-              <select id="selected-workshop" @change="selectWorkshop()">
-                <option v-for="(workshop, index) in workshops" :key="index"
-                        :value="workshop.workshopName ? workshop.workshopName : ''"
-                        :selected="editingWorkshop && workshop.workshopName == editingWorkshop.workshopName">
-                  {{ workshop.workshopName ? workshop.workshopName : 'No Workshop (Single team Game)' }}
-                </option>
-              </select>
+              <table class="workshops-table">
+                <tr v-for="(workshop, index) in workshops" :key="index" :class="{ 'selected': workshop.workshopName == editingWorkshop.workshopName }">
+                  <td>
+                    <input :id="'workshop-' + index" type="checkbox" :checked="workshop.workshopName == editingWorkshop.workshopName" @click="selectWorkshop(workshop.workshopName, index)">
+                  </td>
+                  <td>
+                    {{ workshop.workshopName }}
+                  </td>
+                  <td>
+                    <i v-if="!workshop.protected" @click="deleteWorkshop(workshop.workshopName)" :title="'Delete ' + workshop.workshopName" class="fas fa-trash-alt" />
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
           <tr>
             <td>
-              Game/Team
+              <span v-if="!editingWorkshop.empty">Team</span>
+              <span v-if="editingWorkshop.empty">Game</span>
             </td>
             <td>
               <div>
-                <div>
-                  <span v-if="editingGame">Selected: <b>{{ editingGame.gameName }}</b></span>
-                </div>
                 <input type="text" id="new-game">
-                <button class="btn btn-sm btn-secondary smaller-font" @click="addGame()">
+                <button class="btn btn-sm btn-secondary smaller-font" @click="addGame()" :disabled="!editingWorkshop.workshopName">
                   Add New
                 </button>
               </div>
-              <select id="selected-game" @change="selectGame()">
-                <option value="">
-                  -- Select --
-                </option>
-                <option v-for="(game, index) in editingWorkshop ? editingWorkshop.games : []" :key="index"
-                        :selected="editingGame && game.gameName == editingGame.gameName">
-                  {{ game }}
-                </option>
-              </select>
+              <table class="games-table">
+                <tr v-for="(game, index) in editingWorkshopGames" :key="index" :class="{ 'selected': editingGame && game.gameName == editingGame.gameName }">
+                  <td>
+                    <input :id="'game-' + index" type="checkbox" :checked="editingGame && game.gameName == editingGame.gameName" @click="selectGame(game.gameName, index)">
+                  </td>
+                  <td>
+                    {{ game.gameName }}
+                  </td>
+                  <td>
+                    <i v-if="!game.protected" @click="deleteGame(game.gameName)" :title="'Delete ' + game.gameName" class="fas fa-trash-alt" />
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
         </table>
@@ -67,12 +72,20 @@ export default {
   props: [
     'socket'
   ],
+  data() {
+    return {
+      noWorkshopString: 'No Workshop (Single team Game)'
+    }
+  },
   computed: {
     workshops() {
       return this.$store.getters.getWorkshops
     },
     editingWorkshop() {
       return this.$store.getters.getEditingWorkshop
+    },
+    editingWorkshopGames() {
+      return this.$store.getters.getEditingWorkshopGames
     },
     editingGame() {
       return this.$store.getters.getEditingGame
@@ -84,20 +97,23 @@ export default {
       return this.$store.getters.getGameState
     }
   },
+  created() {
+    this.socket.emit('loadEditingWorkshop', {workshopName: ''})
+  },
   methods: {
     addWorkshop() {
       const workshop = document.getElementById('new-workshop').value
       this.socket.emit('loadWorkshop', {workshopName: workshop})
       document.getElementById('new-workshop').value = ''
     },
-    selectWorkshop() {
-      let workshop = document.getElementById('selected-workshop').value
-      if (workshop) {
-        workshop = this.workshops.find(function(w) {
-          return w.workshopName == workshop
-        }).workshopName
+    selectWorkshop(workshop, index) {
+      const checked = document.getElementById('workshop-' + index).checked
+      this.socket.emit('loadEditingWorkshop', {workshopName: checked ? workshop : ''})
+    },
+    deleteWorkshop(workshop) {
+      if (confirm('Delete ' + workshop + '?')) {
+        this.socket.emit('deleteWorkshop', {workshopName: workshop})
       }
-      this.socket.emit('loadEditingWorkshop', {workshopName: workshop})
     },
     addGame() {
       const workshop = this.editingWorkshop.workshopName
@@ -109,14 +125,26 @@ export default {
         document.getElementById('new-game').value = ''
       }
     },
-    selectGame() {
+    selectGame(game, index) {
+      const checked = document.getElementById('game-' + index).checked
       const workshop = this.editingWorkshop.workshopName
-      const game = document.getElementById('selected-game').value
-      this.socket.emit('loadEditingGame', {workshopName: workshop, gameName: game})
-    }
+      this.socket.emit('loadEditingGame', {workshopName: workshop, gameName: checked ? game: ''})
+    },
+    deleteGame(game) {
+      if (confirm('Delete ' + game + '?')) {
+        const workshop = this.editingWorkshop.workshopName
+        this.socket.emit('deleteGame', {workshopName: workshop, gameName: game})
+      }
+    },
   }
 }
 </script>
 
 <style scoped lang="scss">
+  .workshops-table, .games-table {
+    td {
+      border-left: none;
+      border-right: none;
+    }
+  }
 </style>

@@ -3,12 +3,13 @@
     <div class="card-body">
       <div class="control-header">
         <h5 class="card-title">
-          Teams
+          Players
         </h5>
-        <i v-if="showTeams" @click="setShowTeams(false)" title="collapse" class="fas fa-caret-up toggle" />
-        <i v-if="!showTeams" @click="setShowTeams(true)" title="expand" class="fas fa-caret-down toggle" />
+        <i v-if="showTeams && editingGame.gameName" @click="setShowTeams(false)" title="collapse" class="fas fa-caret-up toggle" />
+        <i v-if="!showTeams && editingGame.gameName" @click="setShowTeams(true)" title="expand" class="fas fa-caret-down toggle" />
       </div>
-      <div v-if="showTeams">
+      <div v-if="showTeams && editingGame.gameName">
+        <Selected />
         <table class="config-table">
           <tr>
             <td>Players</td>
@@ -19,10 +20,12 @@
                   Add New
                 </button>
               </div>
-              <table v-if="editingGame" class="player-table">
+              <table class="player-table">
                 <tr v-for="(player, index) in editingGame.gameState.players" :key="index">
                   <td>
-                    <div class="player-name" v-if="editingPlayer != player.id">{{ player.name }}</div>
+                    <div class="player-name" v-if="editingPlayer != player.id">
+                      {{ player.name }}
+                    </div>
                     <input v-if="editingPlayer == player.id" class="editing-player" :id="'player-' + player.id" type="text" :value="player.name">
                   </td>
                   <td>
@@ -43,10 +46,15 @@
 <script>
 import { v4 as uuidv4 } from 'uuid'
 
+import Selected from './selected/Selected.vue'
+
 export default {
   props: [
     'socket'
   ],
+  components: {
+    Selected
+  },
   data() {
     return {
       showTeams: false,
@@ -102,6 +110,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  .inline {
+    display: inline;
+  }
+
   .player-table {
     td {
       border: none;

@@ -4,7 +4,7 @@
     <Restart :socket="socket" />
     <div class="narration" />
     <div class="container">
-      <table class="table table-striped">
+      <table class="table table-striped game-table">
         <Header :socket="socket" />
         <tbody id="results-table-body">
           <tr v-for="(round, index) in gameState.rounds" :key="index">
@@ -86,21 +86,27 @@ export default {
 </script>
 
 <style lang="scss">
-thead {
-  font-weight: bold;
-}
 
-.results {
-  .result {
-    margin-top: 12px;
-    font-weight: bold;
-
-    &.missed {
-      color: red;
+  .game-table {
+    td {
+      border: none;
+    }
+    thead {
+      font-weight: bold;
     }
 
-    &.all-delivered {
-      color: green;
+  .results {
+    .result {
+      margin-top: 12px;
+      font-weight: bold;
+
+      &.missed {
+        color: red;
+      }
+
+      &.all-delivered {
+        color: green;
+      }
     }
   }
 }

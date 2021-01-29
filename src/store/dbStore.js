@@ -73,9 +73,11 @@ function _loadWorkshops(db, io, debugOn) {
   })
 }
 
-function newWorkshop(name) {
+function newWorkshop(name, empty, protected) {
   return {
     workshopName: name,
+    empty: empty,
+    protected: protected,
     currencies: currencies,
     currency: currencies[0],
     denominations: denominations,
@@ -90,11 +92,15 @@ function newWorkshop(name) {
   }
 }
 
-function newGame(workshopName, gameName) {
-  const game = {gameName: gameName, workshopName: workshopName, gameState: createNewGame()}
-  game.created = new Date().toISOString()
-  game.lastaccess = new Date().toISOString()
-  return game
+function newGame(workshopName, gameName, protected) {
+  return {
+    gameName: gameName,
+    workshopName: workshopName,
+    gameState: createNewGame(),
+    protected: protected,
+    created: new Date().toISOString(),
+    lastaccess: new Date().toISOString()
+  }
 }
 
 function _loadWorkshop(err, client, db, io, data, debugOn) {
@@ -102,14 +108,18 @@ function _loadWorkshop(err, client, db, io, data, debugOn) {
   db.collection('coinGameWorkshops').findOne({workshopName: data.workshopName}, function(err, res) {
     if (err) throw err
     if (!res) {
-      const workshop = newWorkshop(data.workshopName)
+      const workshop = newWorkshop(data.workshopName, false, false)
       db.collection('coinGameWorkshops').insertOne(workshop, function(err, res) {
         if (err) throw err
         _loadWorkshops(db, io, debugOn)
         io.emit('updateWorkshop', res)
       })
     } else {
-      io.emit('updateWorkshop', res)
+      db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, gameRes) {
+        if (err) throw err
+        res.games = gameRes
+        io.emit('updateWorkshop', res)
+      })
     }
   })
 }
@@ -134,13 +144,29 @@ function updateEditingGame(db, io, res, data) {
   })
 }
 
-function _loadEditingGame(err, client, db, io, data, debugOn) {
+function _loadEditingWorkshop(db, io, data, debugOn) {
 
-  if (debugOn) { console.log('loadEditingGame', data) }
+  db.collection('coinGameWorkshops').findOne({workshopName: data.workshopName}, function(err, res) {
+    if (err) throw err
+    if (!res) {
+      io.emit('setEditingWorkshop', {})
+    } else {
+      db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, gameRes) {
+        if (err) throw err
+        res.games = gameRes
+        io.emit('setEditingWorkshop', res)
+      })
+    }
+  })
+}
+
+function _loadEditingGame(err, client, db, io, data, debugOn) {
 
   db.collection('coinGame').findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
     if (err) throw err
-    if (res) {
+    if (!res) {
+      io.emit('setEditingGame', {})
+    } else {
       io.emit('setEditingGame', res)
     }
   })
@@ -364,7 +390,7 @@ module.exports = {
     db.collection('coinGame').findOne({gameName: data.gameName}, function(err, res) {
       if (err) throw err
       if (res) {
-        let gameState = res.gameState
+        const gameState = res.gameState
         gameState.round = data.round
         const coins = coinFuns.getCoins(gameState.rounds[data.round].name, gameState.denominations)
         gameState.coins = coins
@@ -393,7 +419,36 @@ module.exports = {
 
   // Facilitator
 
-  loadWorkshops: function(err, client, db, io, data, debugOn) {
+  checkSystemWorkshops: function(err, client, db, io, debugOn) {
+
+    if (debugOn) { console.log('checkEmptyWorkshop') }
+
+    db.collection('coinGameWorkshops').findOne({empty: true}, function(err, res) {
+      if (err) throw err
+      if (!res) {
+        const workshop = newWorkshop('None (Single team Game)', true, true)
+        db.collection('coinGameWorkshops').insertOne(workshop, function(err, res) {
+          if (err) throw err
+        })
+      }
+    })
+
+    db.collection('coinGameWorkshops').findOne({workshopName: 'Demo'}, function(err, res) {
+      if (err) throw err
+      if (!res) {
+        const workshop = newWorkshop('Demo', false, true)
+        db.collection('coinGameWorkshops').insertOne(workshop, function(err, res) {
+          if (err) throw err
+          const game = newGame('Demo', 'Team Eagle', true)
+          db.collection('coinGame').insertOne(game, function(err, res) {
+            if (err) throw err
+          })
+        })
+      }
+    })
+  },
+
+  loadWorkshops: function(err, client, db, io, debugOn) {
 
     if (debugOn) { console.log('loadWorkshops') }
 
@@ -404,11 +459,26 @@ module.exports = {
 
     if (debugOn) { console.log('loadEditingWorkshop', data) }
 
-    db.collection('coinGameWorkshops').findOne({workshopName: data.workshopName}, function(err, res) {
+    _loadEditingWorkshop(db, io, data, debugOn)
+  },
+
+  deleteWorkshop: function(err, client, db, io, data, debugOn) {
+
+    if (debugOn) { console.log('deleteWorkshop', data) }
+
+    db.collection('coinGameWorkshops').deleteOne({workshopName: data.workshopName}, function(err, res) {
       if (err) throw err
-      if (res) {
-        io.emit('setEditingWorkshop', res)
-      }
+      db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, gameRes) {
+        if (err) throw err
+        if (res.length) {
+          for (let r = 0; r > gameRes.length; r++) {
+            db.collection('coinGame').deleteOne({'_id': gameRes[r]._id}, function(err, gameRes) {
+              if (err) throw err
+            })
+          }
+        }
+        _loadWorkshops(db, io, debugOn)
+      })
     })
   },
 
@@ -429,17 +499,25 @@ module.exports = {
         const game = newGame(data.workshopName, data.gameName)
         db.collection('coinGame').insertOne(game, function(err, res) {
           if (err) throw err
-        })
-        db.collection('coinGameWorkshops').findOne({workshopName: data.workshopName}, function(err, res) {
-          if (err) throw err
-          if (res) {
-            const games = res.games
-            games.push(data.gameName)
-            res.games = games
-            updateEditingWorkshop(db, io, res)
-          }
+          db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, gamesRes) {
+            if (err) throw err
+            if (gamesRes.length) {
+              res.games = gamesRes
+              updateEditingWorkshop(db, io, res)
+            }
+          })
         })
       }
+    })
+  },
+
+  deleteGame: function(err, client, db, io, data, debugOn) {
+
+    if (debugOn) { console.log('deleteGame', data) }
+
+    db.collection('coinGame').deleteOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
+      if (err) throw err
+      _loadEditingWorkshop(db, io, data, debugOn)
     })
   },
 

@@ -12,10 +12,8 @@ export const store = new Vuex.Store({
     showTab: 'game',
     workshop: false,
     workshops: [],
-    editing: {
-      workshop: '',
-      game: ''
-    },
+    editingWorkshop: {},
+    editingGame: {},
     workshopName: '',
     workshopResults: [],
     gameName: '',
@@ -95,10 +93,13 @@ export const store = new Vuex.Store({
       return state.workshops
     },
     getEditingWorkshop: (state) => {
-      return state.editing.workshop
+      return state.editingWorkshop
+    },
+    getEditingWorkshopGames: (state) => {
+      return state.editingWorkshop.games
     },
     getEditingGame: (state) => {
-      return state.editing.game
+      return state.editingGame
     },
     getWorkshop: (state) => {
       return state.workshop
@@ -149,20 +150,16 @@ export const store = new Vuex.Store({
     },
     updateWorkshops: (state, payload) => {
       state.workshops = payload
-      if (!state.editing.workshop) {
-        state.editing.workshop = state.workshops.find(function(w) {
-          return w.workshopName == ''
-        })
-      }
     },
     setEditingWorkshop: (state, payload) => {
-      state.editing.workshop = payload
-      state.editing.game = null
+      state.editingWorkshop = payload
+      state.editingGame = {}
     },
     setEditingGame: (state, payload) => {
-      state.editing.game = payload
+      state.editingGame = payload
     },
     updateWorkshop: (state, payload) => {
+      console.log(payload)
       state.workshop = payload
     },
     updateWorkshopName: (state, payload) => {

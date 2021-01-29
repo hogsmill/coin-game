@@ -80,17 +80,27 @@ function doDb(fun, data) {
         break
 
       // Facilitator
+
+      case 'checkSystemWorkshops':
+        dbStore.checkSystemWorkshops(err, client, db, io, debugOn)
+        break
       case 'loadWorkshops':
-        dbStore.loadWorkshops(err, client, db, io, data, debugOn)
+        dbStore.loadWorkshops(err, client, db, io, debugOn)
         break
       case 'loadEditingWorkshop':
         dbStore.loadEditingWorkshop(err, client, db, io, data, debugOn)
+        break
+      case 'deleteWorkshop':
+        dbStore.deleteWorkshop(err, client, db, io, data, debugOn)
         break
       case 'loadEditingGame':
         dbStore.loadEditingGame(err, client, db, io, data, debugOn)
         break
       case 'addGame':
         dbStore.addGame(err, client, db, io, data, debugOn)
+        break
+      case 'deleteGame':
+        dbStore.deleteGame(err, client, db, io, data, debugOn)
         break
       case 'updateDenomination':
         dbStore.updateCurrency(err, client, db, io, 'denomination', data, debugOn)
@@ -174,12 +184,6 @@ io.on('connection', (socket) => {
 
   socket.on('restartGame', (data) => { doDb('restartGame', data) })
 
-  socket.on('addPlayer', (data) => { doDb('addPlayer', data) })
-
-  socket.on('changePlayerName', (data) => { doDb('changePlayerName', data) })
-
-  socket.on('deletePlayer', (data) => { doDb('deletePlayer', data) })
-
   socket.on('updateGameRole', (data) => { doDb('updateGameRole', data) })
 
   socket.on('startRound', (data) => { doDb('startRound', data) })
@@ -190,13 +194,25 @@ io.on('connection', (socket) => {
 
   // Facilitator
 
+  socket.on('checkSystemWorkshops', () => { doDb('checkSystemWorkshops') })
+
   socket.on('loadWorkshops', (data) => { doDb('loadWorkshops', data) })
 
   socket.on('loadEditingWorkshop', (data) => { doDb('loadEditingWorkshop', data) })
 
+  socket.on('deleteWorkshop', (data) => { doDb('deleteWorkshop', data) })
+
   socket.on('loadEditingGame', (data) => { doDb('loadEditingGame', data) })
 
   socket.on('addGame', (data) => { doDb('addGame', data) })
+
+  socket.on('deleteGame', (data) => { doDb('deleteGame', data) })
+
+  socket.on('addPlayer', (data) => { doDb('addPlayer', data) })
+
+  socket.on('changePlayerName', (data) => { doDb('changePlayerName', data) })
+
+  socket.on('deletePlayer', (data) => { doDb('deletePlayer', data) })
 
   socket.on('updateCurrency', (data) => { doDb('updateCurrency', data) })
 
