@@ -16,7 +16,7 @@
             <td>
               <div>
                 <input type="text" id="new-player">
-                <button class="btn btn-sm btn-secondary smaller-font" @click="addPlayer()">
+                <button class="btn btn-sm btn-secondary smaller-font" :disabled="editingGame.isProtected" @click="addPlayer()">
                   Add New
                 </button>
               </div>
@@ -28,7 +28,7 @@
                     </div>
                     <input v-if="editingPlayer == player.id" class="editing-player" :id="'player-' + player.id" type="text" :value="player.name">
                   </td>
-                  <td>
+                  <td v-if="!editingGame.isProtected">
                     <i v-if="editingPlayer != player.id" class="far fa-edit" @click="editPlayer(player)" />
                     <i v-if="editingPlayer == player.id" class="far fa-save" @click="changePlayerName(player)" />
                     <i class="far fa-trash-alt" @click="deletePlayer(player)" />
