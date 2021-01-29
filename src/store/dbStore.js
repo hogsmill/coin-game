@@ -5,6 +5,8 @@ const roleFuns = require('./lib/roles.js')
 const roundFuns = require('./lib/rounds.js')
 const currencyFuns = require('./lib/currency.js')
 
+const { v4: uuidv4 } = require('uuid')
+
 const currencies = [
   {name: 'pound', symbol: '£', major: '&pound;', minor: 'p'},
   {name: 'euro', symbol: '€', major: '&#8364;', minor: 'c'},
@@ -96,6 +98,7 @@ function newGame(workshopName, gameName, isProtected) {
   return {
     gameName: gameName,
     workshopName: workshopName,
+    isProtected: isProtected,
     gameState: createNewGame(),
     isProtected: isProtected,
     created: new Date().toISOString(),
@@ -190,7 +193,6 @@ function _loadGame(err, client, db, io, data, debugOn) {
       db.collection('coinGame').insertOne(game, function(err, res) {
         if (err) throw err
         io.emit('updateGameState', game)
-        client.close()
       })
     }
   })
@@ -434,26 +436,66 @@ module.exports = {
 
     if (debugOn) { console.log('checkSystemWorkshops') }
 
+    const players = [
+      'Steve',
+      'Dolly',
+      'Allan',
+      'Herbert',
+      'Mary'
+    ]
+
+    const singleWorkshopName = 'None (Single team Game)'
+    const multipleWorkshopName = 'Workshop Demo'
+
     db.collection('coinGameWorkshops').findOne({single: true}, function(err, res) {
       if (err) throw err
       if (!res) {
-        const workshop = newWorkshop('None (Single team Game)', true, true)
+        const workshop = newWorkshop(singleWorkshopName, true, true)
         db.collection('coinGameWorkshops').insertOne(workshop, function(err, res) {
           if (err) throw err
+          const game = newGame(singleWorkshopName, 'Demo ', true)
+          const gamePlayers = []
+          for (let j = 0; j < players.length; j++) {
+            gamePlayers.push({
+              id: uuidv4(),
+              name: players[j]
+            })
+          }
+          game.gameState.players = gamePlayers
+          db.collection('coinGame').insertOne(game, function(err, gameRes) {
+            if (err) throw err
+          })
         })
       }
     })
 
-    db.collection('coinGameWorkshops').findOne({workshopName: 'Demo'}, function(err, res) {
+    const teams = [
+      'Eagle',
+      'Dragon',
+      'Tiger',
+      'Lion'
+    ]
+
+    db.collection('coinGameWorkshops').findOne({workshopName: multipleWorkshopName}, function(err, res) {
       if (err) throw err
       if (!res) {
-        const workshop = newWorkshop('Demo', false, true)
+        const workshop = newWorkshop(multipleWorkshopName, false, true)
         db.collection('coinGameWorkshops').insertOne(workshop, function(err, res) {
           if (err) throw err
-          const game = newGame('Demo', 'Team Eagle', true)
-          db.collection('coinGame').insertOne(game, function(err, res) {
-            if (err) throw err
-          })
+          for (let i = 0; i < teams.length; i++) {
+            const game = newGame(multipleWorkshopName, 'Team ' + teams[i], true)
+            const gamePlayers = []
+            for (let j = 0; j < players.length; j++) {
+              gamePlayers.push({
+                id: uuidv4(),
+                name: players[j] + ' ' + teams[i]
+              })
+            }
+            game.gameState.players = gamePlayers
+            db.collection('coinGame').insertOne(game, function(err, gameRes) {
+              if (err) throw err
+            })
+          }
         })
       }
     })

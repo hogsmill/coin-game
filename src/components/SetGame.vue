@@ -22,7 +22,7 @@
             <td>
               <div v-if="!workshopUrl">
                 <select id="workshop-name" @click="setWorkshop()">
-                  <option>
+                  <option value="">
                     -- Select --
                   </option>
                   <option v-for="(wshop, index) in workshops" :key="index" :value="wshop.workshopName">
@@ -139,7 +139,11 @@ export default {
       this.$store.dispatch('updateWorkshopName', workshop)
       this.$store.dispatch('updateGameName', '')
       this.$store.dispatch('setMyName', '')
-      this.socket.emit('loadWorkshop', {workshopName: workshop})
+      if (!workshop) {
+        this.$store.dispatch('updateWorkshop', false)
+      } else {
+        this.socket.emit('loadWorkshop', {workshopName: workshop})
+      }
     },
     setGame() {
       const gameName = this.gameUrl ? this.gameUrl : document.getElementById('game-name').value
