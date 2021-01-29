@@ -5,14 +5,7 @@
     <h1>
       The Coin Game
     </h1>
-    <h2>
-      <span v-if="workshopName || gameName">(</span>
-      <span v-if="workshopName">{{ workshopName }}</span>
-      <span v-if="!workshopName && gameName">{{ gameName }}</span>
-      <span v-if="workshopName && gameName">, {{ gameName }}</span>
-      <span v-if="myName">, {{ myName.name }}</span>
-      <span v-if="workshopName || gameName">)</span>
-    </h2>
+    <HeaderString />
     <div v-if="showTab == 'about'">
       <AboutView />
     </div>
@@ -37,6 +30,7 @@ import io from 'socket.io-client'
 import params from './lib/params.js'
 
 import Header from './components/Header.vue'
+import HeaderString from './components/HeaderString.vue'
 import SetGame from './components/SetGame.vue'
 import Status from './components/Status.vue'
 import AboutView from './components/about/AboutView.vue'
@@ -48,6 +42,7 @@ export default {
   name: 'App',
   components: {
     Header,
+    HeaderString,
     AboutView,
     WalkThroughView,
     SetGame,
