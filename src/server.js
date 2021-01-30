@@ -24,20 +24,11 @@ const app = express()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http, {
   cors: {
-    origins: ['http://localhost:8098', 'http://agilesimulations.co.uk'],
+    origins: ['http://localhost:*', 'http://agilesimulations.co.uk'],
     methods: ['GET', 'POST'],
     credentials: true
   }
 })
-
-//const express = require('express')
-//const cors = require('cors')
-//const app = express()
-//
-//app.use(cors())
-//
-//const http = require('http').createServer(app)
-//const io = require('socket.io')(http)
 
 const dbStore = require('./store/dbStore.js')
 
@@ -65,108 +56,108 @@ function doDb(fun, data) {
 
     switch(fun) {
       case 'loadWorkshop':
-        dbStore.loadWorkshop(err, client, db, io, data, debugOn)
+        dbStore.loadWorkshop(db, io, data, debugOn)
         break
       case 'loadGame':
-        dbStore.loadGame(err, client, db, io, data, debugOn)
+        dbStore.loadGame(db, io, data, debugOn)
         break
       case 'restartGame':
-        dbStore.restartGame(err, client, db, io, data, debugOn)
+        dbStore.restartGame(db, io, data, debugOn)
         break
       case 'getWorkshopResults':
-        dbStore.getWorkshopResults(err, client, db, io, data, debugOn)
+        dbStore.getWorkshopResults(db, io, data, debugOn)
         break
       case 'addPlayer':
-        dbStore.addPlayer(err, client, db, io, data, debugOn)
+        dbStore.addPlayer(db, io, data, debugOn)
         break
       case 'changePlayerName':
-        dbStore.changePlayerName(err, client, db, io, data, debugOn)
+        dbStore.changePlayerName(db, io, data, debugOn)
         break
       case 'deletePlayer':
-        dbStore.deletePlayer(err, client, db, io, data, debugOn)
+        dbStore.deletePlayer(db, io, data, debugOn)
         break
       case 'updateGameRole':
-        dbStore.updateGameRole(err, client, db, io, data, debugOn)
+        dbStore.updateGameRole(db, io, data, debugOn)
         break
       case 'startRound':
-        dbStore.startRound(err, client, db, io, data, debugOn)
+        dbStore.startRound(db, io, data, debugOn)
         break
       case 'playCoin':
-        dbStore.playCoin(err, client, db, io, data, debugOn)
+        dbStore.playCoin(db, io, data, debugOn)
         break
 
       // Facilitator
 
       case 'checkSystemWorkshops':
-        dbStore.checkSystemWorkshops(err, client, db, io, debugOn)
+        dbStore.checkSystemWorkshops(db, io, debugOn)
         break
       case 'loadWorkshops':
-        dbStore.loadWorkshops(err, client, db, io, debugOn)
+        dbStore.loadWorkshops(db, io, debugOn)
         break
       case 'loadEditingWorkshop':
-        dbStore.loadEditingWorkshop(err, client, db, io, data, debugOn)
+        dbStore.loadEditingWorkshop(db, io, data, debugOn)
         break
       case 'deleteWorkshop':
-        dbStore.deleteWorkshop(err, client, db, io, data, debugOn)
+        dbStore.deleteWorkshop(db, io, data, debugOn)
         break
       case 'loadEditingGame':
-        dbStore.loadEditingGame(err, client, db, io, data, debugOn)
+        dbStore.loadEditingGame(db, io, data, debugOn)
         break
       case 'addGame':
-        dbStore.addGame(err, client, db, io, data, debugOn)
+        dbStore.addGame(db, io, data, debugOn)
         break
       case 'deleteGame':
-        dbStore.deleteGame(err, client, db, io, data, debugOn)
+        dbStore.deleteGame(db, io, data, debugOn)
         break
       case 'updateDenomination':
-        dbStore.updateCurrency(err, client, db, io, 'denomination', data, debugOn)
+        dbStore.updateCurrency(db, io, 'denomination', data, debugOn)
         break
       case 'updateCurrency':
-        dbStore.updateCurrency(err, client, db, io, 'currency', data, debugOn)
+        dbStore.updateCurrency(db, io, 'currency', data, debugOn)
         break
       case 'setRoleInclude':
-        dbStore.updateRoles(err, client, db, io, 'setRoleInclude', data, debugOn)
+        dbStore.updateRoles(db, io, 'setRoleInclude', data, debugOn)
         break
       case 'moveRoleUp':
-        dbStore.updateRoles(err, client, db, io, 'moveRoleUp', data, debugOn)
+        dbStore.updateRoles(db, io, 'moveRoleUp', data, debugOn)
         break
       case 'moveRoleDown':
-        dbStore.updateRoles(err, client, db, io, 'moveRoleDown', data, debugOn)
+        dbStore.updateRoles(db, io, 'moveRoleDown', data, debugOn)
         break
       case 'updateRoleName':
-        dbStore.updateRoles(err, client, db, io, 'updateRoleName', data, debugOn)
+        dbStore.updateRoles(db, io, 'updateRoleName', data, debugOn)
         break
       case 'deleteRole':
-        dbStore.updateRoles(err, client, db, io, 'deleteRole', data, debugOn)
+        dbStore.updateRoles(db, io, 'deleteRole', data, debugOn)
         break
       case 'addNewRole':
-        dbStore.updateRoles(err, client, db, io, 'addNewRole', data, debugOn)
+        dbStore.updateRoles(db, io, 'addNewRole', data, debugOn)
         break
       case 'updateInterval':
         data.value = parseInt(data.value)
-        dbStore.updateConfig(err, client, db, io, data, 'interval', debugOn)
+        dbStore.updateConfig(db, io, data, 'interval', debugOn)
         break
       case 'updateDemoTimeLimit':
         data.value = parseInt(data.value)
-        dbStore.updateConfig(err, client, db, io, data, 'timeLimit.demo', debugOn)
+        dbStore.updateConfig(db, io, data, 'timeLimit.demo', debugOn)
         break
       case 'updateClickTimeLimit':
         data.value = parseInt(data.value)
-        dbStore.updateConfig(err, client, db, io, data, 'timeLimit.click', debugOn)
+        dbStore.updateConfig(db, io, data, 'timeLimit.click', debugOn)
         break
       case 'updateDemoValueTimeLimit':
         data.value = parseInt(data.value)
-        dbStore.updateConfig(err, client, db, io, data, 'valueTimeLimit.demo', debugOn)
+        dbStore.updateConfig(db, io, data, 'valueTimeLimit.demo', debugOn)
         break
       case 'updateClickValueTimeLimit':
         data.value = parseInt(data.value)
-        dbStore.updateConfig(err, client, db, io, data, 'valueTimeLimit.click', debugOn)
+        dbStore.updateConfig(db, io, data, 'valueTimeLimit.click', debugOn)
         break
       case 'updateClickOnCoins':
-        dbStore.updateConfig(err, client, db, io, data, 'clickOnCoins', debugOn)
+        dbStore.updateConfig(db, io, data, 'clickOnCoins', debugOn)
         break
       case 'updateNamedRolesClick':
-        dbStore.updateConfig(err, client, db, io, data, 'namedRolesClick', debugOn)
+        dbStore.updateConfig(db, io, data, 'namedRolesClick', debugOn)
         break
       default:
         console.log('Unknown function ', fun)

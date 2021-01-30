@@ -106,7 +106,7 @@ function newGame(workshopName, gameName, isProtected) {
   }
 }
 
-function _loadWorkshop(err, client, db, io, data, debugOn) {
+function _loadWorkshop(db, io, data, debugOn) {
 
   db.collection('coinGameWorkshops').findOne({workshopName: data.workshopName}, function(err, res) {
     if (err) throw err
@@ -163,7 +163,7 @@ function _loadEditingWorkshop(db, io, data, debugOn) {
   })
 }
 
-function _loadEditingGame(err, client, db, io, data, debugOn) {
+function _loadEditingGame(db, io, data, debugOn) {
 
   db.collection('coinGame').findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
     if (err) throw err
@@ -175,7 +175,7 @@ function _loadEditingGame(err, client, db, io, data, debugOn) {
   })
 }
 
-function _loadGame(err, client, db, io, data, debugOn) {
+function _loadGame(db, io, data, debugOn) {
 
   db.collection('coinGame').findOne({gameName: data.gameName}, function(err, res) {
     if (err) throw err
@@ -212,7 +212,7 @@ function _updateRoles(gameState, roles) {
   return gameState
 }
 
-function updateTime(err, client, db, io, data) {
+function updateTime(db, io, data) {
 
   db.collection('coinGame').findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
     if (err) throw err
@@ -235,7 +235,7 @@ function updateTime(err, client, db, io, data) {
         io.emit('updateGameState', data)
         if (running) {
           setTimeout(function() {
-            updateTime(err, client, db, io, data)
+            updateTime(db, io, data)
           }, 1000)
         }
       })
@@ -243,7 +243,7 @@ function updateTime(err, client, db, io, data) {
   })
 }
 
-function _playCoin(err, client, db, io, data, debugOn) {
+function _playCoin(db, io, data, debugOn) {
 
   if (debugOn) { console.log('playCoin', data) }
 
@@ -261,13 +261,12 @@ function _playCoin(err, client, db, io, data, debugOn) {
       db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
         if (err) throw err
         io.emit('updateGameState', data)
-        client.close()
       })
     }
   })
 }
 
-function playNextCoins(err, client, db, io, data, debugOn) {
+function playNextCoins(db, io, data, debugOn) {
 
   if (debugOn || true) { console.log('playNextCoins') } //data) }
 
@@ -283,7 +282,7 @@ function playNextCoins(err, client, db, io, data, debugOn) {
       //round = coinFuns.moveCoins(round)
 
       setTimeout(function() {
-        playNextCoins(err, client, db, io, data, debugOn)
+        playNextCoins(db, io, data, debugOn)
       }, gameState.config.interval)
     }
   })
@@ -305,21 +304,21 @@ function getGameResults(res) {
 
 module.exports = {
 
-  loadWorkshop: function(err, client, db, io, data, debugOn) {
+  loadWorkshop: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('loadWorkshop', data) }
 
-    _loadWorkshop(err, client, db, io, data, debugOn)
+    _loadWorkshop(db, io, data, debugOn)
   },
 
-  loadGame: function(err, client, db, io, data, debugOn) {
+  loadGame: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('loadGame', data) }
 
-    _loadGame(err, client, db, io, data, debugOn)
+    _loadGame(db, io, data, debugOn)
   },
 
-  restartGame: function(err, client, db, io, data, debugOn) {
+  restartGame: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('restartGame', data) }
 
@@ -336,7 +335,7 @@ module.exports = {
     })
   },
 
-  getWorkshopResults: function(err, client, db, io, data, debugOn) {
+  getWorkshopResults: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('getWorkshopResults', data) }
 
@@ -367,7 +366,7 @@ module.exports = {
     }
   },
 
-  updateGameRole: function(err, client, db, io, data, debugOn) {
+  updateGameRole: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('updateGameRole', data) }
 
@@ -390,13 +389,12 @@ module.exports = {
         db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
           if (err) throw err
           io.emit('updateGameState', data)
-          client.close()
         })
       }
     })
   },
 
-  startRound: function(err, client, db, io, data, debugOn) {
+  startRound: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('startRound', data) }
 
@@ -414,25 +412,25 @@ module.exports = {
         db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
           if (err) throw err
           io.emit('updateGameState', data)
-          updateTime(err, client, db, io, data)
+          updateTime(db, io, data)
           if (!gameState.config.clickOnCoins) {
-            playNextCoins(err, client, db, io, data, debugOn)
+            playNextCoins(db, io, data, debugOn)
           }
         })
       }
     })
   },
 
-  playCoin: function(err, client, db, io, data, debugOn) {
+  playCoin: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('playCoin', data) }
 
-    _playCoin(err, client, db, io, data, debugOn)
+    _playCoin(db, io, data, debugOn)
   },
 
   // Facilitator
 
-  checkSystemWorkshops: function(err, client, db, io, debugOn) {
+  checkSystemWorkshops: function(db, io, debugOn) {
 
     if (debugOn) { console.log('checkSystemWorkshops') }
 
@@ -501,21 +499,21 @@ module.exports = {
     })
   },
 
-  loadWorkshops: function(err, client, db, io, debugOn) {
+  loadWorkshops: function(db, io, debugOn) {
 
     if (debugOn) { console.log('loadWorkshops') }
 
     _loadWorkshops(db, io, debugOn)
   },
 
-  loadEditingWorkshop: function(err, client, db, io, data, debugOn) {
+  loadEditingWorkshop: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('loadEditingWorkshop', data) }
 
     _loadEditingWorkshop(db, io, data, debugOn)
   },
 
-  deleteWorkshop: function(err, client, db, io, data, debugOn) {
+  deleteWorkshop: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('deleteWorkshop', data) }
 
@@ -535,14 +533,14 @@ module.exports = {
     })
   },
 
-  loadEditingGame: function(err, client, db, io, data, debugOn) {
+  loadEditingGame: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('loadEditingGame', data) }
 
-    _loadEditingGame(err, client, db, io, data, debugOn)
+    _loadEditingGame(db, io, data, debugOn)
   },
 
-  addGame: function(err, client, db, io, data, debugOn) {
+  addGame: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('addGame', data) }
 
@@ -564,7 +562,7 @@ module.exports = {
     })
   },
 
-  deleteGame: function(err, client, db, io, data, debugOn) {
+  deleteGame: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('deleteGame', data) }
 
@@ -574,7 +572,7 @@ module.exports = {
     })
   },
 
-  addPlayer: function(err, client, db, io, data, debugOn) {
+  addPlayer: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('addPlayer', data) }
 
@@ -595,7 +593,7 @@ module.exports = {
     })
   },
 
-  changePlayerName: function(err, client, db, io, data, debugOn) {
+  changePlayerName: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('changePlayerName', data) }
 
@@ -617,7 +615,7 @@ module.exports = {
     })
   },
 
-  deletePlayer: function(err, client, db, io, data, debugOn) {
+  deletePlayer: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('deletePlayer', data) }
 
@@ -637,7 +635,7 @@ module.exports = {
     })
   },
 
-  updateConfig: function(err, client, db, io, data, field, debugOn) {
+  updateConfig: function(db, io, data, field, debugOn) {
 
     if (debugOn) { console.log('updateConfig', field, data) }
 
@@ -669,7 +667,7 @@ module.exports = {
     }
   },
 
-  updateRoles: function(err, client, db, io, roleFun, data, debugOn) {
+  updateRoles: function(db, io, roleFun, data, debugOn) {
 
     if (debugOn) { console.log('updateRoles', roleFun, data) }
 
@@ -762,7 +760,7 @@ module.exports = {
     }
   },
 
-  updateCurrency: function(err, client, db, io, currencyFun, data, debugOn) {
+  updateCurrency: function(db, io, currencyFun, data, debugOn) {
 
     if (debugOn) { console.log('updateCurrency', currencyFun, data) }
 
