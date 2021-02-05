@@ -1,5 +1,5 @@
 <template>
-  <div class="game-name" v-if="!showAbout">
+  <div class="game-name" v-if="showTab == 'game'">
     <button class="btn btn-sm btn-secondary smaller-font" @click="show()">
       Set Up Game
     </button>
@@ -25,7 +25,7 @@
                   <option value="">
                     -- Select --
                   </option>
-                  <option v-for="(wshop, index) in workshops" :key="index" :value="wshop.workshopName">
+                  <option v-for="(wshop, index) in workshops" :key="index" :selected="wshop.workshopName == workshopName">
                     {{ wshop.workshopName }}
                   </option>
                 </select>
@@ -37,8 +37,8 @@
           </tr>
           <tr>
             <td>
-              <span v-if="workshopName">Team</span>
-              <span v-if="!workshopName">Game</span>
+              <span v-if="!workshop.single">Team</span>
+              <span v-if="workshop.single">Game</span>
             </td>
             <td>
               <div v-if="!gameUrl">
@@ -46,7 +46,7 @@
                   <option value="">
                     -- Select --
                   </option>
-                  <option v-for="(game, index) in workshop.games" :key="index" :value="game.gameName">
+                  <option v-for="(game, index) in workshop.games" :key="index" :selected="game.gameName == gameName">
                     {{ game.gameName }}
                   </option>
                 </select>
@@ -66,7 +66,7 @@
                   <option value="">
                     -- Select --
                   </option>
-                  <option v-for="(player, index) in players" :key="index" :value="player.id">
+                  <option v-for="(player, index) in players" :key="index" :selected="player.id == myName.id" :value="player.id">
                     {{ player.name }}
                   </option>
                 </select>
@@ -96,8 +96,8 @@ export default {
     }
   },
   computed: {
-    showAbout() {
-      return this.$store.getters.getShowAbout
+    showTab() {
+      return this.$store.getters.getShowTab
     },
     workshops() {
       return this.$store.getters.getWorkshops
@@ -122,7 +122,7 @@ export default {
     this.workshopUrl = params.getParam('workshop')
     this.gameUrl = params.getParam('game')
     if (this.gameUrl) {
-      this.workshopUrl = 'None'
+      this.workshopUrl = 'None (Single team Game)'
     }
   },
   methods: {
@@ -139,6 +139,7 @@ export default {
       this.$store.dispatch('updateWorkshopName', workshop)
       this.$store.dispatch('updateGameName', '')
       this.$store.dispatch('setMyName', '')
+      this.$store.dispatch('clearPlayers')
       if (!workshop) {
         this.$store.dispatch('updateWorkshop', false)
       } else {
@@ -154,12 +155,12 @@ export default {
     setMyName() {
       const id = document.getElementById('my-name').value
       const myName = this.players.find(function(p) {
-        return p.id = id
+        return p.id == id
       })
       localStorage.setItem('myName-cg', JSON.stringify(myName))
       this.$store.dispatch('setMyName', myName)
     }
-  },
+  }
 }
 </script>
 

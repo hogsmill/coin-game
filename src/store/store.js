@@ -72,9 +72,9 @@ export const store = new Vuex.Store({
           running: false,
           delivered: 0,
           time: 0,
-        },
-      ],
-    },
+        }
+      ]
+    }
   },
   getters: {
     thisGame: (state) => {
@@ -170,6 +170,9 @@ export const store = new Vuex.Store({
     updateGameName: (state, payload) => {
       state.gameName = payload
     },
+    clearPlayers: (state) => {
+      state.gameState.players = []
+    },
     setMyName: (state, payload) => {
       state.myName = payload
     },
@@ -217,6 +220,9 @@ export const store = new Vuex.Store({
     updateGameName: ({ commit }, payload) => {
       commit('updateGameName', payload)
     },
+    clearPlayers: ({ commit }, payload) => {
+      commit('clearPlayers', payload)
+    },
     setMyName: ({ commit }, payload) => {
       commit('setMyName', payload)
     },
@@ -232,5 +238,5 @@ export const store = new Vuex.Store({
     updateConnections: ({ commit }, payload) => {
       commit('updateConnections', payload)
     }
-  },
+  }
 })

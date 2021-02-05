@@ -9,6 +9,7 @@
         <i v-if="!showControl" @click="setShowControl(true)" title="expand" class="fas fa-caret-down toggle" />
       </div>
       <div v-if="showControl">
+        <Selected :scope="'workshop'" />
         <table class="config-table control-table">
           <tr>
             <td>
@@ -86,7 +87,12 @@
 </template>
 
 <script>
+import Selected from './selected/Selected.vue'
+
 export default {
+  components: {
+    Selected
+  },
   props: [
     'socket'
   ],

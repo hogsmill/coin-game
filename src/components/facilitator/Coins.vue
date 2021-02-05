@@ -3,12 +3,13 @@
     <div class="card-body">
       <div class="control-header">
         <h5 class="card-title">
-          Denominations and Currency
+          Coins
         </h5>
-        <i v-if="showDenominations" @click="setShowDenominations(false)" title="collapse" class="fas fa-caret-up toggle" />
-        <i v-if="!showDenominations" @click="setShowDenominations(true)" title="expand" class="fas fa-caret-down toggle" />
+        <i v-if="showCoins" @click="setShowCoins(false)" title="collapse" class="fas fa-caret-up toggle" />
+        <i v-if="!showCoins" @click="setShowCoins(true)" title="expand" class="fas fa-caret-down toggle" />
       </div>
-      <div v-if="showDenominations">
+      <div v-if="showCoins">
+        <Selected :scope="'workshop'" />
         <table class="config-table">
           <tr>
             <td>
@@ -50,10 +51,12 @@
 </template>
 
 <script>
-import Denomination from './denominations/Denomination.vue'
+import Selected from './selected/Selected.vue'
+import Denomination from './coins/Denomination.vue'
 
 export default {
   components: {
+    Selected,
     Denomination
   },
   props: [
@@ -61,26 +64,20 @@ export default {
   ],
   data() {
     return {
-      showDenominations: false
+      showCoins: false
     }
   },
   computed: {
     editingWorkshop() {
       return this.$store.getters.getEditingWorkshop
-    },
-    editingGame() {
-      return this.$store.getters.getEditingGame
     }
   },
   methods: {
-    setShowDenominations(val) {
-      this.showDenominations = val
-    },
-    scope() {
-      return this.editingWorkshop ? this.editingWorkshop : this.editingGame
+    setShowCoins(val) {
+      this.showCoins = val
     },
     currencySymbol() {
-      return this.scope().currency.symbol
+      return this.editingWorkshop.currency.symbol
     },
     total() {
       let total = 0
@@ -103,9 +100,8 @@ export default {
     },
     updateCurrency() {
       const workshop = this.editingWorkshop.workshopName
-      const game = this.editingGame.gameName
       const currency = document.getElementById('currency').value
-      this.socket.emit('updateCurrency', {workshopName: workshop, gameName: game, currency: currency })
+      this.socket.emit('updateCurrency', {workshopName: workshop, currency: currency })
 
     }
   }

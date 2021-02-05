@@ -5,11 +5,11 @@
         <h5 class="card-title">
           Players
         </h5>
-        <i v-if="showTeams && editingGame.gameName" @click="setShowTeams(false)" title="collapse" class="fas fa-caret-up toggle" />
-        <i v-if="!showTeams && editingGame.gameName" @click="setShowTeams(true)" title="expand" class="fas fa-caret-down toggle" />
+        <i v-if="showTeams" @click="setShowTeams(false)" title="collapse" class="fas fa-caret-up toggle" />
+        <i v-if="!showTeams" @click="setShowTeams(true)" title="expand" class="fas fa-caret-down toggle" />
       </div>
-      <div v-if="showTeams && editingGame.gameName">
-        <Selected />
+      <div v-if="showTeams">
+        <Selected :scope="'game'" />
         <table class="config-table">
           <tr>
             <td>Players</td>

@@ -85,6 +85,7 @@ export default {
 
     this.socket.emit('checkSystemWorkshops')
 
+    /*
     if (params.getParam('workshop')) {
       const workshop = decodeURIComponent(params.getParam('workshop'))
       this.$store.dispatch('updateWorkshopName', workshop)
@@ -98,20 +99,25 @@ export default {
       this.$store.dispatch('updateWorkshop', false)
       localStorage.setItem('gameName-cg', game)
     }
+    */
 
-    const workshopName = localStorage.getItem('workshopName-cg')
-    const gameName = localStorage.getItem('gameName-cg')
-    if (workshopName && gameName) {
-      this.$store.dispatch('updateWorkshopName', workshopName)
-      this.$store.dispatch('updateGameName', gameName)
-      this.socket.emit('loadGame', { workshopName: workshopName, gameName: gameName })
+    /*
+    const self = this
+    window.onload = function() {
+      const workshopName = localStorage.getItem('workshopName-cg')
+      if (workshopName) {
+        self.$store.dispatch('updateWorkshopName', workshopName)
+      }
+      const gameName = localStorage.getItem('gameName-cg')
+      if (gameName) {
+        self.$store.dispatch('updateGameName', gameName)
+      }
+      const myName = localStorage.getItem('myName-cg')
+      if (myName) {
+        self.$store.dispatch('setMyName', JSON.parse(myName))
+      }
     }
-
-    let myName = localStorage.getItem('myName-cg')
-    if (myName) {
-      myName = JSON.parse(myName)
-      this.$store.dispatch('setMyName', myName)
-    }
+    */
 
     this.socket.on('updateWorkshops', (data) => {
       this.$store.dispatch('updateWorkshops', data)

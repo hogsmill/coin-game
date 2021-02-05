@@ -63,7 +63,7 @@ export default {
       this.roleEditing = ''
       const name = document.getElementById('role-select').value
       this.socket.emit('updateGameRole', { workshopName: this.workshopName, gameName: this.gameName, role: role, name: name })
-    },
+    }
   }
 }
 </script>

@@ -25,7 +25,8 @@
           <p>
             Details on the physical game that is the basis of this one can be found
             in <a href="https://www.linkedin.com/pulse/coin-game-simple-effective-way-demonstrate-agility-steve-wells/" target="blank">
-            this</a> LinkedIn post.
+              this</a> LinkedIn post.
+          </p>
           <div class="coin-game-round" />
         </div>
       </div>
@@ -55,10 +56,14 @@
           </button> button and select the game, either:
         </p>
         <ul>
-          <li>Workshop <em>(None) Single Team Game</em>, game <em>Demo</em> for a game with a
-              single team, or</li>
-          <li>Workshop <em>Demo</em>, and one of the teams from the drop down for a workshop
-              with multiple teams, to add some competition and comparison between teams</li>
+          <li>
+            Workshop <em>(None) Single Team Game</em>, game <em>Demo</em> for a game with a
+            single team, or
+          </li>
+          <li>
+            Workshop <em>Demo</em>, and one of the teams from the drop down for a workshop
+            with multiple teams, to add some competition and comparison between teams
+          </li>
         </ul>
         <p>
           To set up your own game, using your teams' names and roles, use the facilitator tab

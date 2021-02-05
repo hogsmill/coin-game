@@ -135,7 +135,7 @@ export default {
         const workshop = this.editingWorkshop.workshopName
         this.socket.emit('deleteGame', {workshopName: workshop, gameName: game})
       }
-    },
+    }
   }
 }
 </script>

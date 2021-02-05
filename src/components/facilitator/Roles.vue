@@ -9,20 +9,8 @@
         <i v-if="!showRoles" @click="setShowRoles(true)" title="expand" class="fas fa-caret-down toggle" />
       </div>
       <div v-if="showRoles">
-        <Selected />
+        <Selected :scope="'workshop'" />
         <table class="config-table">
-          <!--
-          <tr>
-            <td>
-              Select Existing Roles
-            </td>
-            <td>
-              <select>
-                <option>-- Select --</option>
-              </select>
-            </td>
-          </tr>
-          -->
           <tr>
             <td colspan="2">
               <table class="roles">

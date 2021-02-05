@@ -21,7 +21,7 @@ export default {
     headerString() {
       const elements = []
       let str = ''
-      if (this.workshopName != 'None (Single team Game)') {
+      if (this.workshopName && this.workshopName != 'None (Single team Game)') {
         elements.push(this.workshopName)
       }
       if (this.gameName) {

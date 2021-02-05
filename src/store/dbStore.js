@@ -110,14 +110,7 @@ function _loadWorkshop(db, io, data, debugOn) {
 
   db.collection('coinGameWorkshops').findOne({workshopName: data.workshopName}, function(err, res) {
     if (err) throw err
-    if (!res) {
-      const workshop = newWorkshop(data.workshopName, false, false)
-      db.collection('coinGameWorkshops').insertOne(workshop, function(err, res) {
-        if (err) throw err
-        _loadWorkshops(db, io, debugOn)
-        io.emit('updateWorkshop', res)
-      })
-    } else {
+    if (res) {
       db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, gameRes) {
         if (err) throw err
         res.games = gameRes
@@ -177,7 +170,7 @@ function _loadEditingGame(db, io, data, debugOn) {
 
 function _loadGame(db, io, data, debugOn) {
 
-  db.collection('coinGame').findOne({gameName: data.gameName}, function(err, res) {
+  db.collection('coinGame').findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
     if (err) throw err
     if (res) {
       db.collection('coinGame').updateOne({'_id': res._id}, {$set: {lastaccess: new Date().toISOString()} }, function(err) {
@@ -185,15 +178,6 @@ function _loadGame(db, io, data, debugOn) {
       })
       if (debugOn) { console.log('Loading game \'' + data.gameName + '\'') }
       io.emit('updateGameState', {gameName: data.gameName, workshopName: res.workshopName, gameState: res.gameState})
-    } else {
-      const game = {gameName: data.gameName, workshopName: data.workshopName, gameState: createNewGame()}
-      game.created = new Date().toISOString()
-      game.lastaccess = new Date().toISOString()
-      if (debugOn) { console.log('Created new game \'' + data.gameName + '\'') }
-      db.collection('coinGame').insertOne(game, function(err, res) {
-        if (err) throw err
-        io.emit('updateGameState', game)
-      })
     }
   })
 }
@@ -451,7 +435,7 @@ module.exports = {
         const workshop = newWorkshop(singleWorkshopName, true, true)
         db.collection('coinGameWorkshops').insertOne(workshop, function(err, res) {
           if (err) throw err
-          const game = newGame(singleWorkshopName, 'Demo ', true)
+          const game = newGame(singleWorkshopName, 'Demo', true)
           const gamePlayers = []
           for (let j = 0; j < players.length; j++) {
             gamePlayers.push({
@@ -553,8 +537,8 @@ module.exports = {
           db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, gamesRes) {
             if (err) throw err
             if (gamesRes.length) {
-              res.games = gamesRes
-              updateEditingWorkshop(db, io, res)
+              game.games = gamesRes
+              updateEditingWorkshop(db, io, game)
             }
           })
         })

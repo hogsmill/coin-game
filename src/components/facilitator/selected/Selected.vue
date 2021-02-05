@@ -1,11 +1,15 @@
 <template>
   <div class="selected-header">
-    Workshop: <b>{{ editingWorkshop.workshopName }}</b>, Game: <b>{{ editingGame.gameName }}</b>
+    <span v-if="scope == 'game'">Workshop: <b>{{ editingWorkshop.workshopName }}</b>, Game: <b>{{ editingGame.gameName }}</b></span>
+    <span v-if="scope == 'workshop'">Workshop: <b>{{ editingWorkshop.workshopName }}</b></span>
   </div>
 </template>
 
 <script>
 export default {
+  props: [
+    'scope'
+  ],
   computed: {
     editingWorkshop() {
       return this.$store.getters.getEditingWorkshop

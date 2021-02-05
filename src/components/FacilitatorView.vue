@@ -4,27 +4,30 @@
       Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
     </div>
     <WorkshopsAndGames :socket="socket" />
-    <Players :socket="socket" />
-    <Roles :socket="socket" />
-    <Denominations :socket="socket" />
-    <Control :socket="socket" />
+    <Players v-if="editingWorkshop.workshopName && editingGame.gameName" :socket="socket" />
+    <Roles v-if="editingWorkshop.workshopName" :socket="socket" />
+    <Coins v-if="editingWorkshop.workshopName" :socket="socket" />
+    <Control v-if="editingWorkshop.workshopName" :socket="socket" />
+    <LocalStorage :socket="socket" />
   </div>
 </template>
 
 <script>
 import WorkshopsAndGames from './facilitator/WorkshopsAndGames.vue'
 import Players from './facilitator/Players.vue'
-import Denominations from './facilitator/Denominations.vue'
+import Coins from './facilitator/Coins.vue'
 import Roles from './facilitator/Roles.vue'
 import Control from './facilitator/Control.vue'
+import LocalStorage from './facilitator/LocalStorage.vue'
 
 export default {
   components: {
     WorkshopsAndGames,
     Players,
-    Denominations,
+    Coins,
     Roles,
-    Control
+    Control,
+    LocalStorage
   },
   props: [
     'socket'
