@@ -1,14 +1,19 @@
 <template>
-  <div class="config card bg-light mb-3 no-padding-r-l">
+  <div class="config card bg-light mb-3 no-padding-r-l local-storage-config">
     <div class="card-body">
       <div class="control-header">
         <h5 class="card-title">
-          Local Storage
+          Local Storage (<i class="fas fa-skull-crossbones" /><i>Here be dragons!...</i><i class="fas fa-skull-crossbones" />)
         </h5>
         <i v-if="showLocalStorage" @click="setShowLocalStorage(false)" title="collapse" class="fas fa-caret-up toggle" />
         <i v-if="!showLocalStorage" @click="setShowLocalStorage(true)" title="expand" class="fas fa-caret-down toggle" />
       </div>
-      <div v-if="showLocalStorage">
+      <div v-if="showLocalStorage" >
+        <p>
+          <i class="fas fa-exclamation-triangle" />
+          Don't delete anything here unless you know what you are doing...
+          <i class="fas fa-exclamation-triangle" />
+        </p>
         <button class="btn btn-sm btn-secondary smaller-font" @click="loadLocalStorage()">
           Load
         </button>
@@ -61,6 +66,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  .local-storage-config {
+    .fas {
+
+      &.fa-skull-crossbones {
+        float: initial;
+        color: #000;
+      }
+
+      &.fa-exclamation-triangle {
+        color: firebrick;
+      }
+    }
+  }
   .control-table {
     input {
       width: 80px !important;
