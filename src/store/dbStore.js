@@ -206,13 +206,11 @@ function updateTime(db, io, data) {
         t = gameState.rounds[data.round].time,
         timeLimit = configFuns.getTimeLimit(gameState, data.round),
         running = roundFuns.running(gameState.rounds[data.round], gameState, timeLimit)
-      console.log('Running', running)
       if (running) {
         gameState.rounds[data.round].time = t + 1
       } else {
         gameState.rounds[data.round].running = false
       }
-      console.log(gameState.rounds[data.round].running, gameState.rounds[data.round].time)
       data.gameState = gameState
       db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
         if (err) throw err
@@ -386,6 +384,9 @@ module.exports = {
       if (err) throw err
       if (res) {
         const gameState = res.gameState
+        for (let i = 0; i < gameState.rounds.length; i++) {
+          gameState.rounds[i].running = false
+        }
         gameState.round = data.round
         const coins = coinFuns.getCoins(gameState.rounds[data.round].name, gameState.denominations)
         gameState.coins = coins

@@ -1,23 +1,21 @@
 <template>
   <div id="app" class="mb-4">
     <Header />
-    <WalkThroughView />
     <h1>
       The Coin Game
     </h1>
     <HeaderString />
     <div v-if="showTab == 'about'">
-      <AboutView />
+      <About />
     </div>
     <div v-if="showTab != 'about'">
       <div class="game-params">
         <Status :socket="socket" />
-        <SetGame :socket="socket" />
       </div>
       <div class="container">
-        <FacilitatorView v-if="showTab == 'facilitator'" :socket="socket" />
+        <Facilitator v-if="showTab == 'facilitator'" :socket="socket" />
         <div v-if="showTab == 'game'">
-          <ResultsView :game-state="gameState" :socket="socket" />
+          <Results :game-state="gameState" :socket="socket" />
         </div>
       </div>
     </div>
@@ -31,24 +29,20 @@ import params from './lib/params.js'
 
 import Header from './components/Header.vue'
 import HeaderString from './components/HeaderString.vue'
-import SetGame from './components/SetGame.vue'
 import Status from './components/Status.vue'
-import AboutView from './components/about/AboutView.vue'
-import WalkThroughView from './components/about/WalkThroughView.vue'
-import FacilitatorView from './components/FacilitatorView.vue'
-import ResultsView from './components/results/ResultsView.vue'
+import About from './components/about/About.vue'
+import Facilitator from './components/Facilitator.vue'
+import Results from './components/results/Results.vue'
 
 export default {
   name: 'App',
   components: {
     Header,
     HeaderString,
-    AboutView,
-    WalkThroughView,
-    SetGame,
+    About,
     Status,
-    FacilitatorView,
-    ResultsView
+    Facilitator,
+    Results
   },
   computed: {
     walkThrough() {

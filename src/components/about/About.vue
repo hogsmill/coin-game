@@ -14,12 +14,15 @@
       round takes.
     </p>
     <p class="text-left">
-      See this
-      <a
-        target="_blank"
-        href="https://www.linkedin.com/pulse/coin-game-simple-effective-way-demonstrate-agility-steve-wells/"
-      >LinkedIn blog post</a>
-      for a full description, and details of how to faciltate in person.
+      See either this
+      <a target="_blank" href="https://www.linkedin.com/pulse/coin-game-simple-effective-way-demonstrate-agility-steve-wells/">
+        LinkedIn
+      </a>
+      or
+      <a target="_blank" href="https://agilesimulations.medium.com/the-coin-game-now-available-remotely-a-simple-but-effective-way-to-demonstrate-agility-9bba5be65ae">
+        Medium
+      </a>
+      blog post for a full description, and details of how to faciltate in person.
     </p>
   </div>
 </template>

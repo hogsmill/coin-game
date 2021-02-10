@@ -1,10 +1,13 @@
 <template>
   <div class="results mb-5">
+    <SetGame :socket="socket" />
+    <WalkThrough />
     <Learnings :socket="socket" />
-    <Restart :socket="socket" />
+    <ControlGame :socket="socket" />
     <div class="narration" />
     <div class="container">
-      <table class="table table-striped game-table">
+      <div v-if="!gameName" class="coins rounded" />
+      <table v-if="gameName" class="table table-striped game-table">
         <Header :socket="socket" />
         <tbody id="results-table-body">
           <tr v-for="(round, index) in gameState.rounds" :key="index">
@@ -39,8 +42,10 @@ import roundFuns from '../../lib/roundFuns.js'
 import stringFuns from '../../lib/stringFuns.js'
 import timeFuns from '../../lib/timeFuns.js'
 
+import SetGame from '../SetGame.vue'
+import WalkThrough from '../WalkThrough.vue'
 import Learnings from './Learnings.vue'
-import Restart from './Restart.vue'
+import ControlGame from './ControlGame.vue'
 import Header from './table/Header.vue'
 import RunButton from './table/RunButton.vue'
 import Coins from './table/Coins.vue'
@@ -48,8 +53,10 @@ import Coins from './table/Coins.vue'
 export default {
   name: 'Results',
   components: {
+    SetGame,
+    WalkThrough,
     Learnings,
-    Restart,
+    ControlGame,
     Header,
     RunButton,
     Coins
@@ -86,6 +93,16 @@ export default {
 </script>
 
 <style lang="scss">
+
+  .coins {
+    margin: 36px auto 0 auto;
+    height: 300px;
+    width: 800px;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: top;
+    background-image: url("../../assets/img/coins.png");
+  }
 
   .game-table {
     td {

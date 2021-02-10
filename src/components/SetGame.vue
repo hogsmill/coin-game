@@ -1,6 +1,6 @@
 <template>
-  <div class="game-name" v-if="showTab == 'game'">
-    <button class="btn btn-sm btn-secondary smaller-font" @click="show()">
+  <span class="game-name" v-if="showTab == 'game'">
+    <button class="btn btn-sm btn-secondary mb-2" @click="show()">
       Set Up Game
     </button>
 
@@ -79,7 +79,7 @@
         </button>
       </div>
     </modal>
-  </div>
+  </span>
 </template>
 
 <script>
@@ -165,16 +165,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-  .game-name {
-    float: right;
-    width: 110px;
-    display: inline-block;
-  }
-
-  .restart {
-    margin-right: 12px;
-  }
 
   .set-game {
     table {

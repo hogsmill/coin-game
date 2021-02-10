@@ -1,10 +1,6 @@
 <template>
-  <div>
-    <button
-      v-if="walkThrough && !showAbout"
-      class="btn btn-sm btn-info"
-      @click="help"
-    >
+  <span class="walk-through">
+    <button v-if="!gameName && !showAbout" class="btn btn-sm btn-info mb-2" @click="help">
       Explain this for me...
     </button>
 
@@ -156,11 +152,11 @@
         </button>
       </div>
     </modal>
-  </div>
+  </span>
 </template>
 
 <script>
-import params from '../../lib/params.js'
+import params from '../lib/params.js'
 
 export default {
   data() {
@@ -174,6 +170,9 @@ export default {
     },
     showAbout() {
       return this.$store.getters.getShowAbout
+    },
+    gameName() {
+      return this.$store.getters.getGameName
     },
     gameState() {
       return this.$store.getters.getGameState
@@ -191,7 +190,7 @@ export default {
       this.$modal.show('walk-through')
     },
     skip() {
-      this.step = 8
+      this.hide()
     },
     hide() {
       this.$modal.hide('walk-through')
@@ -208,12 +207,19 @@ export default {
 </script>
 
 <style lang="scss">
+.walk-through {
+  button {
+
+  }
+}
+
 .buttons {
   padding: 6px;
   position: absolute;
   bottom: 20px;
   left: 228px;
 }
+
 #walk-through {
   p {
     text-align: left;
@@ -236,7 +242,7 @@ export default {
   width: 500px;
   height: 80px;
   margin: 0 auto;
-  background-image: url("../../assets/img/coin-game-round.png");
+  background-image: url("../assets/img/coin-game-round.png");
 }
 .walkthrough-graph {
   height: 100%;
@@ -251,11 +257,11 @@ export default {
   text-align: left;
 }
 .risk-graph {
-  background-image: url("../../assets/img/risk.png");
+  background-image: url("../assets/img/risk.png");
 }
 .value-graph {
   margin-left: 8px;
-  background-image: url("../../assets/img/value.png");
+  background-image: url("../assets/img/value.png");
 }
 
 .role-select {
@@ -270,10 +276,10 @@ export default {
     box-shadow: 2px 2px 3px #aaa;
 
     &.selecting {
-      background-image: url("../../assets/img/coin-game-role-select.jpg");
+      background-image: url("../assets/img/coin-game-role-select.jpg");
     }
     &.selected {
-      background-image: url("../../assets/img/coin-game-role-selected.jpg");
+      background-image: url("../assets/img/coin-game-role-selected.jpg");
     }
   }
 }

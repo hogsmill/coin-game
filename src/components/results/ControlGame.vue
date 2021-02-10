@@ -1,6 +1,7 @@
 <template>
-  <span class="restart">
-    <button class="btn btn-sm btn-secondary mb-2" @click="restart()">Re-start Game</button>
+  <span v-if="gameName" class="restart">
+    <i title="Restart Game" class="fas fa-undo-alt restart" aria-hidden="true" @click="restart()" />
+    <i title="End Game" class="fas fa-stop-circle" aria-hidden="true" @click="endGame()" />
   </span>
 </template>
 
