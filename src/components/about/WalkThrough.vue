@@ -23,7 +23,16 @@
             in <a href="https://www.linkedin.com/pulse/coin-game-simple-effective-way-demonstrate-agility-steve-wells/" target="blank">
               this</a> LinkedIn post.
           </p>
-          <div class="coin-game-round" />
+          <p>
+            If you'd like more info, or would like to discuss facilitation, send us your email
+            in the box below, and we can discuss your needs.
+          </p>
+          <div>
+            Email: <input type="email" id="email" placeholder="Email address">
+            <button class="btn btn-info btn-sm" @click="facilitate()">
+              Submit
+            </button>
+          </div>
         </div>
       </div>
       <div class="mt-4" v-if="step == 2">
@@ -41,6 +50,7 @@
             The value delivered is the actual value of coins passed to the
             customer
           </p>
+          <div class="coin-game-round" />
         </div>
       </div>
       <div class="mt-4" v-if="step == 3">
@@ -156,7 +166,8 @@
 </template>
 
 <script>
-import params from '../lib/params.js'
+import mailFuns from '../../lib/mail.js'
+import params from '../../lib/params.js'
 
 export default {
   data() {
@@ -165,6 +176,9 @@ export default {
     }
   },
   computed: {
+    thisGame() {
+      return this.$store.getters.thisGame
+    },
     walkThrough() {
       return this.$store.getters.getWalkThrough
     },
@@ -201,6 +215,15 @@ export default {
     },
     incrementStep() {
       this.step = this.step + 1
+    },
+    facilitate() {
+      mailFuns.post({
+        action: 'Facilitation request (Walkthrough) from ' + this.thisGame,
+        email: encodeURIComponent(document.getElementById('email').value),
+        comments: 'Facilitation Request'
+        },
+        'Thanks for your request - we\'ll get back to you as soon as we can with details'
+      )
     }
   },
 }
@@ -237,12 +260,16 @@ export default {
       text-align: left;
     }
   }
+  #email {
+    width: 50%;
+    margin: 6px;
+  }
 }
 .coin-game-round {
   width: 500px;
   height: 80px;
   margin: 0 auto;
-  background-image: url("../assets/img/coin-game-round.png");
+  background-image: url("../../assets/img/coin-game-round.png");
 }
 .walkthrough-graph {
   height: 100%;
@@ -257,11 +284,11 @@ export default {
   text-align: left;
 }
 .risk-graph {
-  background-image: url("../assets/img/risk.png");
+  background-image: url("../../assets/img/risk.png");
 }
 .value-graph {
   margin-left: 8px;
-  background-image: url("../assets/img/value.png");
+  background-image: url("../../assets/img/value.png");
 }
 
 .role-select {
@@ -276,10 +303,10 @@ export default {
     box-shadow: 2px 2px 3px #aaa;
 
     &.selecting {
-      background-image: url("../assets/img/coin-game-role-select.jpg");
+      background-image: url("../../assets/img/coin-game-role-select.jpg");
     }
     &.selected {
-      background-image: url("../assets/img/coin-game-role-selected.jpg");
+      background-image: url("../../assets/img/coin-game-role-selected.jpg");
     }
   }
 }

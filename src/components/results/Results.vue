@@ -43,7 +43,7 @@ import stringFuns from '../../lib/stringFuns.js'
 import timeFuns from '../../lib/timeFuns.js'
 
 import SetGame from '../SetGame.vue'
-import WalkThrough from '../WalkThrough.vue'
+import WalkThrough from '../about//WalkThrough.vue'
 import Learnings from './Learnings.vue'
 import ControlGame from './ControlGame.vue'
 import Header from './table/Header.vue'
