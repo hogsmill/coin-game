@@ -67,8 +67,8 @@
           by adding <em>?host</em> to the URL:
         </p>
         <p class="center">
-          <a href="http://agilesimulations.co.uk/coin-game/?host">
-            http://agilesimulations.co.uk/coin-game/?host
+          <a href="https://agilesimulations.co.uk/coin-game/?host">
+            https://agilesimulations.co.uk/coin-game/?host
           </a>
         </p>
       </div>
