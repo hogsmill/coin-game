@@ -114,6 +114,9 @@ function doDb(fun, data) {
       case 'loadEditingWorkshop':
         dbStore.loadEditingWorkshop(db, io, data, debugOn)
         break
+      case 'addWorkshop':
+        dbStore.addWorkshop(db, io, data, debugOn)
+        break
       case 'deleteWorkshop':
         dbStore.deleteWorkshop(db, io, data, debugOn)
         break
@@ -223,6 +226,8 @@ io.on('connection', (socket) => {
   socket.on('loadWorkshops', (data) => { doDb('loadWorkshops', data) })
 
   socket.on('loadEditingWorkshop', (data) => { doDb('loadEditingWorkshop', data) })
+
+  socket.on('addWorkshop', (data) => { doDb('addWorkshop', data) })
 
   socket.on('deleteWorkshop', (data) => { doDb('deleteWorkshop', data) })
 

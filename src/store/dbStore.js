@@ -498,6 +498,17 @@ module.exports = {
     _loadEditingWorkshop(db, io, data, debugOn)
   },
 
+  addWorkshop: function(db, io, data, debugOn) {
+
+    if (debugOn) { console.log('addWorkshop', data) }
+
+    const workshop = newWorkshop(data.workshopName, false, false)
+    db.collection('coinGameWorkshops').insertOne(workshop, function(err, res) {
+      if (err) throw err
+      _loadWorkshops(db, io, debugOn)
+    })
+  },
+
   deleteWorkshop: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('deleteWorkshop', data) }

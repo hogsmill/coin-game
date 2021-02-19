@@ -103,7 +103,7 @@ export default {
   methods: {
     addWorkshop() {
       const workshop = document.getElementById('new-workshop').value
-      this.socket.emit('loadWorkshop', {workshopName: workshop})
+      this.socket.emit('addWorkshop', {workshopName: workshop})
       document.getElementById('new-workshop').value = ''
     },
     selectWorkshop(workshop, index) {
