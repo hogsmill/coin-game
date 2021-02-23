@@ -27,7 +27,8 @@ export const store = new Vuex.Store({
         valueTimeLimit: {demo: 10, click: 20 },
         clickOnCoins: true,
         namedRolesClick: true
-     },
+      },
+      currentCoin: '',
       stopped: false,
       currency: { major: '&pound;', minor: 'p'},
       denominations: {
@@ -122,6 +123,9 @@ export const store = new Vuex.Store({
     getInterval: (state) => {
       return state.gameState.config.interval
     },
+    getCurrentCoin: (state) => {
+      return state.gameState.currentCoin
+    },
     getStopped: (state) => {
       return state.gameState.stopped
     },
@@ -179,6 +183,9 @@ export const store = new Vuex.Store({
     changeName: (state, payload) => {
       state.myName.name = payload.name
     },
+    updateCurrentCoin: (state, payload) => {
+      state.gameState.currentCoin = payload
+    },
     updateStopped: (state, payload) => {
       state.gameState.stopped = payload
     },
@@ -228,6 +235,9 @@ export const store = new Vuex.Store({
     },
     changeName: ({ commit }, payload) => {
       commit('changeName', payload)
+    },
+    updateCurrentCoin: ({ commit }, payload) => {
+      commit('updateCurrentCoin', payload)
     },
     updateStopped: ({ commit }, payload) => {
       commit('updateStopped', payload)

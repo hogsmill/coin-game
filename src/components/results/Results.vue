@@ -13,6 +13,7 @@
           <tr v-for="(round, index) in gameState.rounds" :key="index">
             <td>
               <RunButton :socket="socket" :round="round" :index="index" />
+              <Coin />
             </td>
             <td v-for="(role, roleIndex) in gameState.rounds[0].roles"
                 :role="role" :roleIndex="roleIndex" :key="roleIndex"
@@ -49,6 +50,7 @@ import ControlGame from './ControlGame.vue'
 import Header from './table/Header.vue'
 import RunButton from './table/RunButton.vue'
 import Coins from './table/Coins.vue'
+import Coin from './table/Coin.vue'
 
 export default {
   name: 'Results',
@@ -59,7 +61,8 @@ export default {
     ControlGame,
     Header,
     RunButton,
-    Coins
+    Coins,
+    Coin
   },
   props: [
     'socket'
@@ -111,21 +114,28 @@ export default {
     thead {
       font-weight: bold;
     }
+  }
 
-  .results {
-    .result {
-      margin-top: 12px;
-      font-weight: bold;
+  .result {
+    margin-top: 12px;
+    font-weight: bold;
 
-      &.missed {
-        color: red;
-      }
+    &.missed {
+      color: red;
+    }
 
-      &.all-delivered {
-        color: green;
-      }
+    &.all-delivered {
+      color: green;
     }
   }
-}
+
+  .one-p { background-image: url("../../assets/img/1p.png"); }
+  .two-p { background-image: url("../../assets/img/2p.png"); }
+  .five-p { background-image: url("../../assets/img/5p.png"); }
+  .ten-p { background-image: url("../../assets/img/10p.png"); }
+  .twenty-p { background-image: url("../../assets/img/20p.png"); }
+  .fifty-p { background-image: url("../../assets/img/50p.png"); }
+  .one-pound { background-image: url("../../assets/img/1pound.png"); }
+  .two-pound { background-image: url("../../assets/img/2pound.png"); }
 
 </style>

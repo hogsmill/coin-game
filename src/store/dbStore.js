@@ -48,6 +48,7 @@ function createNewGame() {
     currency: currencies[0],
     denominations: denominations,
     defaultDenominations: denominations,
+    currentCoin: '',
     round: 0,
     total: 0,
     players: [],
@@ -201,7 +202,6 @@ function updateTime(db, io, data) {
   db.collection('coinGame').findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
     if (err) throw err
     if (res) {
-      console.log('Running', res.gameState.rounds[data.round].running)
       const gameState = res.gameState,
         t = gameState.rounds[data.round].time,
         timeLimit = configFuns.getTimeLimit(gameState, data.round),

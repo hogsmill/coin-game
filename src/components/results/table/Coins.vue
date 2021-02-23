@@ -11,6 +11,7 @@
         class="coin"
         data-toggle="tooltip" data-placement="top" :title="coinNames[coin.value]"
         :class="[getClassName(role), getValueName(coin)]"
+        @mouseover="showCoinValue(coinNames[coin.value])"
       />
     </div>
   </div>
@@ -76,6 +77,12 @@ export default {
       }
       return classStr
     },
+    showCoinValue(value) {
+      if (value) {
+        console.log('value', value)
+        this.$store.dispatch('updateCurrentCoin', value)
+      }
+    },
     outOfTime(round) {
       return timeFuns.outOfTime(round, this.gameState)
     },
@@ -119,15 +126,10 @@ export default {
   }
 }
 
-.played, .customer { opacity: 1; }
-
-.one-p { background-image: url("../../../assets/img/1p.png"); }
-.two-p { background-image: url("../../../assets/img/2p.png"); }
-.five-p { background-image: url("../../../assets/img/5p.png"); }
-.ten-p { background-image: url("../../../assets/img/10p.png"); }
-.twenty-p { background-image: url("../../../assets/img/20p.png"); }
-.fifty-p { background-image: url("../../../assets/img/50p.png"); }
-.one-pound { background-image: url("../../../assets/img/1pound.png"); }
-.two-pound { background-image: url("../../../assets/img/2pound.png"); }
+.played, .customer {
+  opacity: 1;
+  background-color: green;
+  border-radius: 9px;
+}
 
 </style>
