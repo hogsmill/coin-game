@@ -79,7 +79,6 @@ export default {
     },
     showCoinValue(value) {
       if (value) {
-        console.log('value', value)
         this.$store.dispatch('updateCurrentCoin', value)
       }
     },
