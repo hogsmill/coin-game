@@ -1,24 +1,24 @@
 <template>
   <div class="results mb-5">
-    <SetGame :socket="socket" />
+    <SetGame />
     <WalkThrough />
-    <Learnings :socket="socket" />
-    <ControlGame :socket="socket" />
+    <Learnings />
+    <ControlGame />
     <div class="narration" />
     <div class="container">
       <div v-if="!gameName" class="coins rounded" />
       <table v-if="gameName" class="table table-striped game-table">
-        <Header :socket="socket" />
+        <Header />
         <tbody id="results-table-body">
           <tr v-for="(round, index) in gameState.rounds" :key="index">
             <td>
-              <RunButton :socket="socket" :round="round" :index="index" />
+              <RunButton :round="round" :index="index" />
               <Coin />
             </td>
             <td v-for="(role, roleIndex) in gameState.rounds[0].roles"
                 :role="role" :roleIndex="roleIndex" :key="roleIndex"
             >
-              <Coins :socket="socket" :round="round" :role="role" :index="index" :role-index="roleIndex" />
+              <Coins :round="round" :role="role" :index="index" :role-index="roleIndex" />
             </td>
             <td>
               <div>
@@ -64,9 +64,6 @@ export default {
     Coins,
     Coin
   },
-  props: [
-    'socket'
-  ],
   computed: {
     gameName() {
       return this.$store.getters.getGameName

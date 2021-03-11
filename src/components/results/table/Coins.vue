@@ -18,11 +18,12 @@
 </template>
 
 <script>
+import bus from '../../../socket.js'
+
 import timeFuns from '../../../lib/timeFuns.js'
 
 export default {
   props: [
-    'socket',
     'round',
     'role',
     'index',
@@ -90,14 +91,14 @@ export default {
       if (this.gameState.config.namedRolesClick) {
         canPlay = role.name.id == this.myName.id
         if (!canPlay) {
-          this.socket.emit('status', 'Unable to play that coin - that is not your role...')
+          bus.$emit('sendStatus', 'Unable to play that coin - that is not your role...')
         }
       }
       return canPlay && role.role != 'Customer' && !this.outOfTime(round)
     },
     playCoin(coin, role, round) {
       if (this.canPlayCoin(coin, role, round)) {
-        this.socket.emit('playCoin', {workshopName: this.workshopName, gameName: this.gameName, coin: coin, role: role.role, round: round.name})
+        bus.$emit('sendPlayCoin', {workshopName: this.workshopName, gameName: this.gameName, coin: coin, role: role.role, round: round.name})
       }
     }
   }

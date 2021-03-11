@@ -15,11 +15,12 @@
 </template>
 
 <script>
+import bus from '../../../socket.js'
+
 import stringFuns from '../../../lib/stringFuns.js'
 
 export default {
   props: [
-    'socket',
     'id',
     'amount'
   ],
@@ -55,7 +56,7 @@ export default {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame.gameName
       const n = document.getElementById(this.id).value
-      this.socket.emit('updateDenomination', {workshopName: workshop, gameName: game, amount: this.amount, number: n})
+      bus.$emit('sendUpdateDenomination', {workshopName: workshop, gameName: game, amount: this.amount, number: n})
     }
   }
 }

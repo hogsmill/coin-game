@@ -32,10 +32,9 @@
 </template>
 
 <script>
+import bus from '../../../socket.js'
+
 export default {
-  props: [
-    'socket'
-  ],
   data() {
     return {
       roleEditing: ''
@@ -62,7 +61,7 @@ export default {
     updateRole(role) {
       this.roleEditing = ''
       const name = document.getElementById('role-select').value
-      this.socket.emit('updateGameRole', { workshopName: this.workshopName, gameName: this.gameName, role: role, name: name })
+      bus.$emit('sendUpdateGameRole', { workshopName: this.workshopName, gameName: this.gameName, role: role, name: name })
     }
   }
 }

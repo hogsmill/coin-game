@@ -6,10 +6,9 @@
 </template>
 
 <script>
+import bus from '../../socket.js'
+
 export default {
-  props: [
-    'socket'
-  ],
   computed: {
     workshopName() {
       return this.$store.getters.getWorkshopName
@@ -25,7 +24,7 @@ export default {
     restart() {
       const restartGame = confirm('Are you sure you want to re-start this game?')
       if (restartGame) {
-        this.socket.emit('restartGame', { workshopName: this.workshopName, gameName: this.gameName })
+        bus.$emit('sendRestartGame', { workshopName: this.workshopName, gameName: this.gameName })
       }
     }
   }

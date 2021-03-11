@@ -87,15 +87,14 @@
 </template>
 
 <script>
+import bus from '../../socket.js'
+
 import Selected from './selected/Selected.vue'
 
 export default {
   components: {
     Selected
   },
-  props: [
-    'socket'
-  ],
   data() {
     return {
       showControl: false,
@@ -118,43 +117,43 @@ export default {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       const interval = document.getElementById('interval').value
-      this.socket.emit('updateInterval', {workshopName: workshop, gameName: game, value: interval})
+      bus.$emit('sendUpdateInterval', {workshopName: workshop, gameName: game, value: interval})
     },
     updateDemoTimeLimit() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       const timeLimit = document.getElementById('demoTimeLimit').value
-      this.socket.emit('updateDemoTimeLimit', {workshopName: workshop, gameName: game, value: timeLimit})
+      bus.$emit('sendUpdateDemoTimeLimit', {workshopName: workshop, gameName: game, value: timeLimit})
     },
     updateClickTimeLimit() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       const timeLimit = document.getElementById('clickTimeLimit').value
-      this.socket.emit('updateClickTimeLimit', {workshopName: workshop, gameName: game, value: timeLimit})
+      bus.$emit('sendUpdateClickTimeLimit', {workshopName: workshop, gameName: game, value: timeLimit})
     },
     updateDemoValueTimeLimit() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       const valueTimeLimit = document.getElementById('demoValueTimeLimit').value
-      this.socket.emit('updateDemoValueTimeLimit', {workshopName: workshop, gameName: game, value: valueTimeLimit})
+      bus.$emit('sendUpdateDemoValueTimeLimit', {workshopName: workshop, gameName: game, value: valueTimeLimit})
     },
     updateClickValueTimeLimit() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       const valueTimeLimit = document.getElementById('clickValueTimeLimit').value
-      this.socket.emit('updateClickValueTimeLimit', {workshopName: workshop, gameName: game, value: valueTimeLimit})
+      bus.$emit('sendUpdateClickValueTimeLimit', {workshopName: workshop, gameName: game, value: valueTimeLimit})
     },
     updateClickOnCoins() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       this.clickOnCoins = !this.clickOnCoins
-      this.socket.emit('updateClickOnCoins', {workshopName: workshop, gameName: game, value: this.clickOnCoins})
+      bus.$emit('sendUpdateClickOnCoins', {workshopName: workshop, gameName: game, value: this.clickOnCoins})
     },
     updateNamedRolesClick() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       this.namedRolesClick = !this.namedRolesClick
-      this.socket.emit('updateNamedRolesClick', {workshopName: workshop, gameName: game, value: this.namedRolesClick})
+      bus.$emit('sendUpdateNamedRolesClick', {workshopName: workshop, gameName: game, value: this.namedRolesClick})
     }
   }
 }

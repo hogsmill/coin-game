@@ -3,16 +3,18 @@
     <div class="connections">
       Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
     </div>
-    <WorkshopsAndGames :socket="socket" />
-    <Players v-if="editingWorkshop.workshopName && editingGame.gameName" :socket="socket" />
-    <Roles v-if="editingWorkshop.workshopName" :socket="socket" />
-    <Coins v-if="editingWorkshop.workshopName" :socket="socket" />
-    <Control v-if="editingWorkshop.workshopName" :socket="socket" />
-    <LocalStorage :socket="socket" />
+    <WorkshopsAndGames />
+    <Players v-if="editingWorkshop.workshopName && editingGame.gameName" />
+    <Roles v-if="editingWorkshop.workshopName" />
+    <Coins v-if="editingWorkshop.workshopName" />
+    <Control v-if="editingWorkshop.workshopName" />
+    <LocalStorage />
   </div>
 </template>
 
 <script>
+import bus from '../socket.js'
+
 import WorkshopsAndGames from './facilitator/WorkshopsAndGames.vue'
 import Players from './facilitator/Players.vue'
 import Coins from './facilitator/Coins.vue'
@@ -29,9 +31,6 @@ export default {
     Control,
     LocalStorage
   },
-  props: [
-    'socket'
-  ],
   computed: {
     isHost() {
       return this.$store.getters.getHost
@@ -47,12 +46,12 @@ export default {
     }
   },
   created() {
-    this.socket.emit('loadWorkshops')
+    bus.$emit('sendLoadWorkshops')
 
-    this.socket.on('setEditingWorkshop', (data) => {
+    bus.$on('setEditingWorkshop', (data) => {
       this.$store.dispatch('setEditingWorkshop', data)
     })
-    this.socket.on('setEditingGame', (data) => {
+    bus.$on('setEditingGame', (data) => {
       this.$store.dispatch('setEditingGame', data)
     })
   }

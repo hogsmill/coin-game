@@ -35,9 +35,6 @@
 
 <script>
 export default {
-  props: [
-    'socket'
-  ],
   data() {
     return {
       showLocalStorage: false,

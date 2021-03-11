@@ -46,15 +46,14 @@
 <script>
 import { v4 as uuidv4 } from 'uuid'
 
+import bus from '../../socket.js'
+
 import Selected from './selected/Selected.vue'
 
 export default {
   components: {
     Selected
   },
-  props: [
-    'socket'
-  ],
   data() {
     return {
       showTeams: false,
@@ -82,7 +81,7 @@ export default {
       } else {
         const uuid = uuidv4()
         const playerData = {id: uuid, name: player}
-        this.socket.emit('addPlayer', {workshopName: workshop, gameName: game, player: playerData})
+        bus.$emit('sendAddPlayer', {workshopName: workshop, gameName: game, player: playerData})
         document.getElementById('new-player').value = ''
       }
     },
@@ -93,7 +92,7 @@ export default {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame.gameName
       const newName = document.getElementById('player-' + player.id).value
-      this.socket.emit('changePlayerName', { workshopName: workshop, gameName: game, player: player, newName: newName })
+      bus.$emit('sendChangePlayerName', { workshopName: workshop, gameName: game, player: player, newName: newName })
       document.getElementById('player-' + player.id).value = ''
       this.editingPlayer = ''
     },
@@ -102,7 +101,7 @@ export default {
       if (deletePlayer) {
         const workshop = this.editingWorkshop.workshopName
         const game = this.editingGame.gameName
-        this.socket.emit('deletePlayer', { workshopName: workshop, gameName: game, player: player })
+        bus.$emit('sendDeletePlayer', { workshopName: workshop, gameName: game, player: player })
       }
     }
   }

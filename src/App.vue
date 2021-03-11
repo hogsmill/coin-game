@@ -10,12 +10,12 @@
     </div>
     <div v-if="showTab != 'about'">
       <div class="game-params">
-        <Status :socket="socket" />
+        <Status />
       </div>
       <div class="container">
-        <Facilitator v-if="showTab == 'facilitator'" :socket="socket" />
+        <Facilitator v-if="showTab == 'facilitator'" />
         <div v-if="showTab == 'game'">
-          <Results :game-state="gameState" :socket="socket" />
+          <Results :game-state="gameState" />
         </div>
       </div>
     </div>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import io from 'socket.io-client'
+import bus from './socket.js'
 
 import params from './lib/params.js'
 
@@ -65,20 +65,11 @@ export default {
     }
   },
   created() {
-    let connStr
-    if (location.hostname == 'localhost') {
-      connStr = 'http://localhost:3000'
-    } else {
-      connStr = 'https://agilesimulations.co.uk:3000'
-    }
-    console.log('Connecting to: ' + connStr)
-    this.socket = io(connStr)
-
     if (params.isParam('host')) {
       this.$store.dispatch('updateHost', true)
     }
 
-    this.socket.emit('checkSystemWorkshops')
+    bus.$emit('sendCheckSystemWorkshops')
 
     /*
     if (params.getParam('workshop')) {
@@ -86,7 +77,7 @@ export default {
       this.$store.dispatch('updateWorkshopName', workshop)
       this.$store.dispatch('updateGameName', '')
       localStorage.setItem('workshopName-cg', workshop)
-      this.socket.emit('loadWorkshop', {workshopName: workshop})
+      bus.$emit('sendLoadWorkshop', {workshopName: workshop})
     } else if (params.getParam('game')) {
       const game = decodeURIComponent(params.getParam('game'))
       this.$store.dispatch('updateWorkshopName', '')
@@ -114,29 +105,29 @@ export default {
     }
     */
 
-    this.socket.on('updateWorkshops', (data) => {
+    bus.$on('updateWorkshops', (data) => {
       this.$store.dispatch('updateWorkshops', data)
     })
 
-    this.socket.on('updateWorkshop', (data) => {
+    bus.$on('updateWorkshop', (data) => {
       if (this.workshopName == data.workshopName) {
         this.$store.dispatch('updateWorkshop', data)
       }
     })
 
-    this.socket.on('updateGameState', (data) => {
+    bus.$on('updateGameState', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('updateGameState', data)
       }
     })
 
-    this.socket.on('updateWorkshopResults', (data) => {
+    bus.$on('updateWorkshopResults', (data) => {
       if (this.workshopName == data.workshopName) {
         this.$store.dispatch('updateWorkshopResults', data)
       }
     })
 
-    this.socket.on('updateConnections', (data) => {
+    bus.$on('updateConnections', (data) => {
       this.$store.dispatch('updateConnections', data)
     })
   }

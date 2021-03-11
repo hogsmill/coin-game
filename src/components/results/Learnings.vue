@@ -7,8 +7,8 @@
       <div class="mt-4 conclusions" v-if="step == 1">
         <h4>Results</h4>
         <div class="row">
-          <SingleTeam v-if="workshop.single" :socket="socket" />
-          <MultipleTeams v-if="!workshop.single" :socket="socket" />
+          <SingleTeam v-if="workshop.single" />
+          <MultipleTeams v-if="!workshop.single" />
         </div>
       </div>
       <div class="mt-4 conclusions" v-if="step == 2">
@@ -84,6 +84,8 @@
 </template>
 
 <script>
+import bus from '../../socket.js'
+
 import SingleTeam from './learnings/SingleTeam.vue'
 import MultipleTeams from './learnings/MultipleTeams.vue'
 
@@ -92,9 +94,6 @@ export default {
     SingleTeam,
     MultipleTeams
   },
-  props: [
-    'socket'
-  ],
   data() {
     return {
       step: 1
@@ -116,19 +115,19 @@ export default {
   },
   mounted() {
     const self = this
-    this.socket.on('updateWorkshopResults', (data) => {
+    bus.$on('updateWorkshopResults', (data) => {
       if (self.scope(data, self.workshopName, self.gameName)) {
         self.$modal.show('learnings')
       }
     })
 
-    this.socket.on('hideLearnings', (data) => {
+    bus.$on('hideLearnings', (data) => {
       if (self.scope(data, self.workshopName, self.gameName)) {
         self.$modal.hide('learnings')
       }
     })
 
-    this.socket.on('incrementLearnings', (data) => {
+    bus.$on('incrementLearnings', (data) => {
       if (self.scope(data, self.workshopName, self.gameName)) {
         self._incrementStep()
       }
@@ -148,14 +147,14 @@ export default {
         : this.workshopName == data.workshopName && this.gameName == data.gameName
     },
     show() {
-      this.socket.emit('getWorkshopResults', { workshopName: this.workshopName, single: this.workshop.single, gameName: this.gameName })
+      bus.$emit('sendGetWorkshopResults', { workshopName: this.workshopName, single: this.workshop.single, gameName: this.gameName })
     },
     hide() {
       this.step = 1
-      this.socket.emit('hideLearnings', { workshopName: this.workshopName, gameName: this.gameName })
+      bus.$emit('sendHideLearnings', { workshopName: this.workshopName, gameName: this.gameName })
     },
     incrementStep() {
-      this.socket.emit('incrementLearnings', { workshopName: this.workshopName, gameName: this.gameName })
+      bus.$emit('sendIncrementLearnings', { workshopName: this.workshopName, gameName: this.gameName })
     },
     _incrementStep() {
       this.step = this.step + 1

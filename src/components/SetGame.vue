@@ -83,12 +83,11 @@
 </template>
 
 <script>
+import bus from '../socket.js'
+
 import params from '../lib/params.js'
 
 export default {
-  props: [
-    'socket'
-  ],
   data() {
     return {
       workshopUrl: '',
@@ -127,7 +126,7 @@ export default {
   },
   methods: {
     show() {
-      this.socket.emit('loadWorkshops')
+      bus.$emit('sendLoadWorkshops')
       this.$modal.show('set-game')
     },
     hide() {
@@ -143,14 +142,14 @@ export default {
       if (!workshop) {
         this.$store.dispatch('updateWorkshop', false)
       } else {
-        this.socket.emit('loadWorkshop', {workshopName: workshop})
+        bus.$emit('sendLoadWorkshop', {workshopName: workshop})
       }
     },
     setGame() {
       const gameName = this.gameUrl ? this.gameUrl : document.getElementById('game-name').value
       localStorage.setItem('gameName-cg', gameName)
       this.$store.dispatch('updateGameName', gameName)
-      this.socket.emit('loadGame', { workshopName: this.workshopName, gameName: gameName })
+      bus.$emit('sendLoadGame', { workshopName: this.workshopName, gameName: gameName })
     },
     setMyName() {
       const id = document.getElementById('my-name').value

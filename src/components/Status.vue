@@ -5,10 +5,9 @@
 </template>
 
 <script>
+import bus from '../socket.js'
+
 export default {
-  props: [
-    'socket'
-  ],
   data() {
     return {
       status: ''
@@ -16,7 +15,7 @@ export default {
   },
   created() {
     const self = this
-    this.socket.on('status', (data) => {
+    bus.$on('status', (data) => {
       self.status = data
       setTimeout(function() {
         self.status = ''

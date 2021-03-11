@@ -5,9 +5,10 @@
 </template>
 
 <script>
+import bus from '../../../socket.js'
+
 export default {
   props: [
-    'socket',
     'round',
     'index'
   ],
@@ -21,7 +22,7 @@ export default {
   },
   methods: {
     go(round) {
-      this.socket.emit('startRound', {workshopName: this.workshopName, gameName: this.gameName, round: round})
+      bus.$emit('sendStartRound', {workshopName: this.workshopName, gameName: this.gameName, round: round})
     }
   }
 }

@@ -28,14 +28,14 @@
           <tr>
             <td colspan="2">
               <table class="denominations-table">
-                <Denomination :socket="socket" :id="'twoPound'" :amount="200" />
-                <Denomination :socket="socket" :id="'onePound'" :amount="100" />
-                <Denomination :socket="socket" :id="'fifty'" :amount="50" />
-                <Denomination :socket="socket" :id="'twenty'" :amount="20" />
-                <Denomination :socket="socket" :id="'ten'" :amount="10" />
-                <Denomination :socket="socket" :id="'five'" :amount="5" />
-                <Denomination :socket="socket" :id="'two'" :amount="2" />
-                <Denomination :socket="socket" :id="'one'" :amount="1" />
+                <Denomination :id="'twoPound'" :amount="200" />
+                <Denomination :id="'onePound'" :amount="100" />
+                <Denomination :id="'fifty'" :amount="50" />
+                <Denomination :id="'twenty'" :amount="20" />
+                <Denomination :id="'ten'" :amount="10" />
+                <Denomination :id="'five'" :amount="5" />
+                <Denomination :id="'two'" :amount="2" />
+                <Denomination :id="'one'" :amount="1" />
               </table>
             </td>
           </tr>
@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import bus from '../../socket.js'
+
 import Selected from './selected/Selected.vue'
 import Denomination from './coins/Denomination.vue'
 
@@ -59,9 +61,6 @@ export default {
     Selected,
     Denomination
   },
-  props: [
-    'socket'
-  ],
   data() {
     return {
       showCoins: false
@@ -101,8 +100,7 @@ export default {
     updateCurrency() {
       const workshop = this.editingWorkshop.workshopName
       const currency = document.getElementById('currency').value
-      this.socket.emit('updateCurrency', {workshopName: workshop, currency: currency })
-
+      bus.$emit('sendUpdateCurrency', {workshopName: workshop, currency: currency })
     }
   }
 }
