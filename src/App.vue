@@ -1,9 +1,6 @@
 <template>
   <div id="app" class="mb-4">
     <Header />
-    <h1>
-      The Coin Game
-    </h1>
     <HeaderString />
     <div v-if="showTab == 'about'">
       <About />

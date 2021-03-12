@@ -1,7 +1,7 @@
 <template>
-  <h2>
+  <h3>
     {{ headerString() }}
-  </h2>
+  </h3>
 </template>
 
 <script>
