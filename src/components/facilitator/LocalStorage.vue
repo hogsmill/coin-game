@@ -8,7 +8,7 @@
         <i v-if="showLocalStorage" @click="setShowLocalStorage(false)" title="collapse" class="fas fa-caret-up toggle" />
         <i v-if="!showLocalStorage" @click="setShowLocalStorage(true)" title="expand" class="fas fa-caret-down toggle" />
       </div>
-      <div v-if="showLocalStorage" >
+      <div v-if="showLocalStorage">
         <p>
           <i class="fas fa-exclamation-triangle" />
           Don't delete anything here unless you know what you are doing...

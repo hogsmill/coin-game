@@ -304,7 +304,7 @@ module.exports = {
 
     if (debugOn) { console.log('restartGame', data) }
 
-    if (data.workshopName == "None (Single team Game)") {
+    if (data.workshopName == 'None (Single team Game)') {
       db.collection('coinGame').findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
         if (err) throw err
         if (res) {

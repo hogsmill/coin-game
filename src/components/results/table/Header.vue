@@ -1,8 +1,13 @@
 <template>
   <thead>
     <tr>
+      <td :colspan="gameState.rounds[0]['roles'].length + 2">
+        Total Value to Deliver: {{ total() }}
+      </td>
+    </tr>
+    <tr v-if="!rolesSet()">
       <td />
-      <td :colspan="gameState.rounds[0]['roles'].length" class="role-click">
+      <td :colspan="gameState.rounds[0]['roles'].length + 2" class="role-click">
         <i>(Click on a role to set the player for that role)</i>
       </td>
     </tr>
@@ -34,6 +39,8 @@
 <script>
 import bus from '../../../socket.js'
 
+import valueFuns from '../../../lib/value.js'
+
 export default {
   data() {
     return {
@@ -54,6 +61,18 @@ export default {
   methods: {
     setWidth() {
       return 100 / (this.gameState.roles.length + 1) + '%'
+    },
+    total() {
+      return valueFuns.total(this.gameState.denominations)
+    },
+    rolesSet() {
+      let rolesSet = true
+      for (let i = 0; i < this.gameState.rounds[0]['roles'].length; i++) {
+        if (!this.gameState.rounds[0]['roles'][i].name) {
+          rolesSet = false
+        }
+      }
+      return rolesSet
     },
     showNameEdit(role) {
       this.roleEditing = role

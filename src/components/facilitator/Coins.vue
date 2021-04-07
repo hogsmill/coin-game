@@ -30,7 +30,9 @@
               <table class="denominations-table">
                 <tr>
                   <td colspan="3">
-                    <button class="btn btn-sm btn-secondary smaller-font" @click="resetDefaultDenominations()">Reset Default Denominations</button>
+                    <button class="btn btn-sm btn-secondary smaller-font" @click="resetDefaultDenominations()">
+                      Reset Default Denominations
+                    </button>
                   </td>
                 </tr>
                 <Denomination :id="'twoPound'" :amount="200" />
@@ -57,6 +59,8 @@
 
 <script>
 import bus from '../../socket.js'
+
+import valueFuns from '../../lib/value.js'
 
 import Selected from './selected/Selected.vue'
 import Denomination from './coins/Denomination.vue'
@@ -87,6 +91,8 @@ export default {
       return this.editingWorkshop.currency.symbol
     },
     total() {
+      return valueFuns.total(this.editingWorkshop.denominations)
+      /*
       let total = 0
       for (const denomination in this.editingWorkshop.denominations) {
         total += this.editingWorkshop.denominations[denomination] * denomination
@@ -97,6 +103,7 @@ export default {
         pence = '0' + pence
       }
       return pounds + ':' + pence
+    */
     },
     getWidth(n) {
       let sum = 0
@@ -111,7 +118,6 @@ export default {
       bus.$emit('sendUpdateCurrency', {workshopName: workshop, currency: currency })
     },
     resetDefaultDenominations() {
-    console.log(this.editingGame)
       bus.$emit('sendResetDefaultDenominations', {workshopName: this.editingWorkshop.workshopName, gameName: this.editingGame.gameName})
     }
   }
