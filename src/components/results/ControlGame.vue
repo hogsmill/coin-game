@@ -22,9 +22,8 @@ export default {
   },
   methods: {
     restart() {
-      const restartGame = confirm('Are you sure you want to re-start this game?')
-      if (restartGame) {
-        bus.$emit('sendRestartGame', { workshopName: this.workshopName, gameName: this.gameName })
+      if (confirm('Are you sure you want to re-start this game?')) {
+        bus.$emit('sendRestartGame', {workshopName: this.workshopName, gameName: this.gameName})
       }
     }
   }

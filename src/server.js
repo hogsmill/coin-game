@@ -130,6 +130,8 @@ MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime 
 
     socket.on('sendUpdateCurrency', (data) => { dbStore.updateCurrency(db, io, 'currency', data, debugOn) })
 
+    socket.on('sendResetDefaultDenominations', (data) => { dbStore.resetDefaultDenominations(db, io, data, debugOn) })
+
     socket.on('sendUpdateDenomination', (data) => { dbStore.updateCurrency(db, io, 'denomination', data, debugOn) })
 
     socket.on('sendSetRoleInclude', (data) => { dbStore.updateRoles(db, io, 'setRoleInclude', data, debugOn) })

@@ -40,6 +40,8 @@ bus.$on('sendIncrementLearnings', (data) => { socket.emit('sendIncrementLearning
 
 bus.$on('sendUpdateCurrency', (data) => { socket.emit('sendUpdateCurrency', data) })
 
+bus.$on('sendResetDefaultDenominations', (data) => { socket.emit('sendResetDefaultDenominations', data) })
+
 bus.$on('sendUpdateDenomination', (data) => { socket.emit('sendUpdateDenomination', data) })
 
 bus.$on('sendUpdateInterval', (data) => { socket.emit('sendUpdateInterval', data) })
@@ -107,6 +109,6 @@ socket.on('status', (data) => { bus.$emit('status', data) })
 
 socket.on('hideLearnings', (data) => { bus.$emit('hideLearnings', data) })
 
-socket.on('incrementLearnings', (data) => { bus.$emit('status', data) })
+socket.on('incrementLearnings', (data) => { bus.$emit('incrementLearnings', data) })
 
 export default bus

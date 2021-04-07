@@ -62,6 +62,8 @@
 </template>
 
 <script>
+import bus from '../socket.js'
+
 import mailFuns from '../lib/mail.js'
 
 export default {

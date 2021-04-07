@@ -28,6 +28,11 @@
           <tr>
             <td colspan="2">
               <table class="denominations-table">
+                <tr>
+                  <td colspan="3">
+                    <button class="btn btn-sm btn-secondary smaller-font" @click="resetDefaultDenominations()">Reset Default Denominations</button>
+                  </td>
+                </tr>
                 <Denomination :id="'twoPound'" :amount="200" />
                 <Denomination :id="'onePound'" :amount="100" />
                 <Denomination :id="'fifty'" :amount="50" />
@@ -69,6 +74,9 @@ export default {
   computed: {
     editingWorkshop() {
       return this.$store.getters.getEditingWorkshop
+    },
+    editingGame() {
+      return this.$store.getters.getEditingGame
     }
   },
   methods: {
@@ -101,6 +109,10 @@ export default {
       const workshop = this.editingWorkshop.workshopName
       const currency = document.getElementById('currency').value
       bus.$emit('sendUpdateCurrency', {workshopName: workshop, currency: currency })
+    },
+    resetDefaultDenominations() {
+    console.log(this.editingGame)
+      bus.$emit('sendResetDefaultDenominations', {workshopName: this.editingWorkshop.workshopName, gameName: this.editingGame.gameName})
     }
   }
 }

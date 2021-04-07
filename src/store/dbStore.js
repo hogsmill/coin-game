@@ -304,17 +304,31 @@ module.exports = {
 
     if (debugOn) { console.log('restartGame', data) }
 
-    db.collection('coinGame').findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
-      if (err) throw err
-      if (res) {
-        const gameState = roundFuns.resetRounds(res.gameState)
-        data.gameState = gameState
-        db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
-          if (err) throw err
-          io.emit('updateGameState', data)
-        })
-      }
-    })
+    if (data.workshopName == "None (Single team Game)") {
+      db.collection('coinGame').findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
+        if (err) throw err
+        if (res) {
+          const gameState = roundFuns.resetRounds(res.gameState)
+          data.gameState = gameState
+          db.collection('coinGame').updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
+            if (err) throw err
+            io.emit('updateGameState', data)
+          })
+        }
+      })
+    } else {
+      db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, res) {
+        if (err) throw err
+        for (let i = 0; i < res.length; i++) {
+          const gameState = roundFuns.resetRounds(res[i].gameState)
+          data.gameState = gameState
+          db.collection('coinGame').updateOne({'_id': res[i]._id}, {$set: {gameState: gameState}}, function(err, res) {
+            if (err) throw err
+            io.emit('updateGameState', data)
+          })
+        }
+      })
+    }
   },
 
   getWorkshopResults: function(db, io, data, debugOn) {
@@ -807,6 +821,41 @@ module.exports = {
         }
       })
     }
+  },
+
+  resetDefaultDenominations: function(db, io, data, debugOn) {
+
+    if (debugOn) { console.log('resetDefaultDenominations', data, denominations) }
+
+/*
+    if (data.workshopName == "None (Single team Game)") {
+      db.collection('coinGame').findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
+        if (err) throw err
+        db.collection('coinGame').updateOne({'_id': res._id}, {$set: {'gameState.denominations': denominations}}, function(err, ) {
+          if (err) throw err
+          _loadWorkshops(db, io, debugOn)
+        })
+      })
+    } else {
+*/
+      db.collection('coinGameWorkshops').findOne({workshopName: data.workshopName}, function(err, res) {
+        if (err) throw err
+        db.collection('coinGameWorkshops').updateOne({'_id': res._id}, {$set: {denominations: denominations}}, function(err, ) {
+          if (err) throw err
+          _loadWorkshops(db, io, debugOn)
+          db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, gameRes) {
+            if (err) throw err
+            for (let i = 0; i < gameRes.length; i++) {
+              db.collection('coinGame').updateOne({'_id': gameRes[i]._id}, {$set: {'gameState.denominations': denominations}}, function(err, ) {
+                if (err) throw err
+              })
+            }
+          })
+        })
+      })
+/*
+    }
+*/
   }
 
 }
