@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <td :colspan="gameState.rounds[0]['roles'].length + 2">
-        Total Value to Deliver: {{ total() }}
+        Total Value to Deliver:  {{ currencySymbol() }}{{ total() }}
       </td>
     </tr>
     <tr v-if="!rolesSet()">
@@ -59,6 +59,12 @@ export default {
     }
   },
   methods: {
+    scope() {
+      return this.editingWorkshop ? this.editingWorkshop : this.editingGame
+    },
+    currencyMajorSymbol() {
+      return this.scope().currency.symbol
+    },
     setWidth() {
       return 100 / (this.gameState.roles.length + 1) + '%'
     },
