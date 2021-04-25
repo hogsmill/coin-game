@@ -62,7 +62,7 @@ export default {
     scope() {
       return this.editingWorkshop ? this.editingWorkshop : this.editingGame
     },
-    currencyMajorSymbol() {
+    currencySymbol() {
       return this.scope().currency.symbol
     },
     setWidth() {
