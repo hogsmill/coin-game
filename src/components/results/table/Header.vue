@@ -55,7 +55,6 @@ export default {
       return this.$store.getters.getGameName
     },
     gameState() {
-    console.log(this.$store.getters.getGameState)
       return this.$store.getters.getGameState
     }
   },
