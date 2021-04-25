@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <td :colspan="gameState.rounds[0]['roles'].length + 2">
-        Total Value to Deliver:  {{ gameState.currency.major }}{{ total() }}
+        Total Value to Deliver:  {{ gameState.currency.symbol }}{{ total() }}
       </td>
     </tr>
     <tr v-if="!rolesSet()">
@@ -55,6 +55,7 @@ export default {
       return this.$store.getters.getGameName
     },
     gameState() {
+    console.log(this.$store.getters.getGameState)
       return this.$store.getters.getGameState
     }
   },
