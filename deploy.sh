@@ -17,7 +17,7 @@ done
 REPO="https://github.com/hogsmill/coin-game.git"
 APPS=(
   'coin-game,coinGameWorkshops,coinGame,3000'
-  'coin-game-new,coinGameNewWorkshops,coinGameNew,3024'
+  'coin-game-new,coinGameNewWorkshops,coinGameNew,3024,Coin Game New,123456'
 )
 
 for ((i = 0; i < ${#APPS[@]}; i++))
