@@ -374,9 +374,10 @@ module.exports = {
         for (let i = 0; i < gameState.roles.length; i++) {
           const role = gameState.roles[i]
           if (role.role == data.role.role) {
-            role.name = gameState.players.find(function(p) {
+            const roleName = gameState.players.find(function(p) {
               return p.id == data.name
             })
+            role.name = roleName ? roleName : ''
           }
           roles.push(role)
         }

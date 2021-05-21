@@ -25,6 +25,9 @@ export default {
       if (confirm('Are you sure you want to re-start this game?')) {
         bus.$emit('sendRestartGame', {workshopName: this.workshopName, gameName: this.gameName})
       }
+    },
+    endGame() {
+      alert('endGame not implemented')
     }
   }
 }
