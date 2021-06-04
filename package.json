@@ -19,7 +19,7 @@
     "monodb": "^1.5.1",
     "socket.io": "^4.1.2",
     "socket.io-client": "^4.1.2",
-    "vue": "^2.6.12",
+    "vue": "^2.6.13",
     "vue-js-modal": "^2.0.0-rc.6",
     "vuex": "^3.5.1"
   },
@@ -33,7 +33,7 @@
     "eslint-webpack-plugin": "^2.5.4",
     "node-sass": "^5.0.0",
     "sass-loader": "^10.1.1",
-    "vue-template-compiler": "^2.6.12"
+    "vue-template-compiler": "^2.6.13"
   },
   "eslintConfig": {
     "root": true,
