@@ -1,9 +1,15 @@
+const path = require('path')
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
+
 const fs = require('fs')
 const ON_DEATH = require('death')({uncaughtException: true})
 const os = require('os')
-
 const prod = os.hostname() == 'agilesimulations' ? true : false
+
+const port = prod ? process.env.VUE_APP_PORT : 3000
 const logFile = prod ? process.argv[4] : 'server.log'
+const gameCollection =  prod ? process.env.VUE_APP_GAME_COLLECTION : 'coinGame'
+const workshopCollection =  prod ? process.env.VUE_APP_WORKSHOP_COLLECTION : 'coinGameWorkshops'
 
 ON_DEATH(function(signal, err) {
   let logStr = new Date()
@@ -69,6 +75,12 @@ function emit(event, data) {
 MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime }, function (err, client) {
   if (err) throw err
   const db = client.db('db')
+
+  db.createCollection(gameCollection, function(error, collection) {})
+  db.createCollection(workshopCollection, function(error, collection) {})
+
+  db.gameCollection = db.collection(gameCollection)
+  db.workshopCollection = db.collection(workshopCollection)
 
   io.on('connection', (socket) => {
     const connection = socket.handshake.headers.host
@@ -191,7 +203,6 @@ MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime 
   })
 })
 
-const port = process.argv[2] || 3000
 httpServer.listen(port, () => {
   console.log('Listening on *:' + port)
 })

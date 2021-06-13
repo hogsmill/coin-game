@@ -15,19 +15,19 @@
       <td :style="{ width: setWidth() }">
         Round
       </td>
-      <td v-for="role in gameState.rounds[0]['roles']" :key="role.role" :style="{ width: setWidth() }">
-        <span @click="showNameEdit(role.role)"> {{ role.role }} </span>
-        <div v-if="roleEditing == role.role">
+      <td v-for="(role, rindex) in gameState.rounds[0]['roles']" :key="rindex" :style="{ width: setWidth() }">
+        <span @click="showNameEdit(role)"> {{ role.role }} </span>
+        <div v-if="roleEditing.role == role.role">
           <select id="role-select" v-model="role.name" @change="updateRole(role)">
             <option value="">
               -- Select --
             </option>
-            <option v-for="(player, index) in gameState.players" :key="index" :value="player.id">
+            <option v-for="(player, pindex) in gameState.players" :key="pindex" :value="player.id">
               {{ player.name }}
             </option>
           </select>
         </div>
-        <span v-if="roleEditing != role.role && role.name.name"><br> ({{ role.name.name }}) </span>
+        <span v-if="roleEditing.role != role.role && role.name.name"><br> ({{ role.name.name }}) </span>
       </td>
       <td :style="{ width: setWidth() }">
         Delivered

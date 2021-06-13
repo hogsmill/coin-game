@@ -25,7 +25,7 @@ do
   REC="${APPS[$i]}"
 
   APP=`echo $REC | cut -d, -f1`
-  COLLECTION=`echo $REC | cut -d, -f2`
+  WORKSHOPCOLLECTION=`echo $REC | cut -d, -f2`
   GAMECOLLECTION=`echo $REC | cut -d, -f3`
   PORT=`echo $REC | cut -d, -f4`
   APPNAME=`echo $REC | cut -d, -f5`
@@ -33,9 +33,9 @@ do
 
   echo "------------------------------------------------"
   if [ -z "$APPNAME" ]; then
-    echo "Installing $APP ($COLLECTION, $GAMECOLLECTION, $PORT)"
+    echo "Installing $APP ($WORKSHOPCOLLECTION, $GAMECOLLECTION, $PORT)"
   else
-    echo "Installing $APP ($COLLECTION, $GAMECOLLECTION, $PORT, $APPNAME, $PASSWORD)"
+    echo "Installing $APP ($WORKSHOPCOLLECTION, $GAMECOLLECTION, $PORT, $APPNAME, $PASSWORD)"
   fi
   echo "------------------------------------------------"
 
@@ -45,7 +45,7 @@ do
   fi
   ENVFILE="$DIR/.env"
   echo "VUE_APP_PORT=$PORT" > $ENVFILE
-  echo "VUE_APP_COLLECTION=$COLLECTION" >> $ENVFILE
+  echo "VUE_APP_WORKSHOP_COLLECTION=$WORKSHOPCOLLECTION" >> $ENVFILE
   echo "VUE_APP_GAME_COLLECTION=$GAMECOLLECTION" >> $ENVFILE
   if [ ! -z "$APPNAME" ]; then
     echo "VUE_APP_NAME=$APPNAME" >> $ENVFILE
