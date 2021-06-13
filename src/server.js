@@ -11,11 +11,6 @@ const logFile = prod ? process.argv[4] : 'server.log'
 const gameCollection = prod ? process.env.VUE_APP_GAME_COLLECTION : 'coinGame'
 const workshopCollection = prod ? process.env.VUE_APP_WORKSHOP_COLLECTION : 'coinGameWorkshops'
 
-const logStr = gameCollection + ', ' + workshopCollection
-fs.appendFile(logFile, logStr, function (err) {
-  if (err) console.log(logStr)
-})
-
 ON_DEATH(function(signal, err) {
   let logStr = new Date()
   if (signal) {

@@ -5,7 +5,7 @@ let connStr
 if (location.hostname == 'localhost') {
   connStr = 'http://localhost:3000'
 } else {
-  connStr = 'https://agilesimulations.co.uk:3000'
+  connStr = 'https://agilesimulations.co.uk:' + process.env.VUE_APP_PORT
 }
 console.log('Connecting to: ' + connStr)
 const socket = io(connStr)
