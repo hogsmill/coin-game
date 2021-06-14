@@ -56,6 +56,8 @@ bus.$on('sendUpdateClickValueTimeLimit', (data) => { socket.emit('sendUpdateClic
 
 bus.$on('sendUpdateClickOnCoins', (data) => { socket.emit('sendUpdateClickOnCoins', data) })
 
+bus.$on('sendOnlyHostCanControl', (data) => { socket.emit('sendOnlyHostCanControl', data) })
+
 bus.$on('sendUpdateNamedRolesClick', (data) => { socket.emit('sendUpdateNamedRolesClick', data) })
 
 bus.$on('sendAddPlayer', (data) => { socket.emit('sendAddPlayer', data) })

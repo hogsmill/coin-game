@@ -76,8 +76,16 @@
               Click on Coins
             </td>
             <td colspan="2">
-              <input disabled="true" id="click-on-coins" type="checkbox" :value="editingWorkshop.clickOnCoins" @click="updateClickOnCoins()">
+              <input disabled="true" id="click-on-coins" type="checkbox" :value="editingWorkshop.config.clickOnCoins" @click="updateClickOnCoins()">
               <span class="unavailable">(<i>Demo mode currently unavailable</i>)</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Only Host Can Control
+            </td>
+            <td colspan="2">
+              <input id="only-host-can-control" type="checkbox" :value="editingWorkshop.config.onlyHostCanControl" @click="updateOnlyHostCanControl()">
             </td>
           </tr>
         </table>
@@ -154,6 +162,12 @@ export default {
       const game = this.editingGame ? this.editingGame.gameName : ''
       this.namedRolesClick = !this.namedRolesClick
       bus.$emit('sendUpdateNamedRolesClick', {workshopName: workshop, gameName: game, value: this.namedRolesClick})
+    },
+    updateOnlyHostCanControl() {
+      const workshop = this.editingWorkshop.workshopName
+      const game = this.editingGame ? this.editingGame.gameName : ''
+      const onlyHostCanControl = !this.editingWorkshop.config.onlyHostCanControl
+      bus.$emit('sendOnlyHostCanControl', {workshopName: workshop, gameName: game, value: onlyHostCanControl})
     }
   }
 }

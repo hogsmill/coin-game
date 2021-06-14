@@ -1,7 +1,7 @@
 <template>
   <span v-if="gameName" class="restart">
-    <i title="Restart Game" class="fas fa-undo-alt restart" aria-hidden="true" @click="restart()" />
-    <i title="End Game" class="fas fa-stop-circle" aria-hidden="true" @click="endGame()" />
+    <i title="Restart Game" v-if="host || !workshop.config.onlyHostCanControl" class="fas fa-undo-alt restart" aria-hidden="true" @click="restart()" />
+    <i title="End Game" v-if="host || !workshop.config.onlyHostCanControl" class="fas fa-stop-circle" aria-hidden="true" @click="endGame()" />
   </span>
 </template>
 
@@ -10,8 +10,14 @@ import bus from '../../socket.js'
 
 export default {
   computed: {
+    host() {
+      return this.$store.getters.getHost
+    },
     workshopName() {
       return this.$store.getters.getWorkshopName
+    },
+    workshop() {
+      return this.$store.getters.getWorkshop
     },
     gameName() {
       return this.$store.getters.getGameName

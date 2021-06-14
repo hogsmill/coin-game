@@ -1,5 +1,5 @@
 <template>
-  <button :id="round.name + '-button'" class="btn btn-site-primary mb-2" @click="go(index)">
+  <button :id="round.name + '-button'" :disabled="!host && workshop.config.onlyHostCanControl" class="btn btn-site-primary mb-2" @click="go(index)">
     Run {{ round.name }}
   </button>
 </template>
@@ -13,11 +13,17 @@ export default {
     'index'
   ],
   computed: {
+    host() {
+      return this.$store.getters.getHost
+    },
     gameName() {
       return this.$store.getters.getGameName
     },
     workshopName() {
       return this.$store.getters.getWorkshopName
+    },
+    workshop() {
+      return this.$store.getters.getWorkshop
     }
   },
   methods: {

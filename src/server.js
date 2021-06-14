@@ -187,6 +187,8 @@ MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime 
 
     socket.on('sendUpdateNamedRolesClick', (data) => { dbStore.updateConfig(db, io, data, 'namedRolesClick', debugOn) })
 
+    socket.on('sendOnlyHostCanControl', (data) => { dbStore.updateConfig(db, io, data, 'onlyHostCanControl', debugOn) })
+
     // Learnings
 
     socket.on('sendHideLearnings', (data) => { emit('hideLearnings', data) })

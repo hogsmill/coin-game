@@ -26,7 +26,8 @@ export const store = new Vuex.Store({
         timeLimit: {demo: 60, click: 120 },
         valueTimeLimit: {demo: 10, click: 20 },
         clickOnCoins: true,
-        namedRolesClick: true
+        namedRolesClick: true,
+        onlyHostCanControl: true
       },
       currentCoin: '',
       stopped: false,
