@@ -23,6 +23,6 @@ module.exports = {
   },
 
   running: function(round, gameState, timeLimit) {
-    return round.roles[round.roles.length - 1].coins.length < gameState.coins.length && round.running && round.time < timeLimit
+    return gameState.coins && round.roles[round.roles.length - 1].coins.length < gameState.coins.length && round.running && round.time < timeLimit
   }
 }

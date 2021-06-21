@@ -148,8 +148,10 @@ export default {
     setGame() {
       const gameName = this.gameUrl ? this.gameUrl : document.getElementById('game-name').value
       localStorage.setItem('gameName-cg', gameName)
-      this.$store.dispatch('updateGameName', gameName)
-      bus.$emit('sendLoadGame', { workshopName: this.workshopName, gameName: gameName })
+      if (gameName) {
+        this.$store.dispatch('updateGameName', gameName)
+        bus.$emit('sendLoadGame', { workshopName: this.workshopName, gameName: gameName })
+      }
     },
     setMyName() {
       const id = document.getElementById('my-name').value
