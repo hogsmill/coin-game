@@ -63,13 +63,12 @@
           </li>
         </ul>
         <p>
-          To set up your own game, using your teams' names and roles, use the facilitator tab
-          by adding <em>?host</em> to the URL:
-        </p>
-        <p class="center">
-          <a href="https://agilesimulations.co.uk/coin-game/?host">
-            https://agilesimulations.co.uk/coin-game/?host
-          </a>
+          You can increase engagement and relevance by setting up your own game
+          (<i>this also avoids the of risk others joining your demo game</i>),
+          using your teams' names and roles, by using one of our premium packages
+          <a href="https://agilesimulations.co.uk/?pricing">
+            here
+          </a>.
         </p>
       </div>
       <div class="mt-4" v-if="step == 4">
@@ -132,12 +131,6 @@
         <p>
           Enjoy!
         </p>
-        <!--
-        <p>
-          The game can also be run in demo mode; if you're presenting to
-          management or C-Suite, or doing an online presentation (<em>not currently available</em>)
-        </p>
-        -->
       </div>
       <div class="buttons" v-if="step < 8">
         <button class="btn btn-info" @click="incrementStep">
