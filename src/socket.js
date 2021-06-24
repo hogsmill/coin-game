@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 import bus from './EventBus'
 
-let connStr
+let asConnStr, connStr
 if (location.hostname == 'localhost') {
   asConnStr = 'http://localhost:3099'
   connStr = 'http://localhost:3000'

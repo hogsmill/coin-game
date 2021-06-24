@@ -38,7 +38,8 @@
         <li class="nav-item logged-in">
           <a class="nav-link pointer">
             <i v-if="!session" class="fas fa-handshake-slash" title="Not logged in" />
-            <i v-if="session" class="far fa-handshake" :title="'Logged in as ' + userName" />
+            <i v-if="session && !admin" class="far fa-handshake" :title="'Logged in as ' + userName" />
+            <i v-if="session && admin" class="fas fa-handshake" :title="'Logged in as ' + userName + ' (Admin)'" />
           </a>
         </li>
       </ul>
@@ -83,6 +84,12 @@ export default {
     session() {
       return this.$store.getters.getSession
     },
+    userName() {
+      return this.$store.getters.getUserName
+    },
+    admin() {
+      return this.$store.getters.getAdmin
+    },
     isHost() {
       return this.$store.getters.getHost
     },
@@ -103,7 +110,9 @@ export default {
     }
 
     bus.$on('loginSuccess', (data) => {
-      console.log(data)
+      this.$store.dispatch('updateSession', data.session)
+      this.$store.dispatch('updateUserName', data.userName)
+      this.$store.dispatch('updateAdmin', data.loggedInAsAdmin)
     })
   },
   methods: {

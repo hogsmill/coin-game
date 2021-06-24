@@ -7,6 +7,8 @@ export const store = new Vuex.Store({
   state: {
     thisGame: 'The Coin Game',
     session: null,
+    userName: '',
+    admin: false,
     connections: 0,
     walkThrough: false,
     host: false,
@@ -86,6 +88,12 @@ export const store = new Vuex.Store({
     getSession: (state) => {
       return state.session
     },
+    getUserName: (state) => {
+      return state.userName
+    },
+    getAdmin: (state) => {
+      return state.admin
+    },
     getWalkThrough: (state) => {
       return state.walkThrough
     },
@@ -148,6 +156,15 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
+    updateSession: (state, payload) => {
+      state.session = payload
+    },
+    updateUserName: (state, payload) => {
+      state.userName = payload
+    },
+    updateAdmin: (state, payload) => {
+      state.admin = payload
+    },
     updateWalkThrough: (state, payload) => {
       state.walkThrough = payload
     },
@@ -202,6 +219,15 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    updateSession: ({ commit }, payload) => {
+      commit('updateSession', payload)
+    },
+    updateUserName: ({ commit }, payload) => {
+      commit('updateUserName', payload)
+    },
+    updateAdmin: ({ commit }, payload) => {
+      commit('updateAdmin', payload)
+    },
     updateWalkThrough: ({ commit }, payload) => {
       commit('updateWalkThrough', payload)
     },
