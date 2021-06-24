@@ -35,6 +35,12 @@
         <li class="nav-item">
           <a class="nav-link pointer" @click="show()">Feedback</a>
         </li>
+        <li class="nav-item logged-in">
+          <a class="nav-link pointer">
+            <i v-if="!session" class="fas fa-handshake-slash" title="Not logged in" />
+            <i v-if="session" class="far fa-handshake" :title="'Logged in as ' + userName" />
+          </a>
+        </li>
       </ul>
 
       <modal name="feedback" :height="400" :classes="['rounded', 'feedback']">
@@ -74,6 +80,9 @@ export default {
     thisGame() {
       return this.$store.getters.thisGame
     },
+    session() {
+      return this.$store.getters.getSession
+    },
     isHost() {
       return this.$store.getters.getHost
     },
@@ -83,6 +92,19 @@ export default {
   },
   created() {
     this.appName = process.env.VUE_APP_NAME
+
+    let session = localStorage.getItem('session-agilesimulations')
+    if (session) {
+      session = JSON.parse(session)
+      this.$store.dispatch('updateSession', session.session)
+      bus.$emit('sendCheckLogin', {id: this.id, session: session})
+    } else {
+      this.$store.dispatch('updateSession', '')
+    }
+
+    bus.$on('loginSuccess', (data) => {
+      console.log(data)
+    })
   },
   methods: {
     updateShowTab(payload) {
@@ -108,7 +130,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
   h1 {
     letter-spacing: initial;
     margin-left: 6px;
@@ -116,6 +138,32 @@ export default {
     text-shadow: 2px 2px 3px #444;
     font-size: xx-large;
     line-height: 1;
+  }
+
+  .logged-in {
+
+    a {
+      padding: 11px 6px !important;
+
+      &:hover {
+        cursor: default;
+      }
+    }
+
+    .fas, .far {
+      font-size: x-large;
+      color: #fff !important;
+      position: relative;
+      top: 2px;
+    }
+
+    &:hover {
+
+      .fas, .far {
+        color: #f4511e !important;
+        cursor: default;
+      }
+    }
   }
 
   .feedback {

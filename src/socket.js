@@ -3,12 +3,22 @@ import bus from './EventBus'
 
 let connStr
 if (location.hostname == 'localhost') {
+  asConnStr = 'http://localhost:3099'
   connStr = 'http://localhost:3000'
 } else {
+  asConnStr = 'https://agilesimulations.co.uk:3099'
   connStr = 'https://agilesimulations.co.uk:' + process.env.VUE_APP_PORT
 }
+console.log('Connecting to: ' + asConnStr)
+const asSocket = io(asConnStr)
 console.log('Connecting to: ' + connStr)
 const socket = io(connStr)
+
+// Agile Simulations (login)
+
+bus.$on('sendCheckLogin', (data) => { asSocket.emit('sendCheckLogin', data) })
+
+asSocket.on('loginSuccess', (data) => { bus.$emit('loginSuccess', data) })
 
 // Send
 

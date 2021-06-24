@@ -74,7 +74,7 @@
       <div class="mt-4" v-if="step == 4">
         <h4>Playing The Game</h4>
         <p>
-          Once the game is set up, you can optionally (but recommended..) click on the roles
+          Once the game is set up, you can optionally (<i>but recommended...</i>) click on the roles
           to assign players to those roles as shown below:
         </p>
         <div class="role-select">
