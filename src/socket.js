@@ -20,6 +20,8 @@ bus.$on('sendCheckLogin', (data) => { asSocket.emit('sendCheckLogin', data) })
 
 asSocket.on('loginSuccess', (data) => { bus.$emit('loginSuccess', data) })
 
+asSocket.on('logout', (data) => { bus.$emit('logout', data) })
+
 // Send
 
 bus.$on('sendCheckSystemWorkshops', () => { socket.emit('sendCheckSystemWorkshops') })
