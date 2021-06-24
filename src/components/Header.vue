@@ -116,11 +116,9 @@ export default {
     })
 
     bus.$on('logout', (data) => {
-      if (data.userName == this.userName) {
-        this.$store.dispatch('updateSession', '')
-        this.$store.dispatch('updateUserName', '')
-        this.$store.dispatch('updateAdmin', false)
-      }
+      this.$store.dispatch('updateSession', '')
+      this.$store.dispatch('updateUserName', '')
+      this.$store.dispatch('updateAdmin', false)
     })
   },
   methods: {
