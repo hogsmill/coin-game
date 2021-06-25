@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="mb-4">
     <Header />
+    <ClearStorage />
     <HeaderString />
     <div v-if="showTab == 'about'">
       <About />
@@ -25,6 +26,7 @@ import bus from './socket.js'
 import params from './lib/params.js'
 
 import Header from './components/Header.vue'
+import ClearStorage from './components/ClearStorage.vue'
 import HeaderString from './components/HeaderString.vue'
 import Status from './components/Status.vue'
 import About from './components/about/About.vue'
@@ -35,6 +37,7 @@ export default {
   name: 'App',
   components: {
     Header,
+    ClearStorage,
     HeaderString,
     About,
     Status,
