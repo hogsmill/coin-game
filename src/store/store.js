@@ -159,7 +159,7 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
-    updateSession: (state, payload) => {
+    updateLogin: (state, payload) => {
       state.session = payload.session
       state.userName = payload.userName
       state.admin = payload.loggedInAsAdmin
