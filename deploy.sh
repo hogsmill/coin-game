@@ -17,7 +17,8 @@ done
 REPO="https://github.com/hogsmill/coin-game.git"
 APPS=(
   'coin-game,coinGameWorkshops,coinGame,3000'
-  'coin-game-guardian,coinGameGuardianWorkshops,coinGameGuardian,3024,Coin Game,123456'
+  'coin-game-new,coinGameNewWorkshops,coinGamNew,3035'
+  'coin-game-guardian,coinGameGuardianWorkshops,coinGameGuardian,3024,Coin Game'
 )
 
 for ((i = 0; i < ${#APPS[@]}; i++))
@@ -29,13 +30,12 @@ do
   GAMECOLLECTION=`echo $REC | cut -d, -f3`
   PORT=`echo $REC | cut -d, -f4`
   APPNAME=`echo $REC | cut -d, -f5`
-  PASSWORD=`echo $REC | cut -d, -f6`
 
   echo "------------------------------------------------"
   if [ -z "$APPNAME" ]; then
     echo "Installing $APP ($WORKSHOPCOLLECTION, $GAMECOLLECTION, $PORT)"
   else
-    echo "Installing $APP ($WORKSHOPCOLLECTION, $GAMECOLLECTION, $PORT, $APPNAME, $PASSWORD)"
+    echo "Installing $APP ($WORKSHOPCOLLECTION, $GAMECOLLECTION, $PORT, $APPNAME)"
   fi
   echo "------------------------------------------------"
 
@@ -49,9 +49,6 @@ do
   echo "VUE_APP_GAME_COLLECTION=$GAMECOLLECTION" >> $ENVFILE
   if [ ! -z "$APPNAME" ]; then
     echo "VUE_APP_NAME=$APPNAME" >> $ENVFILE
-  fi
-  if [ ! -z $PASSWORD ]; then
-    echo "VUE_APP_PASSWORD=$PASSWORD" >> $ENVFILE
   fi
 
   cd $DIR
