@@ -1,7 +1,7 @@
 <template>
   <span class="learnings">
 
-    <button v-if="gameName && (host || !workshop.config.onlyHostCanControl)" class="btn btn-sm btn-secondary mb-2" :disabled="running()" @click="show()">Show Learnings</button>
+    <button v-if="gameName && (admin || !workshop.config.onlyAdminCanControl)" class="btn btn-sm btn-secondary mb-2" :disabled="running()" @click="show()">Show Learnings</button>
 
     <modal name="learnings" id="learnings" :height="480" :classes="['rounded']">
       <div class="mt-4 conclusions" v-if="step == 1">
@@ -100,8 +100,8 @@ export default {
     }
   },
   computed: {
-    host() {
-      return this.$store.getters.getHost
+    admin() {
+      return this.$store.getters.getAdmin
     },
     workshop() {
       return this.$store.getters.getWorkshop

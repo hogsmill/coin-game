@@ -65,8 +65,8 @@ export default {
     }
   },
   created() {
-    if (params.isParam('host')) {
-      this.$store.dispatch('updateHost', true)
+    if (location.hostname == 'localhost' && params.isParam('host')) {
+      this.$store.dispatch('updateAdmin', true)
     }
 
     bus.$emit('sendCheckSystemWorkshops')
@@ -135,7 +135,6 @@ export default {
 </script>
 
 <style lang="scss">
-  .not-host { height: 0px; visibility: hidden; }
   #clickCoins { margin-left: -2rem; }
 
   .connections {

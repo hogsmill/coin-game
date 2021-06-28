@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'not-host' : !isHost}">
+  <div :class="{'not-admin' : !admin}">
     <div class="connections">
       Current server connections: {{ connections.connections }} / {{ connections.maxConnections }}
     </div>
@@ -32,8 +32,8 @@ export default {
     LocalStorage
   },
   computed: {
-    isHost() {
-      return this.$store.getters.getHost
+    admin() {
+      return this.$store.getters.getAdmin
     },
     connections() {
       return this.$store.getters.getConnections
@@ -59,6 +59,11 @@ export default {
 </script>
 
 <style lang="scss">
+.not-admin {
+  height: 0px;
+  visibility: hidden;
+}
+
 .config-table {
   width: 90%;
   margin: 0 auto;

@@ -112,7 +112,6 @@ function _loadWorkshop(db, io, data, debugOn) {
   db.workshopCollection.findOne({workshopName: data.workshopName}, function(err, res) {
     if (err) throw err
     if (res) {
-      //db.collection('coinGame').find({workshopName: data.workshopName}).toArray(function(err, gameRes) {
       db.gameCollection.find({workshopName: data.workshopName}).toArray(function(err, gameRes) {
         if (err) throw err
         res.games = gameRes
@@ -323,7 +322,6 @@ module.exports = {
         for (let i = 0; i < res.length; i++) {
           const gameState = roundFuns.resetRounds(res[i].gameState)
           data.gameState = gameState
-          //db.collection('coinGame').updateOne({'_id': res[i]._id}, {$set: {gameState: gameState}}, function(err, res) {
           db.gameCollection.updateOne({'_id': res[i]._id}, {$set: {gameState: gameState}}, function(err, res) {
             if (err) throw err
             io.emit('updateGameState', data)

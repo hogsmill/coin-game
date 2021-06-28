@@ -82,10 +82,10 @@
           </tr>
           <tr>
             <td>
-              Only Host Can Control
+              Only Admin Can Control
             </td>
             <td colspan="2">
-              <input id="only-host-can-control" type="checkbox" :value="editingWorkshop.config.onlyHostCanControl" @click="updateOnlyHostCanControl()">
+              <input id="only-admin-can-control" type="checkbox" :value="editingWorkshop.config.onlyAdminCanControl" @click="updateOnlyAdminCanControl()">
             </td>
           </tr>
         </table>
@@ -163,11 +163,11 @@ export default {
       this.namedRolesClick = !this.namedRolesClick
       bus.$emit('sendUpdateNamedRolesClick', {workshopName: workshop, gameName: game, value: this.namedRolesClick})
     },
-    updateOnlyHostCanControl() {
+    updateOnlyAdminCanControl() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
-      const onlyHostCanControl = !this.editingWorkshop.config.onlyHostCanControl
-      bus.$emit('sendOnlyHostCanControl', {workshopName: workshop, gameName: game, value: onlyHostCanControl})
+      const onlyAdminCanControl = !this.editingWorkshop.config.onlyAdminCanControl
+      bus.$emit('sendOnlyAdminCanControl', {workshopName: workshop, gameName: game, value: onlyAdminCanControl})
     }
   }
 }

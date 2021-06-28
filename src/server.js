@@ -187,7 +187,7 @@ MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime 
 
     socket.on('sendUpdateNamedRolesClick', (data) => { dbStore.updateConfig(db, io, data, 'namedRolesClick', debugOn) })
 
-    socket.on('sendOnlyHostCanControl', (data) => { dbStore.updateConfig(db, io, data, 'onlyHostCanControl', debugOn) })
+    socket.on('sendOnlyAdminCanControl', (data) => { dbStore.updateConfig(db, io, data, 'onlyAdminCanControl', debugOn) })
 
     // Learnings
 

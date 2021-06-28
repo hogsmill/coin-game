@@ -11,7 +11,6 @@ export const store = new Vuex.Store({
     admin: false,
     connections: 0,
     walkThrough: false,
-    host: false,
     showTab: 'game',
     workshop: false,
     workshops: [],
@@ -30,7 +29,7 @@ export const store = new Vuex.Store({
         valueTimeLimit: {demo: 10, click: 20 },
         clickOnCoins: true,
         namedRolesClick: true,
-        onlyHostCanControl: true
+        onlyAdminCanControl: true
       },
       currentCoin: '',
       stopped: false,
@@ -100,9 +99,6 @@ export const store = new Vuex.Store({
     getWalkThrough: (state) => {
       return state.walkThrough
     },
-    getHost: (state) => {
-      return state.host
-    },
     getShowTab: (state) => {
       return state.showTab
     },
@@ -164,6 +160,9 @@ export const store = new Vuex.Store({
       state.userName = payload.userName
       state.admin = payload.loggedInAsAdmin
     },
+    updateAdmin: (state, payload) => {
+      state.admin = payload
+    },
     updateWalkThrough: (state, payload) => {
       state.walkThrough = payload
     },
@@ -220,6 +219,9 @@ export const store = new Vuex.Store({
   actions: {
     updateLogin: ({ commit }, payload) => {
       commit('updateLogin', payload)
+    },
+    updateAdmin: ({ commit }, payload) => {
+      commit('updateAdmin', payload)
     },
     updateWalkThrough: ({ commit }, payload) => {
       commit('updateWalkThrough', payload)
