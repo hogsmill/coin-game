@@ -1,5 +1,5 @@
 <template>
-  <i class="fas fa-store-alt-slash clear-storage" @click="clearLocalStorage()" />
+  <i class="fas fa-store-alt-slash clear-storage" title="Clear local storage (will log you out)" @click="clearLocalStorage()" />
 </template>
 
 <script>
@@ -22,8 +22,15 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
   .clear-storage {
     float: right;
+    margin-right: 6px;
+    color: #888;
+
+    &:hover {
+      color: #444;
+      cursor: pointer;
+    }
   }
 </style>
