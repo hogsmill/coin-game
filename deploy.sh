@@ -19,6 +19,7 @@ APPS=(
   'coin-game,coinGameWorkshops,coinGame,3000'
   'coin-game-new,coinGameNewWorkshops,coinGamNew,3035'
   'coin-game-guardian,coinGameGuardianWorkshops,coinGameGuardian,3024,Coin Game'
+  'coin-game-dex,coinGameDexWorkshops,coinGameDex,3050,Coin Game'
 )
 
 for ((i = 0; i < ${#APPS[@]}; i++))
