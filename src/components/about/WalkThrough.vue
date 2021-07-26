@@ -4,7 +4,7 @@
       Explain this for me...
     </button>
 
-    <modal name="walk-through" id="walk-through" :height="400" :classes="['rounded']">
+    <modal name="walk-through" id="walk-through" :height="500" :classes="['rounded']">
       <div class="float-right mr-2 mt-1">
         <button type="button" class="close" @click="hide" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -16,12 +16,21 @@
           <p>
             This game demonstrates the importance of focussing on value delivery
             as the best means of satisfying customer need, and the best strategy
-            for reducing risk
+            for reducing risk.
           </p>
           <p>
             Details on the physical game that is the basis of this one can be found
             in <a href="https://www.linkedin.com/pulse/coin-game-simple-effective-way-demonstrate-agility-steve-wells/" target="blank">
-              this</a> LinkedIn post.
+              this
+            </a> LinkedIn post.
+          </p>
+          <p>
+            If you want to increase the engagement and relevance by setting up this game
+            to use your actual teams and team members, and have full access to other
+            configuration, you will need to purchase a basic licence from
+            <a href="https://agilesimulations.co.uk/?pricing">Agile Simulations</a>.
+            This will also give you full access to a whole raft of engaging
+            agile games and workshops.
           </p>
           <Facilitation />
         </div>
