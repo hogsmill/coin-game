@@ -15,8 +15,10 @@
             <td>
               Only Named Roles can click coins
             </td>
-            <td>
+            <td colspan="2">
               <input id="named-roles-click" type="checkbox" :checked="editingWorkshop.config.namedRolesClick" @click="updateNamedRolesClick()">
+              <br>
+              (<i>Admin/host can always click for any role</i>)
             </td>
           </tr>
           <tr>
