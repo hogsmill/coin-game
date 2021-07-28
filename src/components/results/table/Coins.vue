@@ -54,6 +54,9 @@ export default {
     }
   },
   computed: {
+    admin() {
+      return this.$store.getters.getAdmin
+    },
     workshopName() {
       return this.$store.getters.getWorkshopName
     },
@@ -88,7 +91,7 @@ export default {
     },
     canPlayCoin(coin, role, round) {
       let canPlay = true
-      if (this.gameState.config.namedRolesClick) {
+      if (!this.admin && this.gameState.config.namedRolesClick) {
         canPlay = role.name.id == this.myName.id
         if (!canPlay) {
           bus.$emit('sendStatus', 'Unable to play that coin - that is not your role...')
