@@ -21,7 +21,7 @@ APPS=(
   'coin-game-guardian,coinGameGuardianWorkshops,coinGameGuardian,3024,Coin Game'
   'coin-game-dex,coinGameDexWorkshops,coinGameDex,3050,Coin Game'
   'coin-game-ratesetter,coinGameRatesetterWorkshops,coinGameRatesetter,3056,Coin Game'
-  'coin-game-ratesetter,coinGameEverydayAgileWorkshops,coinGameEverydayAgile,3064,Coin Game'
+  'coin-game-eagile,coinGameEverydayAgileWorkshops,coinGameEverydayAgile,3064,Coin Game'
 )
 
 for ((i = 0; i < ${#APPS[@]}; i++))
