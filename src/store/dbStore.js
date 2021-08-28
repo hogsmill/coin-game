@@ -4,6 +4,7 @@ const coinFuns = require('./lib/coins.js')
 const roleFuns = require('./lib/roles.js')
 const roundFuns = require('./lib/rounds.js')
 const currencyFuns = require('./lib/currency.js')
+const arrayFuns = require('./lib/array.js')
 
 const { v4: uuidv4 } = require('uuid')
 
@@ -54,9 +55,9 @@ function createNewGame() {
     players: [],
     roles: roles,
     rounds: [
-      { name: 'Batch', roles: [], current: false, delivered: 0, time: 0 },
-      { name: 'Kanban', roles: [], current: false, delivered: 0, time: 0 },
-      { name: 'Value First', roles: [], current: false, delivered: 0, time: 0 }
+      { name: 'Batch', roles: [], current: false, delivered: 0, deliveredSeconds: [], time: 0 },
+      { name: 'Kanban', roles: [], current: false, delivered: 0, deliveredSeconds: [], time: 0 },
+      { name: 'Value First', roles: [], current: false, delivered: 0, deliveredSeconds: [], time: 0 }
     ]
   }
 
@@ -270,6 +271,33 @@ function playNextCoins(db, io, data, debugOn) {
   })
 }
 
+function getGraphData(data) {
+  console.log('getGraphData', data)
+  const x = []
+  const y = []
+  if (data.length) {
+    const max = arrayFuns.maxSub(data, 0)
+    let second = data[0][0]
+    let value = 0
+    let j = 0
+    for (let i = 0; i < max; i++) {
+       while (j < second) {
+         x.push(i)
+         y.push(value)
+         j++
+       }
+       value = data[j][i]
+       x.push(second)
+       y.push(value)
+       second = data[j][0]
+    }
+  }
+  return {
+    x: x,
+    y: y
+  }
+}
+
 function getGameResults(res) {
   const results = []
   for (let i = 0; i < res.gameState.rounds.length; i++) {
@@ -277,7 +305,8 @@ function getGameResults(res) {
       gameName: res.gameName,
       name: res.gameState.rounds[i].name,
       time: res.gameState.rounds[i].time,
-      delivered: res.gameState.rounds[i].delivered
+      delivered: res.gameState.rounds[i].delivered,
+      graph: getGraphData(res.gameState.rounds[i].deliveredSeconds)
     }
     results.push(result)
   }

@@ -77,6 +77,11 @@ import bus from '../socket.js'
 import mailFuns from '../lib/mail.js'
 
 export default {
+  data() {
+    return {
+      connectToAgileSimulations: location.hostname != 'localhost'
+    }
+  },
   computed: {
     thisGame() {
       return this.$store.getters.thisGame
@@ -115,8 +120,10 @@ export default {
   },
   methods: {
     clearLogin() {
-      const data = {session: '', userName: '', loggedInAsAdmin: false}
-      this.$store.dispatch('updateLogin', data)
+      if (this.connectToAgileSimulations) {
+        const data = {session: '', userName: '', loggedInAsAdmin: false}
+        this.$store.dispatch('updateLogin', data)
+      }
     },
     updateShowTab(payload) {
       this.$store.dispatch('updateShowTab', payload)

@@ -24,13 +24,17 @@ export default {
 
 <style lang="scss">
   .clear-storage {
-    float: right;
-    margin-right: 6px;
-    color: #888;
+    &.fas {
+      float: right;
+      margin: 0 6px 0 0;
+      color: #888;
+      font-size: revert;
+      position: revert;
 
-    &:hover {
-      color: #444;
-      cursor: pointer;
+      &:hover {
+        color: #444;
+        cursor: pointer;
+      }
     }
   }
 </style>

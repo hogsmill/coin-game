@@ -61,6 +61,7 @@ export const store = new Vuex.Store({
           roles: [],
           running: false,
           delivered: 0,
+          deliveredSeconds: [],
           time: 0,
         },
         {
@@ -68,6 +69,7 @@ export const store = new Vuex.Store({
           roles: [],
           running: false,
           delivered: 0,
+          deliveredSeconds: [],
           time: 0,
         },
         {
@@ -75,6 +77,7 @@ export const store = new Vuex.Store({
           roles: [],
           running: false,
           delivered: 0,
+          deliveredSeconds: [],
           time: 0,
         }
       ]

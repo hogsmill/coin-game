@@ -79,7 +79,11 @@ module.exports = {
     } else {
       round.roles = moveCoinsIfPlayed(round.roles)
     }
-    round.delivered = valueDelivered(round)
+    const value = valueDelivered(round)
+    round.delivered = value
+    const deliveredSeconds = round.deliveredSeconds
+    deliveredSeconds.push([round.time, value])
+    round.deliveredSeconds = deliveredSeconds
     return round
   }
 }

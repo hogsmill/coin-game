@@ -2,6 +2,7 @@
   <div id="app" class="mb-4">
     <Header />
     <ClearStorage />
+    <RateThisGame />
     <HeaderString />
     <div v-if="showTab == 'about'">
       <About />
@@ -27,6 +28,7 @@ import params from './lib/params.js'
 
 import Header from './components/Header.vue'
 import ClearStorage from './components/ClearStorage.vue'
+import RateThisGame from './components/RateThisGame.vue'
 import HeaderString from './components/HeaderString.vue'
 import Status from './components/Status.vue'
 import About from './components/about/About.vue'
@@ -38,6 +40,7 @@ export default {
   components: {
     Header,
     ClearStorage,
+    RateThisGame,
     HeaderString,
     About,
     Status,
@@ -117,12 +120,14 @@ export default {
 
     bus.$on('updateGameState', (data) => {
       if (this.gameName == data.gameName) {
+        console.log(data)
         this.$store.dispatch('updateGameState', data)
       }
     })
 
     bus.$on('updateWorkshopResults', (data) => {
       if (this.workshopName == data.workshopName) {
+        console.log('updateWorkshopResults', data)
         this.$store.dispatch('updateWorkshopResults', data)
       }
     })
