@@ -57,8 +57,8 @@ do
   cd $DIR
   if [ "$NEW" == "true" ]
   then
-    rm package-lock.json
-    rm -rf node_modules
+    rm $DIR/package-lock.json
+    rm -rf $DIR/node_modules
   fi
 
   PWD=`pwd`
