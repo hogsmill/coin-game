@@ -81,7 +81,7 @@ module.exports = {
     }
     const value = valueDelivered(round)
     round.delivered = value
-    const deliveredSeconds = round.deliveredSeconds
+    const deliveredSeconds = round.deliveredSeconds ? round.deliveredSeconds : []
     deliveredSeconds.push([round.time, value])
     round.deliveredSeconds = deliveredSeconds
     return round
