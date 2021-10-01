@@ -15,6 +15,7 @@ do
 done
 
 REPO="https://github.com/hogsmill/coin-game.git"
+MAINAPP="coin-game"
 APPS=(
   'coin-game,coinGameWorkshops,coinGame,3000'
   'coin-game-new,coinGameNewWorkshops,coinGameNew,3035'
@@ -90,8 +91,13 @@ do
       kill -9 $SERVER
     fi
   fi
-  rm -rf $DIR/dist
-  rm -rf $DIR/node_modules/.cache
+  if [ $i == 0 ]; then
+      rm -rf $DIR/node_modules/.cache
+    else
+      rm -rf node_modules
+      ln -s ../$MAINAPP/node_modules node_modules
+    fi
+    rm -rf $DIR/dist
 done
 
 ps -ef | grep php | grep outdated
