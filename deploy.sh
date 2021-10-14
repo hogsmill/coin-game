@@ -51,28 +51,6 @@ do
   APPNAME=$MAINNAME
   let PORT=$BASEPORT+$i
 
-#REPO="https://github.com/hogsmill/coin-game.git"
-#MAINAPP="coin-game"
-#APPS=(
-#  'coin-game,coinGameWorkshops,coinGame,3000'
-#  'coin-game-new,coinGameNewWorkshops,coinGameNew,3035'
-#  'coin-game-guardian,coinGameGuardianWorkshops,coinGameGuardian,3024,Coin Game'
-#  'coin-game-dex,coinGameDexWorkshops,coinGameDex,3050,Coin Game'
-#  'coin-game-ratesetter,coinGameRatesetterWorkshops,coinGameRatesetter,3056,Coin Game'
-#  'coin-game-eagile,coinGameEverydayAgileWorkshops,coinGameEverydayAgile,3064,Coin Game'
-#  'coin-game-and,coinGameAndWorkshops,coinGameAnd,3113,Coin Game'
-#)
-
-#for ((i = 0; i < ${#APPS[@]}; i++))
-#do
-#  REC="${APPS[$i]}"
-#
-#  APP=`echo $REC | cut -d, -f1`
-#  WORKSHOPCOLLECTION=`echo $REC | cut -d, -f2`
-#  GAMECOLLECTION=`echo $REC | cut -d, -f3`
-#  PORT=`echo $REC | cut -d, -f4`
-#  APPNAME=`echo $REC | cut -d, -f5`
-
   echo "------------------------------------------------"
   if [ -z "$APPNAME" ]; then
     echo "Installing $APP ($WORKSHOPCOLLECTION, $GAMECOLLECTION, $PORT)"
