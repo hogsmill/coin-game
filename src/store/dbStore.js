@@ -275,7 +275,7 @@ function getGraphData(data) {
   console.log('getGraphData', data)
   const x = []
   const y = []
-  if (data.length) {
+  if (data && data.length) {
     const max = arrayFuns.maxSub(data, 0)
     let second = data[0][0]
     let value = 0
