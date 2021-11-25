@@ -23,7 +23,7 @@ MAINNAME="Coin Game"
 ROUTES=(
   '',''
   'new','New'
-  'guardian','Guardian'
+  'abn','Abn'
   'dex','Dex'
   'ratesetter','Ratesetter'
   'eagile','EverydayAgile'
