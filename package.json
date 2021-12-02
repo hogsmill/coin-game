@@ -16,7 +16,7 @@
     "eslint-loader": "^4.0.2",
     "express": "^4.17.1",
     "jquery": "^3.6.0",
-    "mongodb": "^4.2.0",
+    "mongodb": "^4.2.1",
     "monodb": "^1.5.1",
     "package-lock.json": "^1.0.0",
     "package.json": "^2.0.1",
