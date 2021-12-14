@@ -42,6 +42,8 @@ bus.$on('sendLoadWorkshop', (data) => { socket.emit('sendLoadWorkshop', data) })
 
 bus.$on('sendLoadGame', (data) => { socket.emit('sendLoadGame', data) })
 
+bus.$on('sendClearUsers', (data) => { socket.emit('sendClearUsers', data) })
+
 bus.$on('sendRestartGame', (data) => { socket.emit('sendRestartGame', data) })
 
 bus.$on('sendStartRound', (data) => { socket.emit('sendStartRound', data) })

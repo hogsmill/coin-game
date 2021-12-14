@@ -56,7 +56,7 @@
       <div class="mt-4" v-if="step == 3">
         <h4>Playing The Game</h4>
         <p>
-          Two demo games are already to set up if with to use them. Simply click the
+          Two demo games are already to set up if you wish to use them. Simply click the
           <button class="btn btn-sm btn-secondary smaller-font">
             Set Up Game
           </button> button and select the game, either:

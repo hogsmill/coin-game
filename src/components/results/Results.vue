@@ -94,6 +94,20 @@ export default {
 
 <style lang="scss">
 
+  .fas {
+    font-size: x-large;
+    color: #888;
+    display: inline-block;
+    margin: 0px 3px;
+    position: relative;
+    top: 4px;
+
+    &:hover {
+      cursor: pointer;
+      color: #444;
+    }
+  }
+
   .coins {
     margin: 36px auto 0 auto;
     height: 300px;

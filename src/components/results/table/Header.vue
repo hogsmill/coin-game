@@ -1,5 +1,5 @@
 <template>
-  <thead>
+  <thead class="role-header">
     <tr>
       <td :colspan="gameState.rounds[0]['roles'].length + 2">
         Total Value to Deliver:  {{ gameState.currency.symbol }}{{ total() }}
@@ -8,7 +8,7 @@
     <tr v-if="!rolesSet()">
       <td />
       <td :colspan="gameState.rounds[0]['roles'].length + 2" class="role-click">
-        <i>(Click on a role to set the player for that role)</i>
+        <i>(Click on a role or name to set the player for that role)</i>
       </td>
     </tr>
     <tr>
@@ -16,7 +16,7 @@
         Round
       </td>
       <td v-for="(role, rindex) in gameState.rounds[0]['roles']" :key="rindex" :style="{ width: setWidth() }">
-        <span @click="showNameEdit(role)"> {{ role.role }} </span>
+        <span class="role-name" @click="showNameEdit(role)"> {{ role.role }} </span>
         <div v-if="roleEditing.role == role.role">
           <select id="role-select" v-model="role.name" @change="updateRole(role)">
             <option value="">
@@ -27,7 +27,7 @@
             </option>
           </select>
         </div>
-        <span v-if="roleEditing.role != role.role && role.name.name"><br> ({{ role.name.name }}) </span>
+        <span v-if="roleEditing.role != role.role && role.name.name" class="role-name" @click="showNameEdit(role)"><br> ({{ role.name.name }}) </span>
       </td>
       <td :style="{ width: setWidth() }">
         Delivered
@@ -87,25 +87,23 @@ export default {
 </script>
 
 <style lang="scss">
-  .role-click {
-    font-weight: normal;
-    padding: 24px 0 0 0 !important;
-  }
+  .role-header {
 
-  #role-select {
-    max-width: 80%;
-  }
-  .fas {
-    font-size: x-large;
-    color: #888;
-    display: inline-block;
-    margin: 0px 8px;
-    position: relative;
-    top: 4px;
+    .role-click {
+      font-weight: normal;
+      padding: 24px 0 0 0 !important;
+    }
 
-    &:hover {
-      cursor: pointer;
-      color: #444;
+    .role-name {
+      padding: 4px;
+      &:hover {
+        cursor: pointer;
+        color: #888;
+      }
+    }
+
+    #role-select {
+      max-width: 80%;
     }
   }
 </style>

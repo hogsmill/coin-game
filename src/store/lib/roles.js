@@ -119,5 +119,32 @@ module.exports = {
       newRounds.push(round)
     }
     return newRounds
+  },
+
+  clearRoles: function(gameState) {
+    const roles = []
+    let i = 0
+    for (i = 0; i < gameState.roles.length; i++) {
+      const role = gameState.roles[i]
+      role.name = ''
+      roles.push(role)
+    }
+    gameState.roles = roles
+    const rounds = []
+    for (i = 0; i < gameState.rounds.length; i++) {
+      const round = gameState.rounds[i]
+      for (let j = 0; j < round.roles.length; j++) {
+        const roundRoles = []
+        for (let k = 0; k < round.roles.length; k++) {
+          const role = round.roles[k]
+          role.name = ''
+          roundRoles.push(role)
+        }
+        round.roles = roundRoles
+      }
+      rounds.push(round)
+    }
+    gameState.rounds = rounds
+    return gameState
   }
 }

@@ -184,6 +184,35 @@ function _loadGame(db, io, data, debugOn) {
   })
 }
 
+function _restartGame(db, io, data, debugOn) {
+
+  if (data.workshopName == 'None (Single team Game)') {
+    db.gameCollection.findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
+      if (err) throw err
+      if (res) {
+        const gameState = roundFuns.resetRounds(res.gameState)
+        data.gameState = gameState
+        db.gameCollection.updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
+          if (err) throw err
+          io.emit('updateGameState', data)
+        })
+      }
+    })
+  } else {
+    db.gameCollection.find({workshopName: data.workshopName}).toArray(function(err, res) {
+      if (err) throw err
+      for (let i = 0; i < res.length; i++) {
+        const gameState = roundFuns.resetRounds(res[i].gameState)
+        data.gameState = gameState
+        db.gameCollection.updateOne({'_id': res[i]._id}, {$set: {gameState: gameState}}, function(err, res) {
+          if (err) throw err
+          io.emit('updateGameState', data)
+        })
+      }
+    })
+  }
+}
+
 function _updateRoles(gameState, roles) {
   gameState.roles = roles
   for (let i = 0; i < gameState.rounds.length; i++) {
@@ -329,7 +358,7 @@ module.exports = {
     _loadGame(db, io, data, debugOn)
   },
 
-  restartGame: function(db, io, data, debugOn) {
+  clearUsers: function(db, io, data, debugOn) {
 
     if (debugOn) { console.log('restartGame', data) }
 
@@ -337,11 +366,11 @@ module.exports = {
       db.gameCollection.findOne({workshopName: data.workshopName, gameName: data.gameName}, function(err, res) {
         if (err) throw err
         if (res) {
-          const gameState = roundFuns.resetRounds(res.gameState)
+          const gameState = roleFuns.clearRoles(res.gameState)
           data.gameState = gameState
           db.gameCollection.updateOne({'_id': res._id}, {$set: {gameState: gameState}}, function(err, res) {
             if (err) throw err
-            io.emit('updateGameState', data)
+            _restartGame(db, io, data, debugOn)
           })
         }
       })
@@ -349,15 +378,22 @@ module.exports = {
       db.gameCollection.find({workshopName: data.workshopName}).toArray(function(err, res) {
         if (err) throw err
         for (let i = 0; i < res.length; i++) {
-          const gameState = roundFuns.resetRounds(res[i].gameState)
+          const gameState = roleFuns.clearRoles(res[i].gameState)
           data.gameState = gameState
           db.gameCollection.updateOne({'_id': res[i]._id}, {$set: {gameState: gameState}}, function(err, res) {
             if (err) throw err
-            io.emit('updateGameState', data)
+            _restartGame(db, io, data, debugOn)
           })
         }
       })
     }
+  },
+
+  restartGame: function(db, io, data, debugOn) {
+
+    if (debugOn) { console.log('restartGame', data) }
+
+    _restartGame(db, io, data, debugOn)
   },
 
   getWorkshopResults: function(db, io, data, debugOn) {
