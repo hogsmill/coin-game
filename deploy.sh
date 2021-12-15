@@ -28,7 +28,8 @@ ROUTES=(
   'ratesetter','Ratesetter'
   'eagile','EverydayAgile'
   'and','And'
-  'richemont','Richemont'
+  'richemont','Richemont',
+  'bud', 'Bud'
 )
 
 for ((i = 0; i < ${#ROUTES[@]}; i++))
