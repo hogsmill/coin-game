@@ -301,7 +301,6 @@ function playNextCoins(db, io, data, debugOn) {
 }
 
 function getGraphData(data) {
-  console.log('getGraphData', data)
   const x = []
   const y = []
   if (data && data.length) {
@@ -315,7 +314,7 @@ function getGraphData(data) {
          y.push(value)
          j++
        }
-       value = data[j][i]
+       value = data[j] ? data[j][i] : 0
        x.push(second)
        y.push(value)
        second = data[j][0]

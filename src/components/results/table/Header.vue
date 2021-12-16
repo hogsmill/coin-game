@@ -8,7 +8,7 @@
     <tr v-if="!rolesSet()">
       <td />
       <td :colspan="gameState.rounds[0]['roles'].length + 2" class="role-click">
-        <i>(Click on a role or name to set the player for that role)</i>
+        <i>(Click on a role or name to set the player for that role. Click on the <i class="fas fa-check-circle small" /> to set yourself as that role)</i>
       </td>
     </tr>
     <tr>
@@ -16,13 +16,17 @@
         Round
       </td>
       <td v-for="(role, rindex) in gameState.rounds[0]['roles']" :key="rindex" :style="{ width: setWidth() }">
-        <span class="role-name" @click="showNameEdit(role)"> {{ role.role }} </span>
+        <span class="role-name" @click="showNameEdit(role)">
+          {{ role.role }}
+        </span>
+        <br />
+        <i v-if="myName" class="fas fa-check-circle" :title="'Make me ' + role.role" @click="updateMeToRole(role)"/>
         <div v-if="roleEditing.role == role.role">
-          <select id="role-select" v-model="role.name" @change="updateRole(role)">
+          <select id="role-select" @change="updateRole(role)">
             <option value="">
               -- Select --
             </option>
-            <option v-for="(player, pindex) in gameState.players" :key="pindex" :value="player.id">
+            <option v-for="(player, pindex) in gameState.players" :key="pindex" :selected="player.name == role.name" :value="player.id">
               {{ player.name }}
             </option>
           </select>
@@ -54,6 +58,9 @@ export default {
     gameName() {
       return this.$store.getters.getGameName
     },
+    myName() {
+      return this.$store.getters.getMyName
+    },
     gameState() {
       return this.$store.getters.getGameState
     }
@@ -77,6 +84,11 @@ export default {
     showNameEdit(role) {
       this.roleEditing = role
     },
+    updateMeToRole(role) {
+      this.roleEditing = ''
+      role.name = this.myName.id
+      bus.$emit('sendUpdateGameRole', { workshopName: this.workshopName, gameName: this.gameName, role: role, name: this.myName.id })
+    },
     updateRole(role) {
       this.roleEditing = ''
       const name = document.getElementById('role-select').value
@@ -89,6 +101,11 @@ export default {
 <style lang="scss">
   .role-header {
 
+    .small {
+      position: relative;
+      top: 2px;
+    }
+
     .role-click {
       font-weight: normal;
       padding: 24px 0 0 0 !important;
@@ -99,6 +116,13 @@ export default {
       &:hover {
         cursor: pointer;
         color: #888;
+      }
+    }
+
+    .fa-check-circle {
+      font-size: medium;
+      &:hover {
+        color: green;
       }
     }
 

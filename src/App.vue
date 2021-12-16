@@ -120,7 +120,6 @@ export default {
 
     bus.$on('updateGameState', (data) => {
       if (this.gameName == data.gameName) {
-        console.log(data)
         this.$store.dispatch('updateGameState', data)
       }
     })
