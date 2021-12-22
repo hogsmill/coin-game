@@ -21,7 +21,7 @@
             </td>
             <td>
               <div v-if="!workshopUrl">
-                <select id="workshop-name" @click="setWorkshop()">
+                <select id="workshop-name" @change="setWorkshop()">
                   <option value="">
                     -- Select --
                   </option>
