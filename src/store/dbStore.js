@@ -317,7 +317,7 @@ function getGraphData(data) {
        value = data[j] ? data[j][i] : 0
        x.push(second)
        y.push(value)
-       second = data[j][0]
+       second = data[j] ? data[j][0] : 0
     }
   }
   return {
