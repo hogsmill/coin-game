@@ -111,12 +111,12 @@ do
     fi
   fi
   if [ $i == 0 ]; then
-      rm -rf $DIR/node_modules/.cache
-    else
-      rm -rf node_modules
-      ln -s ../$MAINAPP/node_modules node_modules
-    fi
-    rm -rf $DIR/dist
+    rm -rf $DIR/node_modules/.cache
+  else
+    rm -rf node_modules
+    ln -s ../$MAINAPP/node_modules node_modules
+  fi
+  rm -rf $DIR/dist
 done
 
 ps -ef | grep php | grep outdated
