@@ -44,7 +44,7 @@ if (!prod) {
 } else {
   const options = {
     key: fs.readFileSync('/etc/ssl/private/agilesimulations.co.uk.key'),
-    cert: fs.readFileSync('/etc/ssl/certs/07DDA10F5A5AB75BD9E9508BC490D32C.cer')
+    cert: fs.readFileSync('/etc/ssl/certs/agilesimulations.cer')
   }
   httpServer = require('https').createServer(options)
   io = require('socket.io')(httpServer, {
@@ -110,7 +110,7 @@ MongoClient.connect(url, { useUnifiedTopology: true, maxIdleTimeMS: maxIdleTime 
     socket.on('sendGetWorkshopResults', (data) => { dbStore.getWorkshopResults(db, io, data, debugOn) })
 
     socket.on('sendClearUsers', (data) => { dbStore.clearUsers(db, io, data, debugOn)})
-    
+
     socket.on('sendRestartGame', (data) => { dbStore.restartGame(db, io, data, debugOn)})
 
     socket.on('sendUpdateGameRole', (data) => { dbStore.updateGameRole(db, io, data, debugOn) })
