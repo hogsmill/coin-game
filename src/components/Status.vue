@@ -15,7 +15,7 @@ export default {
   },
   created() {
     const self = this
-    bus.$on('status', (data) => {
+    bus.on('status', (data) => {
       self.status = data
       setTimeout(function() {
         self.status = ''

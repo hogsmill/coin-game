@@ -1,16 +1,20 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
 
-Vue.use(Vuex)
+import { createStore } from 'vuex'
 
-export const store = new Vuex.Store({
+export const store = createStore({
   state: {
     thisGame: 'The Coin Game',
     session: null,
     userName: '',
     admin: false,
     connections: 0,
-    walkThrough: false,
+    modals: {
+      'feedback': false,
+      'walkThrough': false,
+      'setGame': false,
+      'learnings': false
+    },
+    walkThroughStep: 1,
     showTab: 'game',
     workshop: false,
     workshops: [],
@@ -99,8 +103,11 @@ export const store = new Vuex.Store({
     getAdmin: (state) => {
       return state.admin
     },
-    getWalkThrough: (state) => {
-      return state.walkThrough
+    getModals: (state) => {
+      return state.modals
+    },
+    getWalkThroughStep: (state) => {
+      return state.walkThroughStep
     },
     getShowTab: (state) => {
       return state.showTab
@@ -166,8 +173,19 @@ export const store = new Vuex.Store({
     updateAdmin: (state, payload) => {
       state.admin = payload
     },
-    updateWalkThrough: (state, payload) => {
-      state.walkThrough = payload
+    showModal: (state, payload) => {
+      const modals = Object.keys(state.modals)
+      for (let i = 0; i < modals.length; i++) {
+        state.modals[modals[i]] = false
+      }
+      state.modals[payload] = true
+      console.log(state.modals)
+    },
+    hideModal: (state, payload) => {
+      state.modals[payload] = false
+    },
+    updateWalkThroughStep: (state, payload) => {
+      state.walkThroughStep = payload
     },
     updateHost: (state, payload) => {
       state.host = payload
@@ -226,8 +244,14 @@ export const store = new Vuex.Store({
     updateAdmin: ({ commit }, payload) => {
       commit('updateAdmin', payload)
     },
-    updateWalkThrough: ({ commit }, payload) => {
-      commit('updateWalkThrough', payload)
+    showModal: ({ commit }, payload) => {
+      commit('showModal', payload)
+    },
+    hideModal: ({ commit }, payload) => {
+      commit('hideModal', payload)
+    },
+    updateWalkThroughStep: ({ commit }, payload) => {
+      commit('updateWalkThroughStep', payload)
     },
     updateHost: ({ commit }, payload) => {
       commit('updateHost', payload)

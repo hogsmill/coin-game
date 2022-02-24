@@ -115,10 +115,10 @@ export default {
     updateCurrency() {
       const workshop = this.editingWorkshop.workshopName
       const currency = document.getElementById('currency').value
-      bus.$emit('sendUpdateCurrency', {workshopName: workshop, currency: currency })
+      bus.emit('sendUpdateCurrency', {workshopName: workshop, currency: currency })
     },
     resetDefaultDenominations() {
-      bus.$emit('sendResetDefaultDenominations', {workshopName: this.editingWorkshop.workshopName, gameName: this.editingGame.gameName})
+      bus.emit('sendResetDefaultDenominations', {workshopName: this.editingWorkshop.workshopName, gameName: this.editingGame.gameName})
     }
   }
 }

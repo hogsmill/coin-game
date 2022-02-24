@@ -81,7 +81,7 @@ export default {
       } else {
         const uuid = uuidv4()
         const playerData = {id: uuid, name: player}
-        bus.$emit('sendAddPlayer', {workshopName: workshop, gameName: game, player: playerData})
+        bus.emit('sendAddPlayer', {workshopName: workshop, gameName: game, player: playerData})
         document.getElementById('new-player').value = ''
       }
     },
@@ -92,7 +92,7 @@ export default {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame.gameName
       const newName = document.getElementById('player-' + player.id).value
-      bus.$emit('sendChangePlayerName', { workshopName: workshop, gameName: game, player: player, newName: newName })
+      bus.emit('sendChangePlayerName', { workshopName: workshop, gameName: game, player: player, newName: newName })
       document.getElementById('player-' + player.id).value = ''
       this.editingPlayer = ''
     },
@@ -101,7 +101,7 @@ export default {
       if (deletePlayer) {
         const workshop = this.editingWorkshop.workshopName
         const game = this.editingGame.gameName
-        bus.$emit('sendDeletePlayer', { workshopName: workshop, gameName: game, player: player })
+        bus.emit('sendDeletePlayer', { workshopName: workshop, gameName: game, player: player })
       }
     }
   }

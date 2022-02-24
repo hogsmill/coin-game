@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     go(round) {
-      bus.$emit('sendStartRound', {workshopName: this.workshopName, gameName: this.gameName, round: round})
+      bus.emit('sendStartRound', {workshopName: this.workshopName, gameName: this.gameName, round: round})
     }
   }
 }

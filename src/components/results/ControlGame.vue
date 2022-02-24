@@ -30,12 +30,12 @@ export default {
   methods: {
     clearUsers() {
       if (confirm('Are you sure you want to clear users and re-start this game?')) {
-        bus.$emit('sendClearUsers', {workshopName: this.workshopName, gameName: this.gameName})
+        bus.emit('sendClearUsers', {workshopName: this.workshopName, gameName: this.gameName})
       }
     },
     restart() {
       if (confirm('Are you sure you want to re-start this game?')) {
-        bus.$emit('sendRestartGame', {workshopName: this.workshopName, gameName: this.gameName})
+        bus.emit('sendRestartGame', {workshopName: this.workshopName, gameName: this.gameName})
       }
     },
     endGame() {

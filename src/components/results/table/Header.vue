@@ -19,8 +19,8 @@
         <span class="role-name" @click="showNameEdit(role)">
           {{ role.role }}
         </span>
-        <br />
-        <i v-if="myName" class="fas fa-check-circle" :title="'Make me ' + role.role" @click="updateMeToRole(role)"/>
+        <br>
+        <i v-if="myName" class="fas fa-check-circle" :title="'Make me ' + role.role" @click="updateMeToRole(role)" />
         <div v-if="roleEditing.role == role.role">
           <select id="role-select" @change="updateRole(role)">
             <option value="">
@@ -87,12 +87,12 @@ export default {
     updateMeToRole(role) {
       this.roleEditing = ''
       role.name = this.myName.id
-      bus.$emit('sendUpdateGameRole', { workshopName: this.workshopName, gameName: this.gameName, role: role, name: this.myName.id })
+      bus.emit('sendUpdateGameRole', { workshopName: this.workshopName, gameName: this.gameName, role: role, name: this.myName.id })
     },
     updateRole(role) {
       this.roleEditing = ''
       const name = document.getElementById('role-select').value
-      bus.$emit('sendUpdateGameRole', { workshopName: this.workshopName, gameName: this.gameName, role: role, name: name })
+      bus.emit('sendUpdateGameRole', { workshopName: this.workshopName, gameName: this.gameName, role: role, name: name })
     }
   }
 }

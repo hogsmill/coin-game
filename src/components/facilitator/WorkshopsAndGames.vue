@@ -97,21 +97,21 @@ export default {
     }
   },
   created() {
-    bus.$emit('sendLoadEditingWorkshop', {workshopName: ''})
+    bus.emit('sendLoadEditingWorkshop', {workshopName: ''})
   },
   methods: {
     addWorkshop() {
       const workshop = document.getElementById('new-workshop').value
-      bus.$emit('sendAddWorkshop', {workshopName: workshop})
+      bus.emit('sendAddWorkshop', {workshopName: workshop})
       document.getElementById('new-workshop').value = ''
     },
     selectWorkshop(workshop, index) {
       const checked = document.getElementById('workshop-' + index).checked
-      bus.$emit('sendLoadEditingWorkshop', {workshopName: checked ? workshop : ''})
+      bus.emit('sendLoadEditingWorkshop', {workshopName: checked ? workshop : ''})
     },
     deleteWorkshop(workshop) {
       if (confirm('Delete ' + workshop + '?')) {
-        bus.$emit('sendDeleteWorkshop', {workshopName: workshop})
+        bus.emit('sendDeleteWorkshop', {workshopName: workshop})
       }
     },
     addGame() {
@@ -120,19 +120,19 @@ export default {
       if (!game) {
         alert('Please enter a valid team name')
       } else {
-        bus.$emit('sendAddGame', {workshopName: workshop, gameName: game})
+        bus.emit('sendAddGame', {workshopName: workshop, gameName: game})
         document.getElementById('new-game').value = ''
       }
     },
     selectGame(game, index) {
       const checked = document.getElementById('game-' + index).checked
       const workshop = this.editingWorkshop.workshopName
-      bus.$emit('sendLoadEditingGame', {workshopName: workshop, gameName: checked ? game: ''})
+      bus.emit('sendLoadEditingGame', {workshopName: workshop, gameName: checked ? game: ''})
     },
     deleteGame(game) {
       if (confirm('Delete ' + game + '?')) {
         const workshop = this.editingWorkshop.workshopName
-        bus.$emit('sendDeleteGame', {workshopName: workshop, gameName: game})
+        bus.emit('sendDeleteGame', {workshopName: workshop, gameName: game})
       }
     }
   }

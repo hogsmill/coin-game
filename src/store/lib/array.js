@@ -3,7 +3,7 @@ module.exports = {
 
   max: function(arr) {
     let max
-    for (i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr.length; i++) {
       if (!max || arr[i] > max) {
         max = arr[i]
       }
@@ -13,7 +13,7 @@ module.exports = {
 
   maxSub: function(arr, index) {
     let max
-    for (i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr.length; i++) {
       if (!max || arr[i][index] > max) {
         max = arr[i][index]
       }
@@ -23,7 +23,7 @@ module.exports = {
 
   min: function(arr) {
     let min
-    for (i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr.length; i++) {
       if (!min || arr[i] < min) {
         min = arr[i]
       }
@@ -33,7 +33,7 @@ module.exports = {
 
   minSub: function(arr, index) {
     let min
-    for (i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr.length; i++) {
       if (!min || arr[i][index] < min) {
         min = arr[i][index]
       }

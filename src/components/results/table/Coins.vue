@@ -1,11 +1,12 @@
 <template>
   <div v-if="round.running && index == gameState.round && gameState.rounds[index].roles[roleIndex]">
-    <div v-for="(coin, coinIndex) in gameState.rounds[index].roles[roleIndex].coins"
-         :coin="coin"
-         :coinIndex="coinIndex"
-         :key="coinIndex"
-         class="coin-parent"
-         @click="playCoin(coinIndex, gameState.rounds[index].roles[roleIndex], gameState.rounds[index])"
+    <div
+      v-for="(coin, coinIndex) in gameState.rounds[index].roles[roleIndex].coins"
+      :coin="coin"
+      :coinIndex="coinIndex"
+      :key="coinIndex"
+      class="coin-parent"
+      @click="playCoin(coinIndex, gameState.rounds[index].roles[roleIndex], gameState.rounds[index])"
     >
       <div
         class="coin"
@@ -94,14 +95,14 @@ export default {
       if (!this.admin && this.gameState.config.namedRolesClick) {
         canPlay = role.name.id == this.myName.id
         if (!canPlay) {
-          bus.$emit('sendStatus', 'Unable to play that coin - that is not your role...')
+          bus.emit('sendStatus', 'Unable to play that coin - that is not your role...')
         }
       }
       return canPlay && role.role != 'Customer' && !this.outOfTime(round)
     },
     playCoin(coin, role, round) {
       if (this.canPlayCoin(coin, role, round)) {
-        bus.$emit('sendPlayCoin', {workshopName: this.workshopName, gameName: this.gameName, coin: coin, role: role.role, round: round.name})
+        bus.emit('sendPlayCoin', {workshopName: this.workshopName, gameName: this.gameName, coin: coin, role: role.role, round: round.name})
       }
     }
   }

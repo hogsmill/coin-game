@@ -46,12 +46,12 @@ export default {
     }
   },
   created() {
-    bus.$emit('sendLoadWorkshops')
+    bus.emit('sendLoadWorkshops')
 
-    bus.$on('setEditingWorkshop', (data) => {
+    bus.on('setEditingWorkshop', (data) => {
       this.$store.dispatch('setEditingWorkshop', data)
     })
-    bus.$on('setEditingGame', (data) => {
+    bus.on('setEditingGame', (data) => {
       this.$store.dispatch('setEditingGame', data)
     })
   }

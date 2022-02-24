@@ -18,6 +18,7 @@
         </div>
       </div>
     </div>
+    <Modals />
   </div>
 </template>
 
@@ -34,6 +35,7 @@ import Status from './components/Status.vue'
 import About from './components/about/About.vue'
 import Facilitator from './components/Facilitator.vue'
 import Results from './components/results/Results.vue'
+import Modals from './components/Modals.vue'
 
 export default {
   name: 'App',
@@ -45,7 +47,8 @@ export default {
     About,
     Status,
     Facilitator,
-    Results
+    Results,
+    Modals
   },
   computed: {
     walkThrough() {
@@ -72,7 +75,7 @@ export default {
       this.$store.dispatch('updateAdmin', true)
     }
 
-    bus.$emit('sendCheckSystemWorkshops')
+    bus.emit('sendCheckSystemWorkshops')
 
     /*
     if (params.getParam('workshop')) {
@@ -80,7 +83,7 @@ export default {
       this.$store.dispatch('updateWorkshopName', workshop)
       this.$store.dispatch('updateGameName', '')
       localStorage.setItem('workshopName-cg', workshop)
-      bus.$emit('sendLoadWorkshop', {workshopName: workshop})
+      bus.emit('sendLoadWorkshop', {workshopName: workshop})
     } else if (params.getParam('game')) {
       const game = decodeURIComponent(params.getParam('game'))
       this.$store.dispatch('updateWorkshopName', '')
@@ -108,30 +111,29 @@ export default {
     }
     */
 
-    bus.$on('updateWorkshops', (data) => {
+    bus.on('updateWorkshops', (data) => {
       this.$store.dispatch('updateWorkshops', data)
     })
 
-    bus.$on('updateWorkshop', (data) => {
+    bus.on('updateWorkshop', (data) => {
       if (this.workshopName == data.workshopName) {
         this.$store.dispatch('updateWorkshop', data)
       }
     })
 
-    bus.$on('updateGameState', (data) => {
+    bus.on('updateGameState', (data) => {
       if (this.gameName == data.gameName) {
         this.$store.dispatch('updateGameState', data)
       }
     })
 
-    bus.$on('updateWorkshopResults', (data) => {
+    bus.on('updateWorkshopResults', (data) => {
       if (this.workshopName == data.workshopName) {
-        console.log('updateWorkshopResults', data)
         this.$store.dispatch('updateWorkshopResults', data)
       }
     })
 
-    bus.$on('updateConnections', (data) => {
+    bus.on('updateConnections', (data) => {
       this.$store.dispatch('updateConnections', data)
     })
   }

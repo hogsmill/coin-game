@@ -75,34 +75,34 @@ export default {
     toggleRoleInclude(role) {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame.gameName
-      bus.$emit('sendSetRoleInclude', {workshopName: workshop, gameName: game, role: role, include: !role.include})
+      bus.emit('sendSetRoleInclude', {workshopName: workshop, gameName: game, role: role, include: !role.include})
     },
     moveRoleUp(role) {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame.gameName
-      bus.$emit('sendMoveRoleUp', {workshopName: workshop, gameName: game, role: role})
+      bus.emit('sendMoveRoleUp', {workshopName: workshop, gameName: game, role: role})
     },
     moveRoleDown(role) {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame.gameName
-      bus.$emit('sendMoveRoleDown', {workshopName: workshop, gameName: game, role: role})
+      bus.emit('sendMoveRoleDown', {workshopName: workshop, gameName: game, role: role})
     },
     updateRoleName(role, index) {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame.gameName
       const newRole = document.getElementById('role-name-' + index).value
-      bus.$emit('sendUpdateRoleName', {workshopName: workshop, gameName: game, role: role, newRole: newRole})
+      bus.emit('sendUpdateRoleName', {workshopName: workshop, gameName: game, role: role, newRole: newRole})
     },
     deleteRole(role) {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame.gameName
-      bus.$emit('sendDeleteRole', {workshopName: workshop, gameName: game, role: role})
+      bus.emit('sendDeleteRole', {workshopName: workshop, gameName: game, role: role})
     },
     addNewRole() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame.gameName
       const role = document.getElementById('new-role').value
-      bus.$emit('sendAddNewRole', {workshopName: workshop, gameName: game, role: role})
+      bus.emit('sendAddNewRole', {workshopName: workshop, gameName: game, role: role})
       document.getElementById('new-role').value = ''
     }
   }

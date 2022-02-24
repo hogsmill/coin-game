@@ -56,7 +56,7 @@ export default {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame.gameName
       const n = document.getElementById(this.id).value
-      bus.$emit('sendUpdateDenomination', {workshopName: workshop, gameName: game, amount: this.amount, number: n})
+      bus.emit('sendUpdateDenomination', {workshopName: workshop, gameName: game, amount: this.amount, number: n})
     }
   }
 }

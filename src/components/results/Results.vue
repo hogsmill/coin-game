@@ -15,8 +15,9 @@
               <RunButton :round="round" :index="index" />
               <Coin />
             </td>
-            <td v-for="(role, roleIndex) in gameState.rounds[0].roles"
-                :role="role" :roleIndex="roleIndex" :key="roleIndex"
+            <td
+              v-for="(role, roleIndex) in gameState.rounds[0].roles"
+              :role="role" :roleIndex="roleIndex" :key="roleIndex"
             >
               <Coins :round="round" :role="role" :index="index" :role-index="roleIndex" />
             </td>

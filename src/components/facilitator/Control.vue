@@ -127,49 +127,49 @@ export default {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       const interval = document.getElementById('interval').value
-      bus.$emit('sendUpdateInterval', {workshopName: workshop, gameName: game, value: interval})
+      bus.emit('sendUpdateInterval', {workshopName: workshop, gameName: game, value: interval})
     },
     updateDemoTimeLimit() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       const timeLimit = document.getElementById('demoTimeLimit').value
-      bus.$emit('sendUpdateDemoTimeLimit', {workshopName: workshop, gameName: game, value: timeLimit})
+      bus.emit('sendUpdateDemoTimeLimit', {workshopName: workshop, gameName: game, value: timeLimit})
     },
     updateClickTimeLimit() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       const timeLimit = document.getElementById('clickTimeLimit').value
-      bus.$emit('sendUpdateClickTimeLimit', {workshopName: workshop, gameName: game, value: timeLimit})
+      bus.emit('sendUpdateClickTimeLimit', {workshopName: workshop, gameName: game, value: timeLimit})
     },
     updateDemoValueTimeLimit() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       const valueTimeLimit = document.getElementById('demoValueTimeLimit').value
-      bus.$emit('sendUpdateDemoValueTimeLimit', {workshopName: workshop, gameName: game, value: valueTimeLimit})
+      bus.emit('sendUpdateDemoValueTimeLimit', {workshopName: workshop, gameName: game, value: valueTimeLimit})
     },
     updateClickValueTimeLimit() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       const valueTimeLimit = document.getElementById('clickValueTimeLimit').value
-      bus.$emit('sendUpdateClickValueTimeLimit', {workshopName: workshop, gameName: game, value: valueTimeLimit})
+      bus.emit('sendUpdateClickValueTimeLimit', {workshopName: workshop, gameName: game, value: valueTimeLimit})
     },
     updateClickOnCoins() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       this.clickOnCoins = !this.clickOnCoins
-      bus.$emit('sendUpdateClickOnCoins', {workshopName: workshop, gameName: game, value: this.clickOnCoins})
+      bus.emit('sendUpdateClickOnCoins', {workshopName: workshop, gameName: game, value: this.clickOnCoins})
     },
     updateNamedRolesClick() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       this.namedRolesClick = !this.namedRolesClick
-      bus.$emit('sendUpdateNamedRolesClick', {workshopName: workshop, gameName: game, value: this.namedRolesClick})
+      bus.emit('sendUpdateNamedRolesClick', {workshopName: workshop, gameName: game, value: this.namedRolesClick})
     },
     updateOnlyAdminCanControl() {
       const workshop = this.editingWorkshop.workshopName
       const game = this.editingGame ? this.editingGame.gameName : ''
       const onlyAdminCanControl = !this.editingWorkshop.config.onlyAdminCanControl
-      bus.$emit('sendOnlyAdminCanControl', {workshopName: workshop, gameName: game, value: onlyAdminCanControl})
+      bus.emit('sendOnlyAdminCanControl', {workshopName: workshop, gameName: game, value: onlyAdminCanControl})
     }
   }
 }
