@@ -179,7 +179,6 @@ export const store = createStore({
         state.modals[modals[i]] = false
       }
       state.modals[payload] = true
-      console.log(state.modals)
     },
     hideModal: (state, payload) => {
       state.modals[payload] = false

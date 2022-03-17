@@ -84,7 +84,7 @@
 <script>
 import bus from '../../socket.js'
 
-import { $vfm, VueFinalModal } from 'vue-final-modal'
+import { VueFinalModal } from 'vue-final-modal'
 
 import SingleTeam from './learnings/SingleTeam.vue'
 import MultipleTeams from './learnings/MultipleTeams.vue'
