@@ -61,7 +61,7 @@ do
   fi
   echo "------------------------------------------------"
 
-  DIR="/usr/apps/agilesimulations/$APP"
+  DIR="/usr/apps/$APP"
   if [ ! -d $DIR ]; then
     git clone $REPO $DIR
   fi
@@ -89,20 +89,20 @@ do
 
   npm install
   npm run build
-  if [ ! -d /var/www/html/$APP/ ]; then
-    mkdir /var/www/html/$APP
+  if [ ! -d /var/www/html/agilesimulations/$APP/ ]; then
+    mkdir /var/www/html/agilesimulations/$APP
   fi
-  if [ -d /var/www/html/$APP/css ]; then
-    rm /var/www/html/$APP/css/*
+  if [ -d /var/www/html/agilesimulations/$APP/css ]; then
+    rm /var/www/html/agilesimulations/$APP/css/*
   else
-    mkdir /var/www/html/$APP/css
+    mkdir /var/www/html/agilesimulations/$APP/css
   fi
-  if [ -d /var/www/html/$APP/js ]; then
-    rm /var/www/html/$APP/js/*
+  if [ -d /var/www/html/agilesimulations/$APP/js ]; then
+    rm /var/www/html/agilesimulations/$APP/js/*
   else
-    mkdir /var/www/html/$APP/js
+    mkdir /var/www/html/agilesimulations/$APP/js
   fi
-  cp -R dist/* /var/www/html/$APP
+  cp -R dist/* /var/www/html/agilesimulations/$APP
   if [ -f "src/server.js" ]; then
     SERVER=`ps -ef | grep server.js | grep "/$APP/" | awk {'print $2'}`
     if [ "$SERVER" != "" ]; then
