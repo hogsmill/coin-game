@@ -28,7 +28,6 @@ ROUTES=(
   'ratesetter','Ratesetter'
   'eagile','EverydayAgile'
   'and','And'
-  'richemont','Richemont'
   'bud','Bud'
   'mattphillip','MattPhillip'
 )
@@ -62,7 +61,7 @@ do
   fi
   echo "------------------------------------------------"
 
-  DIR="/usr/apps/$APP"
+  DIR="/usr/apps/agilesimulations/$APP"
   if [ ! -d $DIR ]; then
     git clone $REPO $DIR
   fi
